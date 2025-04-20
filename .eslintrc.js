@@ -1,4 +1,5 @@
 module.exports = {
+  parser: '@typescript-eslint/parser',
   root: true,
   parserOptions: {
     ecmaVersion: 2020,
@@ -20,8 +21,33 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [1, {extensions: ['.tsx']}],
     'import/prefer-default-export': 'off',
+    'import/no-unresolved': 'off',
+    'no-use-before-define': 'off',
+    'global-require': 'off',
+    'react/style-prop-object': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
+    'react/destructuring-assignment': 'off',
+    'react/no-unused-prop-types': 'warn',
+    'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+        tsx: 'never',
+        js: 'never',
+        jsx: 'never',
+      },
+    ],
+  },
+  env: {
+    jest: true,
   },
   settings: {
+    'import/resolver': {
+      typescript: {},
+    },
     react: {
       version: 'detect',
     },

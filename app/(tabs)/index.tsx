@@ -7,17 +7,21 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 const goal = '(목표)';
 const dDay = '(디데이)';
 const achieved = '(달성한 일들)';
-const remaining = '(할 일들)';
+const todos = '(할 일들)';
 
-type ToggleKey = 'goal' | 'dday';
+type ToggleKey = 'goal' | 'dday' | 'achieved' | 'todos';
 
 export default function MainScreen() {
   const [goalExtend, setGoalExtend] = useState<boolean>(false);
   const [ddayExtend, setDdayExtend] = useState<boolean>(false);
+  const [achievedExtend, setAchievedExtend] = useState<boolean>(false);
+  const [todosExtend, setTodosExtend] = useState<boolean>(false);
 
   const extendStates = {
     goal: [goalExtend, setGoalExtend] as const,
     dday: [ddayExtend, setDdayExtend] as const,
+    achieved: [achievedExtend, setAchievedExtend] as const,
+    todos: [todosExtend, setTodosExtend] as const,
   };
 
   const handleToggle = (key: ToggleKey) => {
@@ -33,36 +37,59 @@ export default function MainScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <TouchableOpacity onPress={() => handleToggle('goal')}>
-          <View style={styles.extendContainer}>
+        <View style={styles.lineContainer}>
+          <TouchableOpacity
+            onPress={() => handleToggle('goal')}
+            style={styles.extendContainer}>
             <Text style={[styles.text, styles.highlight]}>{goal}</Text>
             {goalExtend && (
               <Text style={[styles.text, styles.highlight]}>설정</Text>
             )}
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.text}>까지 </Text>
-        <TouchableOpacity onPress={() => handleToggle('dday')}>
-          <View style={styles.extendContainer}>
+          </TouchableOpacity>
+          <Text style={styles.text}>까지 </Text>
+          <TouchableOpacity
+            onPress={() => handleToggle('dday')}
+            style={styles.extendContainer}>
             <Text style={[styles.text, styles.highlight]}>{dDay}</Text>
             {ddayExtend && (
               <Text style={[styles.text, styles.highlight]}>날짜</Text>
             )}
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.text}>남았어요.</Text>
+          </TouchableOpacity>
+          <Text style={styles.text}>남았어요.</Text>
+        </View>
 
-        <Text style={styles.text}>지금까지 </Text>
-        <TouchableOpacity>
-          <Text style={[styles.text, styles.highlight]}>{achieved}</Text>
-        </TouchableOpacity>
-        <Text style={styles.text}>을 해냈고,</Text>
+        <View style={styles.lineContainer}>
+          <Text style={styles.text}>지금까지 </Text>
 
-        <Text style={styles.text}>앞으로 </Text>
-        <TouchableOpacity>
-          <Text style={[styles.text, styles.highlight]}>{remaining}</Text>
-        </TouchableOpacity>
-        <Text style={styles.text}>이 남았어요.</Text>
+          <TouchableOpacity onPress={() => handleToggle('achieved')}>
+            <Text style={[styles.text, styles.highlight]}>{achieved}</Text>
+          </TouchableOpacity>
+
+          {achievedExtend && (
+            <View style={styles.dropdown}>
+              <Text style={styles.dropdownItem}>• 첫 번째 달성 항목</Text>
+              <Text style={styles.dropdownItem}>• 두 번째 달성 항목</Text>
+              <Text style={styles.dropdownItem}>• 세 번째 달성 항목</Text>
+            </View>
+          )}
+
+          <Text style={styles.text}>들을 해냈고, </Text>
+          <Text style={styles.text}>앞으로 </Text>
+
+          <TouchableOpacity onPress={() => handleToggle('todos')}>
+            <Text style={[styles.text, styles.highlight]}>{todos}</Text>
+          </TouchableOpacity>
+
+          {todosExtend && (
+            <View style={styles.dropdown}>
+              <Text style={styles.dropdownItem}>• 첫 번째 할 일</Text>
+              <Text style={styles.dropdownItem}>• 두 번째 할 일</Text>
+              <Text style={styles.dropdownItem}>• 세 번째 할 일</Text>
+            </View>
+          )}
+
+          <Text style={styles.text}>들이 남았어요.</Text>
+        </View>
       </View>
     </View>
   );
@@ -75,13 +102,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding.horizontal,
   },
   textContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   extendContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  lineContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
   },
   text: {
     fontSize: Typography.fontSize.large,
@@ -91,5 +121,16 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: Typography.fontWeight.bold,
     color: '#007AFF',
+  },
+  dropdown: {
+    width: '100%',
+    backgroundColor: '#f5f5f5',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  dropdownItem: {
+    fontSize: Typography.fontSize.medium,
+    paddingVertical: 5,
   },
 });

@@ -9,54 +9,57 @@ const dDay = '(디데이)';
 const achieved = '(달성한 일들)';
 const remaining = '(할 일들)';
 
+type ToggleKey = 'goal' | 'dday';
+
 export default function MainScreen() {
   const [goalExtend, setGoalExtend] = useState<boolean>(false);
+  const [ddayExtend, setDdayExtend] = useState<boolean>(false);
 
-  const handleGoalPress = () => {
-    console.log('tap goal');
-    setGoalExtend(prev => !prev);
+  const extendStates = {
+    goal: [goalExtend, setGoalExtend] as const,
+    dday: [ddayExtend, setDdayExtend] as const,
   };
 
-  const handleDDayPress = () => {
-    console.log('tap dDay');
-  };
-
-  const handleAchievedPress = () => {
-    console.log('tap achieved');
-  };
-
-  const handleRemainingPress = () => {
-    console.log('tap Todo');
+  const handleToggle = (key: ToggleKey) => {
+    Object.entries(extendStates).forEach(([k, [, setter]]) => {
+      if (k === key) {
+        setter(prev => !prev);
+      } else {
+        setter(false);
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <TouchableOpacity onPress={handleGoalPress}>
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
+        <TouchableOpacity onPress={() => handleToggle('goal')}>
+          <View style={styles.extendContainer}>
             <Text style={[styles.text, styles.highlight]}>{goal}</Text>
             {goalExtend && (
               <Text style={[styles.text, styles.highlight]}>설정</Text>
             )}
           </View>
         </TouchableOpacity>
-        <Text style={styles.text}> 까지 </Text>
-        <TouchableOpacity onPress={handleDDayPress}>
-          <Text style={[styles.text, styles.highlight]}>{dDay}</Text>
+        <Text style={styles.text}>까지 </Text>
+        <TouchableOpacity onPress={() => handleToggle('dday')}>
+          <View style={styles.extendContainer}>
+            <Text style={[styles.text, styles.highlight]}>{dDay}</Text>
+            {ddayExtend && (
+              <Text style={[styles.text, styles.highlight]}>날짜</Text>
+            )}
+          </View>
         </TouchableOpacity>
-        <Text style={styles.text}> 남았어요.</Text>
+        <Text style={styles.text}>남았어요.</Text>
 
         <Text style={styles.text}>지금까지 </Text>
-        <TouchableOpacity onPress={handleAchievedPress}>
+        <TouchableOpacity>
           <Text style={[styles.text, styles.highlight]}>{achieved}</Text>
         </TouchableOpacity>
         <Text style={styles.text}>을 해냈고,</Text>
 
         <Text style={styles.text}>앞으로 </Text>
-        <TouchableOpacity onPress={handleRemainingPress}>
+        <TouchableOpacity>
           <Text style={[styles.text, styles.highlight]}>{remaining}</Text>
         </TouchableOpacity>
         <Text style={styles.text}>이 남았어요.</Text>
@@ -75,6 +78,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
+  },
+  extendContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   text: {
     fontSize: Typography.fontSize.large,

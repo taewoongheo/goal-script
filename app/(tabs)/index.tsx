@@ -3,29 +3,37 @@ import {Typography} from '@/constants/Typography';
 import {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Animated, {
+  EntryAnimationsValues,
+  FadeIn,
+  LinearTransition,
+  withSpring,
+} from 'react-native-reanimated';
 
 const goal = '(목표)';
 const dDay = '(디데이)';
 const achieved = '(달성한 일들)';
 const todos = '(할 일들)';
 
+const ANIMATION_DURATION = 300;
+
 type ToggleKey = 'goal' | 'dday' | 'achieved' | 'todos';
 
 export default function MainScreen() {
-  const [goalExtend, setGoalExtend] = useState<boolean>(false);
-  const [ddayExtend, setDdayExtend] = useState<boolean>(false);
-  const [achievedExtend, setAchievedExtend] = useState<boolean>(false);
-  const [todosExtend, setTodosExtend] = useState<boolean>(false);
+  const [goalExpand, setGoalExpand] = useState<boolean>(false);
+  const [ddayExpand, setDdayExpand] = useState<boolean>(false);
+  const [achievedExpand, setAchievedExpand] = useState<boolean>(false);
+  const [todosExpand, setTodosExpand] = useState<boolean>(false);
 
-  const extendStates = {
-    goal: [goalExtend, setGoalExtend] as const,
-    dday: [ddayExtend, setDdayExtend] as const,
-    achieved: [achievedExtend, setAchievedExtend] as const,
-    todos: [todosExtend, setTodosExtend] as const,
+  const expandStates = {
+    goal: [goalExpand, setGoalExpand] as const,
+    dday: [ddayExpand, setDdayExpand] as const,
+    achieved: [achievedExpand, setAchievedExpand] as const,
+    todos: [todosExpand, setTodosExpand] as const,
   };
 
   const handleToggle = (key: ToggleKey) => {
-    Object.entries(extendStates).forEach(([k, [, setter]]) => {
+    Object.entries(expandStates).forEach(([k, [, setter]]) => {
       if (k === key) {
         setter(prev => !prev);
       } else {
@@ -34,28 +42,90 @@ export default function MainScreen() {
     });
   };
 
+  // https://x.com/vaunblu/status/1830961902299816296
+  const ExpandWidthFromLeft = (targetValues: EntryAnimationsValues) => {
+    'worklet';
+
+    return {
+      initialValues: {width: 0},
+      animations: {
+        width: withSpring(targetValues.targetWidth, {
+          duration: ANIMATION_DURATION,
+        }),
+      },
+    };
+  };
+
+  // TODO:
+  //  텍스트가 먼저 FadeOut 되고 레이아웃이 줄어들어야 함
+
+  const ShrinkWidthFromRight = (currentValues: {currentWidth: number}) => {
+    'worklet';
+
+    return {
+      initialValues: {width: currentValues.currentWidth},
+      animations: {
+        width: withSpring(0, {
+          duration: ANIMATION_DURATION,
+        }),
+      },
+    };
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.textContainer}>
+      <Animated.View
+        style={styles.textContainer}
+        layout={LinearTransition.duration(ANIMATION_DURATION)}>
         <View style={styles.lineContainer}>
           <TouchableOpacity
             onPress={() => handleToggle('goal')}
-            style={styles.extendContainer}>
+            style={styles.expandContainer}>
             <Text style={[styles.text, styles.highlight]}>{goal}</Text>
-            {goalExtend && (
-              <Text style={[styles.text, styles.highlight]}>설정</Text>
+            {goalExpand && (
+              <Animated.View
+                entering={ExpandWidthFromLeft}
+                exiting={ShrinkWidthFromRight}
+                style={[
+                  styles.highlight,
+                  {
+                    overflow: 'hidden',
+                    flexDirection: 'row',
+                    backgroundColor: 'gray',
+                  },
+                ]}>
+                <Animated.Text
+                  entering={FadeIn.duration(ANIMATION_DURATION)}
+                  style={styles.text}>
+                  설정
+                </Animated.Text>
+              </Animated.View>
             )}
           </TouchableOpacity>
-          <Text style={styles.text}>까지 </Text>
-          <TouchableOpacity
-            onPress={() => handleToggle('dday')}
-            style={styles.extendContainer}>
-            <Text style={[styles.text, styles.highlight]}>{dDay}</Text>
-            {ddayExtend && (
-              <Text style={[styles.text, styles.highlight]}>날짜</Text>
-            )}
-          </TouchableOpacity>
-          <Text style={styles.text}>남았어요.</Text>
+
+          <Animated.Text
+            layout={LinearTransition.springify().duration(ANIMATION_DURATION)}
+            style={styles.text}>
+            까지{' '}
+          </Animated.Text>
+
+          <Animated.View
+            layout={LinearTransition.springify().duration(ANIMATION_DURATION)}>
+            <TouchableOpacity
+              onPress={() => handleToggle('dday')}
+              style={styles.expandContainer}>
+              <Text style={[styles.text, styles.highlight]}>{dDay}</Text>
+              {ddayExpand && (
+                <Text style={[styles.text, styles.highlight]}>날짜</Text>
+              )}
+            </TouchableOpacity>
+          </Animated.View>
+
+          <Animated.Text
+            layout={LinearTransition.springify().duration(ANIMATION_DURATION)}
+            style={styles.text}>
+            남았어요.
+          </Animated.Text>
         </View>
 
         <View style={styles.lineContainer}>
@@ -65,7 +135,7 @@ export default function MainScreen() {
             <Text style={[styles.text, styles.highlight]}>{achieved}</Text>
           </TouchableOpacity>
 
-          {achievedExtend && (
+          {achievedExpand && (
             <View style={styles.dropdown}>
               <Text style={styles.dropdownItem}>• 첫 번째 달성 항목</Text>
               <Text style={styles.dropdownItem}>• 두 번째 달성 항목</Text>
@@ -80,7 +150,7 @@ export default function MainScreen() {
             <Text style={[styles.text, styles.highlight]}>{todos}</Text>
           </TouchableOpacity>
 
-          {todosExtend && (
+          {todosExpand && (
             <View style={styles.dropdown}>
               <Text style={styles.dropdownItem}>• 첫 번째 할 일</Text>
               <Text style={styles.dropdownItem}>• 두 번째 할 일</Text>
@@ -90,7 +160,7 @@ export default function MainScreen() {
 
           <Text style={styles.text}>들이 남았어요.</Text>
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -104,7 +174,7 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'flex-start',
   },
-  extendContainer: {
+  expandContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
   },

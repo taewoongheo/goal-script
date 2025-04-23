@@ -1,4 +1,5 @@
 import {Layout} from '@/constants/Layout';
+import {websiteProject} from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
 import {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
@@ -6,16 +7,20 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Animated, {
   EntryAnimationsValues,
   FadeIn,
+  FadeInLeft,
   LinearTransition,
   withSpring,
 } from 'react-native-reanimated';
 
-const goal = '(목표)';
-const dDay = '(디데이)';
-const achieved = '(달성한 일들)';
-const todos = '(할 일들)';
+const sampleData = websiteProject;
 
-const ANIMATION_DURATION = 300;
+const goal = sampleData.title;
+const dDay = sampleData.dDay.remainingDays;
+const rDay = sampleData.dDay.date;
+const [...achieved] = sampleData.achieved;
+const [...todos] = sampleData.todos;
+
+const ANIMATION_DURATION = 400;
 
 type ToggleKey = 'goal' | 'dday' | 'achieved' | 'todos';
 
@@ -87,7 +92,6 @@ export default function MainScreen() {
                 entering={ExpandWidthFromLeft}
                 exiting={ShrinkWidthFromRight}
                 style={[
-                  styles.highlight,
                   {
                     overflow: 'hidden',
                     flexDirection: 'row',
@@ -96,7 +100,7 @@ export default function MainScreen() {
                 ]}>
                 <Animated.Text
                   entering={FadeIn.duration(ANIMATION_DURATION)}
-                  style={styles.text}>
+                  style={[styles.text, styles.highlight]}>
                   설정
                 </Animated.Text>
               </Animated.View>
@@ -114,47 +118,51 @@ export default function MainScreen() {
             <TouchableOpacity
               onPress={() => handleToggle('dday')}
               style={styles.expandContainer}>
-              <Text style={[styles.text, styles.highlight]}>{dDay}</Text>
+              <Text style={[styles.text, styles.highlight]}>D-{dDay}</Text>
               {ddayExpand && (
-                <Text style={[styles.text, styles.highlight]}>날짜</Text>
+                <Text style={[styles.text, styles.highlight]}>({rDay})</Text>
               )}
             </TouchableOpacity>
           </Animated.View>
 
-          <Animated.Text
+          {/* <Animated.Text
             layout={LinearTransition.springify().duration(ANIMATION_DURATION)}
             style={styles.text}>
             남았어요.
-          </Animated.Text>
+          </Animated.Text> */}
         </View>
 
         <View style={styles.lineContainer}>
-          <Text style={styles.text}>지금까지 </Text>
+          {/* <Text style={styles.text}>지금까지 </Text> */}
 
           <TouchableOpacity onPress={() => handleToggle('achieved')}>
-            <Text style={[styles.text, styles.highlight]}>{achieved}</Text>
+            <Text style={[styles.text, styles.highlight]}>{achieved[0]}</Text>
           </TouchableOpacity>
 
           {achievedExpand && (
             <View style={styles.dropdown}>
-              <Text style={styles.dropdownItem}>• 첫 번째 달성 항목</Text>
-              <Text style={styles.dropdownItem}>• 두 번째 달성 항목</Text>
-              <Text style={styles.dropdownItem}>• 세 번째 달성 항목</Text>
+              {achieved.map((el, index) => (
+                <Text key={`${el}${index + 1}`} style={styles.dropdownItem}>
+                  {el}
+                </Text>
+              ))}
             </View>
           )}
 
-          <Text style={styles.text}>들을 해냈고, </Text>
-          <Text style={styles.text}>앞으로 </Text>
+          <Text style={styles.text}>들을 완료했고, </Text>
+          {/* <Text style={styles.text}>앞으로 </Text> */}
 
           <TouchableOpacity onPress={() => handleToggle('todos')}>
-            <Text style={[styles.text, styles.highlight]}>{todos}</Text>
+            <Text style={[styles.text, styles.highlight]}>{todos[0]}</Text>
           </TouchableOpacity>
 
           {todosExpand && (
             <View style={styles.dropdown}>
-              <Text style={styles.dropdownItem}>• 첫 번째 할 일</Text>
-              <Text style={styles.dropdownItem}>• 두 번째 할 일</Text>
-              <Text style={styles.dropdownItem}>• 세 번째 할 일</Text>
+              {todos.map((el, index) => (
+                <Text key={`${el}${index + 1}`} style={styles.dropdownItem}>
+                  {el}
+                </Text>
+              ))}
             </View>
           )}
 

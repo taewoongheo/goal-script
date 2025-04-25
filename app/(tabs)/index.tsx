@@ -5,10 +5,11 @@ import {
   websiteProject,
 } from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Animated, {LinearTransition} from 'react-native-reanimated';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {ListSection} from '@/components/mainScreen/ListSection';
+import {GoalAndDDaySection} from '@/components/mainScreen/GoalAndDDaySection';
 
 const sampleData = websiteProject;
 
@@ -36,22 +37,15 @@ export default function MainScreen() {
       <Animated.View
         style={styles.textContainer}
         layout={LinearTransition.duration(ANIMATION_DURATION)}>
-        {/* Goal and D-Day Section */}
-        <View style={componentStyles.lineContainer}>
-          <Text style={componentStyles.text}>
-            <Text style={componentStyles.highlight}>{goal}</Text>
-            <Text>까지 </Text>
-            <Text
-              onPress={() => handleToggle('dday')}
-              style={componentStyles.highlight}>
-              D-{dDay}
-            </Text>
-            {expandStates.dday[0] ? (
-              <Text style={componentStyles.highlight}> ({rDay})</Text>
-            ) : null}
-            <Text>.</Text>
-          </Text>
-        </View>
+        {/* Use GoalDDaySection component */}
+        <GoalAndDDaySection
+          goal={goal}
+          dDay={dDay}
+          rDay={rDay}
+          isDdayExpanded={expandStates.dday[0]}
+          onToggleDday={handleToggle}
+          styles={componentStyles}
+        />
 
         {/* ListSection for Achieved */}
         <ListSection

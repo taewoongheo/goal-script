@@ -5,125 +5,73 @@ import {
   websiteProject,
 } from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
-import {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import Animated, {LinearTransition} from 'react-native-reanimated';
+import {useToggleExpand} from '@/hooks/useToggleExpand';
+import {ListSection} from '@/components/mainScreen/ListSection';
 
 const sampleData = websiteProject;
 
 const goal = sampleData.title;
-const {description} = sampleData;
 const dDay = sampleData.dDay.remainingDays;
 const rDay = sampleData.dDay.date;
-const [...achieved] = sampleData.achieved;
-const [...todos] = sampleData.todos;
+const {achieved} = sampleData;
+const {todos} = sampleData;
 
 const ANIMATION_DURATION = 400;
 
-type ToggleKey = 'goal' | 'dday' | 'achieved' | 'todos';
-
 export default function MainScreen() {
-  const [goalExpand, setGoalExpand] = useState<boolean>(false);
-  const [ddayExpand, setDdayExpand] = useState<boolean>(false);
-  const [achievedExpand, setAchievedExpand] = useState<boolean>(false);
-  const [todosExpand, setTodosExpand] = useState<boolean>(false);
+  const {expandStates, handleToggle} = useToggleExpand();
 
-  const expandStates = {
-    goal: [goalExpand, setGoalExpand] as const,
-    dday: [ddayExpand, setDdayExpand] as const,
-    achieved: [achievedExpand, setAchievedExpand] as const,
-    todos: [todosExpand, setTodosExpand] as const,
+  const componentStyles = {
+    lineContainer: styles.lineContainer,
+    text: styles.text,
+    highlight: styles.highlight,
+    dropdownContainer: styles.dropdownContainer,
+    dropdownItem: styles.dropdownItem,
   };
-
-  const handleToggle = (key: ToggleKey) => {
-    Object.entries(expandStates).forEach(([k, [, setter]]) => {
-      if (k === key) {
-        setter(prev => !prev);
-      } else {
-        setter(false);
-      }
-    });
-  };
-
-  // https://x.com/vaunblu/status/1830961902299816296
-
-  // 줄바꿈 시 줄바꿈 되는 텍스트를 별도의 View 로 만듦.
-  // 마지막 View 에 확장 애니메이션 넣기
 
   return (
     <View style={styles.container}>
       <Animated.View
         style={styles.textContainer}
         layout={LinearTransition.duration(ANIMATION_DURATION)}>
-        {/* {goal} line */}
-        <View style={styles.lineContainer}>
-          <Text style={styles.text}>
-            <Text onPress={() => handleToggle('goal')} style={styles.highlight}>
-              {goal}
-            </Text>
-            <Text>까지</Text>
-            {/* 추후 {goal} 이 두 줄 이상 넘어갈 시 {d day} 를 여기에 붙이기 */}
-          </Text>
-        </View>
-
-        {goalExpand ? (
-          <View>
-            <Text>{description}</Text>
-          </View>
-        ) : null}
-
-        {/* {d day} line */}
-        <View style={styles.lineContainer}>
-          <Text style={styles.text}>
-            <Text onPress={() => handleToggle('dday')} style={styles.highlight}>
+        {/* Goal and D-Day Section */}
+        <View style={componentStyles.lineContainer}>
+          <Text style={componentStyles.text}>
+            <Text style={componentStyles.highlight}>{goal}</Text>
+            <Text>까지 </Text>
+            <Text
+              onPress={() => handleToggle('dday')}
+              style={componentStyles.highlight}>
               D-{dDay}
             </Text>
-            {ddayExpand ? <Text style={styles.highlight}>{rDay}</Text> : null}
-            <Text>남았어요</Text>
+            {expandStates.dday[0] ? (
+              <Text style={componentStyles.highlight}> ({rDay})</Text>
+            ) : null}
+            <Text>.</Text>
           </Text>
         </View>
 
-        {/* {achieved} line */}
-        <View style={styles.lineContainer}>
-          <TouchableOpacity onPress={() => handleToggle('achieved')}>
-            <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
-              {achieved[0]}
-            </Text>
-          </TouchableOpacity>
+        {/* ListSection for Achieved */}
+        <ListSection
+          items={achieved}
+          isExpanded={expandStates.achieved[0]}
+          onToggle={handleToggle}
+          toggleKey="achieved"
+          suffixText="들을 완료했고, "
+          styles={componentStyles}
+        />
 
-          {achievedExpand && (
-            <View style={styles.dropdownContainer}>
-              {achieved.map((el, index) => (
-                <Text key={`${el}${index + 1}`} style={styles.dropdownItem}>
-                  {el}
-                </Text>
-              ))}
-            </View>
-          )}
-
-          <Text style={styles.text}>들을 완료했고, </Text>
-        </View>
-
-        <View style={styles.lineContainer}>
-          <TouchableOpacity onPress={() => handleToggle('todos')}>
-            <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
-              {todos[0]}
-            </Text>
-          </TouchableOpacity>
-
-          {todosExpand && (
-            <View style={styles.dropdownContainer}>
-              {todos.map((el, index) => (
-                <Text key={`${el}${index + 1}`} style={styles.dropdownItem}>
-                  {el}
-                </Text>
-              ))}
-            </View>
-          )}
-
-          <Text style={styles.text}>들이 남았어요.</Text>
-        </View>
+        {/* ListSection for Todos */}
+        <ListSection
+          items={todos}
+          isExpanded={expandStates.todos[0]}
+          onToggle={handleToggle}
+          toggleKey="todos"
+          suffixText="들이 남았어요."
+          styles={componentStyles}
+        />
       </Animated.View>
     </View>
   );
@@ -143,6 +91,8 @@ const styles = StyleSheet.create({
   lineContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'center',
+    marginBottom: 4,
   },
   text: {
     fontSize: Typography.fontSize.large,
@@ -155,7 +105,13 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     width: '100%',
-    backgroundColor: 'red',
+    backgroundColor: '#f0f0f0',
+    padding: 8,
+    marginTop: 4,
+    borderRadius: 4,
   },
-  dropdownItem: {},
+  dropdownItem: {
+    fontSize: Typography.fontSize.medium,
+    paddingVertical: 4,
+  },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 
@@ -23,12 +23,19 @@ export function GoalAndDDaySection({
   onToggleDday,
   styles,
 }: GoalAndDDaySectionProps) {
+  const [ddayPressed, setDdayPressed] = useState<boolean>(false);
+
   return (
     <View style={styles.lineContainer}>
       <Text style={styles.text}>
         <Text style={styles.highlight}>{goal}</Text>
         <Text>까지 </Text>
-        <Text onPress={() => onToggleDday('dday')} style={styles.highlight}>
+        <Text
+          onPress={() => onToggleDday('dday')}
+          onPressIn={() => setDdayPressed(true)}
+          onPressOut={() => setDdayPressed(false)}
+          suppressHighlighting
+          style={ddayPressed ? styles.highlight : styles.highlight}>
           D-{dDay}
         </Text>
         {isDdayExpanded ? (

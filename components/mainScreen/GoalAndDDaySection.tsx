@@ -15,6 +15,11 @@ interface GoalAndDDaySectionProps {
   };
 }
 
+interface ParsedLines {
+  type: 'noWrap' | 'rDayWrap' | 'strWrap';
+  lines: string[];
+}
+
 export function GoalAndDDaySection({
   goal,
   dDay,
@@ -23,26 +28,70 @@ export function GoalAndDDaySection({
   onToggleDday,
   styles,
 }: GoalAndDDaySectionProps) {
-  const [ddayPressed, setDdayPressed] = useState<boolean>(false);
+  const [lines, setLines] = useState<ParsedLines | null>(null);
 
   return (
     <View style={styles.lineContainer}>
-      <Text style={styles.text}>
-        <Text style={styles.highlight}>{goal}</Text>
-        <Text>까지 </Text>
-        <Text
-          onPress={() => onToggleDday('dday')}
-          onPressIn={() => setDdayPressed(true)}
-          onPressOut={() => setDdayPressed(false)}
-          suppressHighlighting
-          style={ddayPressed ? styles.highlight : styles.highlight}>
-          D-{dDay}
-        </Text>
-        {isDdayExpanded ? (
-          <Text style={styles.highlight}> ({rDay})</Text>
-        ) : null}
-        <Text> 남았어요.</Text>
+      {/* Hidden Text for onTextLayout */}
+      <Text
+        style={[
+          styles.text,
+          {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            opacity: 0,
+          },
+        ]}
+        onTextLayout={e => {
+          const texts = e.nativeEvent.lines.map(el => el.text);
+          const parsedLines = parseLine(texts, rDay);
+          setLines(parsedLines);
+        }}>
+        {goal}까지 D-{dDay} {formatRDay(rDay)} 남았어요
       </Text>
     </View>
   );
+}
+
+function formatRDay(date: string): string {
+  return date.replace(/\./g, '.\u200B');
+}
+
+function parseLine(texts: string[], rDay: string): ParsedLines {
+  let lines: string[] = [...texts];
+
+  const SUFFIX = '남았어요';
+
+  let type: 'noWrap' | 'strWrap' | 'rDayWrap' | null = null;
+  if (
+    lines.at(-1)?.includes(SUFFIX) &&
+    lines.at(-1)?.includes(formatRDay(rDay))
+  )
+    type = 'noWrap';
+  else if (
+    !lines.at(-1)?.includes(SUFFIX) &&
+    lines.at(-2)?.includes(formatRDay(rDay))
+  )
+    type = 'strWrap';
+  else type = 'rDayWrap';
+
+  if (type === 'strWrap') {
+    const sec = lines[lines.length - 2].split(' ');
+    sec.pop();
+    lines[lines.length - 2] = sec.join(' ');
+  } else if (type === 'noWrap') {
+    const last = lines[lines.length - 1].split(' ');
+    last.pop();
+    last.pop();
+    lines[lines.length - 1] = last.join(' ');
+  }
+
+  lines = lines.map(el => el.trim());
+
+  return {
+    type,
+    lines,
+  };
 }

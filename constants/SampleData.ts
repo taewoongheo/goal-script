@@ -14,7 +14,7 @@ export const websiteProject: GoalData = {
   description:
     '회사의 온라인 브랜딩을 강화하기 위해 기존 웹사이트를 전면 개편하는 프로젝트입니다.',
   dDay: {
-    date: '2025.05.30',
+    date: '25.05.30',
     remainingDays: 37,
   },
   achieved: [
@@ -35,7 +35,7 @@ export const marathonPreparation: GoalData = {
   description:
     '완주는 목표일 뿐, 과정 속 꾸준함과 건강한 삶의 습관을 만들어가는 여정입니다.', // 짧은 설명
   dDay: {
-    date: '2025.10.15',
+    date: '25.10.15',
     remainingDays: 175,
   },
   achieved: [
@@ -60,7 +60,7 @@ export const academicPaper: GoalData = {
   description:
     'AI 기술이 급속도로 발전함에 따라 윤리적 문제들이 대두되고 있습니다. 본 연구는 이러한 흐름 속에서 인간 중심의 윤리 기준을 어떻게 설정하고 적용할 수 있는지를 실증적 데이터를 통해 분석하는 데 목적이 있습니다. 기술과 인간의 공존을 위한 사회적·법적 기반 마련에 기여하고자 합니다.', // 긴 설명
   dDay: {
-    date: '2025.12.20',
+    date: '25.12.20',
     remainingDays: 111241,
   },
   achieved: [

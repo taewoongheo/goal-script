@@ -1,5 +1,7 @@
 import {Layout} from '@/constants/Layout';
 import {
+  academicPaper,
+  marathonPreparation,
   // academicPaper,
   // marathonPreparation,
   websiteProject,
@@ -16,7 +18,7 @@ import {DdaySection} from '@/components/mainScreen/DdaySection';
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
 
-const sampleData = websiteProject;
+const sampleData = marathonPreparation;
 
 const goal = sampleData.title;
 const dDay = sampleData.dDay.remainingDays;

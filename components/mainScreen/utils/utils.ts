@@ -49,7 +49,7 @@ export function parseLine(texts: string[], rDay: string): ParsedLines {
   };
 }
 
-export function tokenizeLineWithDday(line, dDay) {
+export function tokenizeLineWithDday(line: string, dDay: number) {
   const tokens = line.split(' ');
   const dDayString = `D-${dDay}`;
   const isTouchableDDayToken = tokens.some(el => el.includes(dDayString));

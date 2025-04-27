@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleProp, TextStyle} from 'react-native';
 import Animated, {FadeIn, LinearTransition} from 'react-native-reanimated';
+import {ToggleKey} from '@/hooks/useToggleExpand';
 import TouchableLineRenderer from './TouchableLineRenderer';
 
 interface NoWrapLineProps {
@@ -9,7 +10,7 @@ interface NoWrapLineProps {
   dDay: number;
   rDay: string;
   isDdayExpanded: boolean;
-  onToggleDday: (key: ToggleKey) => void;
+  onToggleDday: (_key: ToggleKey) => void;
   styles: {
     text: StyleProp<TextStyle>;
     // Add other styles if needed, e.g., highlight

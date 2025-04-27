@@ -10,7 +10,7 @@ interface GoalAndDDaySectionProps {
   dDay: number;
   rDay: string;
   isDdayExpanded: boolean;
-  onToggleDday: (key: ToggleKey) => void;
+  onToggleDday: (_key: ToggleKey) => void;
   styles: {
     lineContainer: StyleProp<ViewStyle>;
     text: StyleProp<TextStyle>;

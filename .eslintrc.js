@@ -23,6 +23,14 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-unresolved': 'off',
     'no-use-before-define': 'off',
+    'no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
     'global-require': 'off',
     'react/style-prop-object': 'off',
     'react/jsx-props-no-spreading': 'off',

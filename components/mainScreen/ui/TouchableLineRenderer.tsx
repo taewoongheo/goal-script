@@ -1,11 +1,12 @@
 import {View, Text, TextStyle, StyleProp} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ToggleKey} from '@/hooks/useToggleExpand';
 import {tokenizeLineWithDday} from '../utils/utils';
 
 interface TouchableLineRendererProps {
   line: string;
   dDay: number;
-  onToggleDday: (key: ToggleKey) => void;
+  onToggleDday: (_key: ToggleKey) => void;
   textStyle: StyleProp<TextStyle>;
 }
 

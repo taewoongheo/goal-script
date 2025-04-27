@@ -12,6 +12,8 @@ export function parseLine(texts: string[], rDay: string): ParsedLines {
 
   const SUFFIX = '남았어요';
 
+  console.log(lines);
+
   let type: 'noWrap' | 'strWrap' | 'rDayWrap' | null = null;
   if (
     lines.at(-1)?.includes(SUFFIX) &&

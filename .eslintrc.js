@@ -29,6 +29,7 @@ module.exports = {
     'react/require-default-props': 'off',
     'react/destructuring-assignment': 'off',
     'react/no-unused-prop-types': 'warn',
+    'react/no-array-index-key': 'off',
     'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
     'import/extensions': [
       'error',

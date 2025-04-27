@@ -1,7 +1,7 @@
 import {Layout} from '@/constants/Layout';
 import {
-  academicPaper,
-  marathonPreparation,
+  // academicPaper,
+  // marathonPreparation,
   websiteProject,
 } from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
@@ -10,6 +10,9 @@ import Animated, {LinearTransition} from 'react-native-reanimated';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {ListSection} from '@/components/mainScreen/ListSection';
 import {GoalAndDDaySection} from '@/components/mainScreen/GoalAndDDaySection';
+
+// TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
+//  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
 
 const sampleData = websiteProject;
 

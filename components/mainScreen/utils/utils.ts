@@ -12,8 +12,6 @@ export function parseLine(texts: string[], rDay: string): ParsedLines {
 
   const SUFFIX = '남았어요';
 
-  console.log(lines);
-
   let type: 'noWrap' | 'strWrap' | 'rDayWrap' | null = null;
   if (
     lines.at(-1)?.includes(SUFFIX) &&
@@ -48,5 +46,23 @@ export function parseLine(texts: string[], rDay: string): ParsedLines {
   return {
     type,
     lines,
+  };
+}
+
+export function tokenizeLineWithDday(line, dDay) {
+  const tokens = line.split(' ');
+  const dDayString = `D-${dDay}`;
+  const isTouchableDDayToken = tokens.some(el => el.includes(dDayString));
+  let parsedTokens: [string, boolean, number][] = [];
+  if (isTouchableDDayToken) {
+    parsedTokens = tokens.map((element, index) => {
+      if (element === dDayString) return [element, true, index];
+      return [element, false, index];
+    });
+  }
+
+  return {
+    isTouchableDDayToken,
+    parsedTokens,
   };
 }

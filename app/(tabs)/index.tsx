@@ -9,7 +9,9 @@ import {StyleSheet, View} from 'react-native';
 import Animated, {LinearTransition} from 'react-native-reanimated';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {ListSection} from '@/components/mainScreen/ListSection';
-import {GoalAndDDaySection} from '@/components/mainScreen/GoalAndDDaySection';
+// Import the new components
+import {GoalSection} from '@/components/mainScreen/GoalSection';
+import {DdaySection} from '@/components/mainScreen/DdaySection';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
@@ -40,9 +42,16 @@ export default function MainScreen() {
       <Animated.View
         style={styles.textContainer}
         layout={LinearTransition.duration(ANIMATION_DURATION)}>
-        {/* Use GoalDDaySection component */}
-        <GoalAndDDaySection
+        {/* Use GoalSection */}
+        <GoalSection
           goal={goal}
+          isGoalExpanded={expandStates.goal[0]}
+          onToggleGoal={handleToggle}
+          styles={componentStyles}
+        />
+
+        {/* Use DdaySection */}
+        <DdaySection
           dDay={dDay}
           rDay={rDay}
           isDdayExpanded={expandStates.dday[0]}
@@ -82,14 +91,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.padding.horizontal,
   },
   textContainer: {
-    alignItems: 'stretch',
+    alignItems: 'stretch', // Changed to stretch to allow sections to take full width if needed
     flexDirection: 'column',
   },
   lineContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'center',
-    marginBottom: 4,
+    alignItems: 'center', // Keep items aligned at the baseline
+    marginBottom: 4, // Keep margin between lines/sections
+    // width: '100%', // Optional: Ensure each section takes full width if needed
   },
   text: {
     fontSize: Typography.fontSize.large,

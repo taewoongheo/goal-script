@@ -34,6 +34,11 @@ export function parseLine(texts: string[], rDay: string): ParsedLines {
     last.pop();
     last.pop();
     lines[lines.length - 1] = last.join(' ');
+  } else if (type === 'rDayWrap') {
+    const last = lines[lines.length - 1];
+    const pLast = last.replace(/남았어요/, '');
+    pLast.trim();
+    lines[lines.length - 1] = pLast;
   }
 
   lines = lines.map(el => el.trim());

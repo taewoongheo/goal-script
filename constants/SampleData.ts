@@ -10,7 +10,7 @@ export type GoalData = {
 };
 
 export const websiteProject: GoalData = {
-  title: '웹사이트 리뉴얼웹사이트 리뉴얼웹사이트 리뉴얼',
+  title: '🖥️웹사이트 리뉴얼웹사이트 리뉴얼웹사이트 리뉴얼',
   description:
     '회사의 온라인 브랜딩을 강화하기 위해 기존 웹사이트를 전면 개편하는 프로젝트입니다.',
   dDay: {

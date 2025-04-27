@@ -10,8 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chamjoeun.goalScript",
-      "deviceUdid": "47835669-8506-41FA-B688-F731B64373DA"
+      "bundleIdentifier": "com.chamjoeun.goalScript"
     },
     "android": {
       "adaptiveIcon": {

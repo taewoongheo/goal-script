@@ -57,12 +57,43 @@ export function GoalAndDDaySection({
     <View style={styles.lineContainer}>
       <View>
         {parsedLines?.lines.map((line, idx) => {
+          // Touchable한 dDay 버튼이 라인에 포함된 경우
+          const tokens = line.split(' ');
+          const isTouchableDDayToken = tokens.some(el =>
+            el.includes(`D-${dDay}`),
+          );
+          let parsedTokens: [string, boolean, number][] = [];
+          if (isTouchableDDayToken)
+            parsedTokens = tokens.map((element, index) => {
+              if (element === `D-${dDay}`) return [element, true, index];
+              return [element, false, index];
+            });
+
           if (idx === parsedLines.lines.length - 1) {
             return (
-              <View key={line.toString()} style={{flexDirection: 'row'}}>
-                <TouchableOpacity onPress={() => onToggleDday('dday')}>
-                  <Text style={styles.text}>{line}</Text>
-                </TouchableOpacity>
+              <View
+                key={line.toString()}
+                style={{flexDirection: 'row', backgroundColor: 'red'}}>
+                <View style={{flexDirection: 'row'}}>
+                  {isTouchableDDayToken ? (
+                    parsedTokens.map(el =>
+                      el[1] ? (
+                        <TouchableOpacity
+                          key={el[2]}
+                          onPress={() => onToggleDday('dday')}>
+                          <Text style={styles.text}>{el[0]}</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <Text key={el[2]} style={styles.text}>
+                          {el[0]}
+                        </Text>
+                      ),
+                    )
+                  ) : (
+                    <Text style={styles.text}>{line}</Text>
+                  )}
+                </View>
+
                 <Animated.View
                   style={{backgroundColor: 'red'}}
                   layout={LinearTransition.duration(100)}>
@@ -85,7 +116,25 @@ export function GoalAndDDaySection({
 
           return (
             <View key={line.toString()} style={{backgroundColor: 'blue'}}>
-              <Text style={styles.text}>{line}</Text>
+              <View style={{flexDirection: 'row'}}>
+                {isTouchableDDayToken ? (
+                  parsedTokens.map(el =>
+                    el[1] ? (
+                      <TouchableOpacity
+                        key={el[2]}
+                        onPress={() => onToggleDday('dday')}>
+                        <Text style={styles.text}>{el[0]} </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <Text key={el[2]} style={styles.text}>
+                        {el[0]}{' '}
+                      </Text>
+                    ),
+                  )
+                ) : (
+                  <Text style={styles.text}>{line}</Text>
+                )}
+              </View>
             </View>
           );
         })}

@@ -6,7 +6,7 @@
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "npx expo run:android",
-    "ios": "npx expo run:ios",
+    "ios": "npx expo run:ios -d 47835669-8506-41FA-B688-F731B64373DA",
     "build:ios": "eas build --platform ios",
     "build:android": "eas build --platform android",
     "web": "expo start --web",

@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
-import {ToggleKey} from '@/hooks/useToggleExpand';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated, {
   EntryAnimationsValues,
@@ -8,6 +7,7 @@ import Animated, {
   LinearTransition,
   withSpring,
 } from 'react-native-reanimated';
+import {ToggleKey} from '@/hooks/useToggleExpand';
 
 interface DdaySectionProps {
   dDay: number;

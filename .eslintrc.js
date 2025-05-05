@@ -39,14 +39,25 @@ module.exports = {
     'react/no-unused-prop-types': 'warn',
     'react/no-array-index-key': 'off',
     'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
-    'import/extensions': 'never',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
   env: {
     jest: true,
   },
   settings: {
     'import/resolver': {
-      typescript: {},
+      typescript: {
+        project: './tsconfig.json',
+      },
     },
     react: {
       version: 'detect',

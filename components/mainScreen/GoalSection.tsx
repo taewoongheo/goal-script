@@ -75,15 +75,37 @@ export function GoalSection({
       {lines?.map((line, idx) => {
         if (idx === lines.length - 1) {
           return (
-            <Text key={`${line}-${idx}`} style={styles.text}>
-              <Text style={styles.text}>{line}</Text>
-              <Text>까지</Text>
-            </Text>
+            <View key={`${line}-${idx}`} style={styles.lineContainer}>
+              <Pressable onPress={() => onToggleGoal('goal')}>
+                <Text style={styles.text}>{line}</Text>
+              </Pressable>
+              {isGoalExpanded ? (
+                <Animated.View
+                  entering={expandWidth}
+                  style={{
+                    overflow: 'hidden',
+                  }}>
+                  <Animated.Text
+                    entering={FadeIn.duration(400)}
+                    style={styles.text}>
+                    ⚙️
+                  </Animated.Text>
+                </Animated.View>
+              ) : null}
+              <Animated.Text
+                layout={LinearTransition.springify().duration(1000)}
+                style={styles.text}>
+                까지
+              </Animated.Text>
+            </View>
           );
         }
 
         return (
-          <Pressable key={`${line}-${idx}`} style={[styles.lineContainer]}>
+          <Pressable
+            onPress={() => onToggleGoal('goal')}
+            key={`${line}-${idx}`}
+            style={styles.lineContainer}>
             <Text style={styles.text}>{line}</Text>
           </Pressable>
         );

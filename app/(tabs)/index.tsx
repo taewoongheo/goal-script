@@ -54,33 +54,33 @@ export default function MainScreen() {
         />
 
         {/* Use DdaySection */}
-        {/* <DdaySection
+        <DdaySection
           dDay={dDay}
           rDay={rDay}
           isDdayExpanded={expandStates.dday[0]}
           onToggleDday={handleToggle}
           styles={componentStyles}
-        /> */}
+        />
 
         {/* ListSection for Achieved */}
-        {/* <ListSection
+        <ListSection
           items={achieved}
           isExpanded={expandStates.achieved[0]}
           onToggle={handleToggle}
           toggleKey="achieved"
           suffixText="들을 완료했고, "
           styles={componentStyles}
-        /> */}
+        />
 
         {/* ListSection for Todos */}
-        {/* <ListSection
+        <ListSection
           items={todos}
           isExpanded={expandStates.todos[0]}
           onToggle={handleToggle}
           toggleKey="todos"
           suffixText="들이 남았어요."
           styles={componentStyles}
-        /> */}
+        />
       </Animated.View>
     </View>
   );

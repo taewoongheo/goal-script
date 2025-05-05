@@ -1,3 +1,5 @@
+import {StyleSheet, View} from 'react-native';
+import Animated, {LinearTransition} from 'react-native-reanimated';
 import {Layout} from '@/constants/Layout';
 import {
   academicPaper,
@@ -7,8 +9,6 @@ import {
   websiteProject,
 } from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
-import {StyleSheet, View} from 'react-native';
-import Animated, {LinearTransition} from 'react-native-reanimated';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 // Import the new components
 import {GoalSection} from '@/components/mainScreen/GoalSection';
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     marginBottom: 4,
+    width: '100%',
   },
   text: {
     fontSize: Typography.fontSize.large,

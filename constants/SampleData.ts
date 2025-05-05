@@ -31,7 +31,7 @@ export const websiteProject: GoalData = {
 };
 
 export const marathonPreparation: GoalData = {
-  title: 'aaaaㅂㅂqq봄 마라톤가나다라마바',
+  title: '봄 마라톤',
   description:
     '완주는 목표일 뿐, 과정 속 꾸준함과 건강한 삶의 습관을 만들어가는 여정입니다.', // 짧은 설명
   dDay: {

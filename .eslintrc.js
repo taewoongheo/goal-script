@@ -39,16 +39,7 @@ module.exports = {
     'react/no-unused-prop-types': 'warn',
     'react/no-array-index-key': 'off',
     'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        ts: 'never',
-        tsx: 'never',
-        js: 'never',
-        jsx: 'never',
-      },
-    ],
+    'import/extensions': 'never',
   },
   env: {
     jest: true,

@@ -5,8 +5,9 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
+    "android:boot": "emulator -avd Pixel9",
     "android": "npx expo run:android",
-    "ios": "npx expo run:ios -d 47835669-8506-41FA-B688-F731B64373DA",
+    "ios": "npx expo run:ios -d E60D95D5-A3CE-4F75-9FC1-A1A504F452F1",
     "build:ios": "eas build --platform ios",
     "build:android": "eas build --platform android",
     "web": "expo start --web",

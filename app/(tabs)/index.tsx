@@ -10,10 +10,11 @@ import {Typography} from '@/constants/Typography';
 import {StyleSheet, View} from 'react-native';
 import Animated, {LinearTransition} from 'react-native-reanimated';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
-import {ListSection} from '@/components/mainScreen/ListSection';
 // Import the new components
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
+import {ListSection} from '@/components/mainScreen/ListSection';
+import {getViewportWidth} from '@/utils/viewport';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
@@ -53,33 +54,33 @@ export default function MainScreen() {
         />
 
         {/* Use DdaySection */}
-        <DdaySection
+        {/* <DdaySection
           dDay={dDay}
           rDay={rDay}
           isDdayExpanded={expandStates.dday[0]}
           onToggleDday={handleToggle}
           styles={componentStyles}
-        />
+        /> */}
 
         {/* ListSection for Achieved */}
-        <ListSection
+        {/* <ListSection
           items={achieved}
           isExpanded={expandStates.achieved[0]}
           onToggle={handleToggle}
           toggleKey="achieved"
           suffixText="들을 완료했고, "
           styles={componentStyles}
-        />
+        /> */}
 
         {/* ListSection for Todos */}
-        <ListSection
+        {/* <ListSection
           items={todos}
           isExpanded={expandStates.todos[0]}
           onToggle={handleToggle}
           toggleKey="todos"
           suffixText="들이 남았어요."
           styles={componentStyles}
-        />
+        /> */}
       </Animated.View>
     </View>
   );
@@ -90,18 +91,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Layout.padding.horizontal,
   },
   textContainer: {
-    alignItems: 'stretch', // Changed to stretch to allow sections to take full width if needed
+    alignItems: 'stretch',
     flexDirection: 'column',
+    width: getViewportWidth() * Layout.padding.horizontal,
   },
   lineContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'center', // Keep items aligned at the baseline
-    marginBottom: 4, // Keep margin between lines/sections
-    // width: '100%', // Optional: Ensure each section takes full width if needed
+    alignItems: 'center',
+    marginBottom: 4,
   },
   text: {
     fontSize: Typography.fontSize.large,

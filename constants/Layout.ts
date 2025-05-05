@@ -17,7 +17,7 @@ export const Layout: LayoutType = {
     large: 24,
   },
   padding: {
-    horizontal: 20,
+    horizontal: 0.8,
     vertical: 16,
   },
 };

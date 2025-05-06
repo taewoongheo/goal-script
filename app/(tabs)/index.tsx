@@ -13,8 +13,8 @@ import {useToggleExpand} from '@/hooks/useToggleExpand';
 // Import the new components
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
-import {ListSection} from '@/components/mainScreen/ListSection';
 import {getViewportWidth} from '@/utils/viewport';
+import {ListSection} from '@/components/mainScreen/ListSection';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
@@ -62,23 +62,12 @@ export default function MainScreen() {
           styles={componentStyles}
         />
 
-        {/* ListSection for Achieved */}
         <ListSection
-          items={achieved}
-          isExpanded={expandStates.achieved[0]}
+          achievedItems={achieved}
+          todoItems={todos}
+          isAchievedExpanded={expandStates.achieved[0]}
+          isTodosExpanded={expandStates.todos[0]}
           onToggle={handleToggle}
-          toggleKey="achieved"
-          suffixText="들을 완료했고,"
-          styles={componentStyles}
-        />
-
-        {/* ListSection for Todos */}
-        <ListSection
-          items={todos}
-          isExpanded={expandStates.todos[0]}
-          onToggle={handleToggle}
-          toggleKey="todos"
-          suffixText="들이 남았어요."
           styles={componentStyles}
         />
       </Animated.View>

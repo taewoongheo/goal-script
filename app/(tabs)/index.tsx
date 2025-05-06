@@ -1,12 +1,15 @@
 import {StyleSheet, View} from 'react-native';
-import Animated, {LinearTransition} from 'react-native-reanimated';
+import Animated, {
+  LinearTransition,
+  FadeIn,
+  FadeOut,
+} from 'react-native-reanimated';
+import {useMemo} from 'react';
 import {Layout} from '@/constants/Layout';
 import {
-  academicPaper,
   marathonPreparation,
   // academicPaper,
   // marathonPreparation,
-  websiteProject,
 } from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
@@ -15,6 +18,7 @@ import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
 import {getViewportWidth} from '@/utils/viewport';
 import {ListSection} from '@/components/mainScreen/ListSection';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
@@ -27,10 +31,23 @@ const rDay = sampleData.dDay.date;
 const {achieved} = sampleData;
 const {todos} = sampleData;
 
-const ANIMATION_DURATION = 400;
-
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
+
+  const linearTransitionAnimation = useMemo(
+    () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
+    [],
+  );
+
+  const fadeInAnimation = useMemo(
+    () => FadeIn.duration(ANIMATION_DURATION.FADE_IN),
+    [],
+  );
+
+  const fadeOutAnimation = useMemo(
+    () => FadeOut.duration(ANIMATION_DURATION.FADE_IN * 0.4),
+    [],
+  );
 
   const componentStyles = {
     lineContainer: styles.lineContainer,
@@ -44,22 +61,26 @@ export default function MainScreen() {
     <View style={styles.container}>
       <Animated.View
         style={styles.textContainer}
-        layout={LinearTransition.duration(ANIMATION_DURATION)}>
-        {/* Use GoalSection */}
+        layout={linearTransitionAnimation}>
         <GoalSection
           goal={goal}
           isGoalExpanded={expandStates.goal[0]}
           onToggleGoal={handleToggle}
           styles={componentStyles}
+          linearTransitionAnimation={linearTransitionAnimation}
+          fadeInAnimation={fadeInAnimation}
+          fadeOutAnimation={fadeOutAnimation}
         />
 
-        {/* Use DdaySection */}
         <DdaySection
           dDay={dDay}
           rDay={rDay}
           isDdayExpanded={expandStates.dday[0]}
           onToggleDday={handleToggle}
           styles={componentStyles}
+          linearTransitionAnimation={linearTransitionAnimation}
+          fadeInAnimation={fadeInAnimation}
+          fadeOutAnimation={fadeOutAnimation}
         />
 
         <ListSection
@@ -69,6 +90,7 @@ export default function MainScreen() {
           isTodosExpanded={expandStates.todos[0]}
           onToggle={handleToggle}
           styles={componentStyles}
+          linearTransitionAnimation={linearTransitionAnimation}
         />
       </Animated.View>
     </View>
@@ -104,8 +126,6 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     width: '100%',
-    // backgroundColor: '#f0f0f0',
-    // padding: 10,
     borderRadius: 4,
   },
   dropdownItem: {

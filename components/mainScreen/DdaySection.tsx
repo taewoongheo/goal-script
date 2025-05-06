@@ -3,8 +3,6 @@ import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated, {
   EntryAnimationsValues,
-  FadeIn,
-  LinearTransition,
   withSpring,
 } from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
@@ -19,6 +17,9 @@ interface DdaySectionProps {
     text: StyleProp<TextStyle>;
     highlight: StyleProp<TextStyle>;
   };
+  linearTransitionAnimation: any;
+  fadeInAnimation: any;
+  fadeOutAnimation: any;
 }
 
 export function DdaySection({
@@ -27,6 +28,9 @@ export function DdaySection({
   isDdayExpanded,
   onToggleDday,
   styles,
+  linearTransitionAnimation,
+  fadeInAnimation,
+  fadeOutAnimation,
 }: DdaySectionProps) {
   const expandWidth = (values: EntryAnimationsValues) => {
     'worklet';
@@ -47,20 +51,21 @@ export function DdaySection({
         <Pressable onPress={() => onToggleDday('dday')}>
           <Text style={styles.text}>📅D-{dDay} </Text>
         </Pressable>
-        {isDdayExpanded ? (
+        {isDdayExpanded && (
           <Animated.View
             entering={expandWidth}
             style={{
               overflow: 'hidden',
             }}>
-            <Animated.Text entering={FadeIn.duration(400)} style={styles.text}>
+            <Animated.Text
+              entering={fadeInAnimation}
+              exiting={fadeOutAnimation}
+              style={styles.text}>
               {rDay}{' '}
             </Animated.Text>
           </Animated.View>
-        ) : null}
-        <Animated.Text
-          layout={LinearTransition.springify().duration(1000)}
-          style={styles.text}>
+        )}
+        <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
           남았어요
         </Animated.Text>
       </View>

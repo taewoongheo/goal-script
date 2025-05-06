@@ -3,13 +3,12 @@ import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated, {
   EntryAnimationsValues,
-  FadeIn,
-  LinearTransition,
-  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
+import {getViewportWidth} from '@/utils/viewport';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {Layout} from '@/constants/Layout';
-import {getViewportWidth} from '@/utils/viewport';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 
 interface GoalSectionProps {
   goal: string;
@@ -20,6 +19,9 @@ interface GoalSectionProps {
     text: StyleProp<TextStyle>;
     highlight: StyleProp<TextStyle>;
   };
+  linearTransitionAnimation: any;
+  fadeInAnimation: any;
+  fadeOutAnimation: any;
 }
 
 export function GoalSection({
@@ -27,6 +29,9 @@ export function GoalSection({
   isGoalExpanded,
   onToggleGoal,
   styles,
+  linearTransitionAnimation,
+  fadeInAnimation,
+  fadeOutAnimation,
 }: GoalSectionProps) {
   const [lines, setLines] = useState<string[] | null>(null);
 
@@ -42,7 +47,9 @@ export function GoalSection({
     return {
       initialValues: {width: 0},
       animations: {
-        width: withSpring(finalW, {duration: 1000}),
+        width: withTiming(finalW, {
+          duration: ANIMATION_DURATION.LINEAR_TRANSIION,
+        }),
       },
     };
   };
@@ -79,21 +86,22 @@ export function GoalSection({
               <Pressable onPress={() => onToggleGoal('goal')}>
                 <Text style={styles.text}>{line}</Text>
               </Pressable>
-              {isGoalExpanded ? (
+              {isGoalExpanded && (
                 <Animated.View
                   entering={expandWidth}
                   style={{
                     overflow: 'hidden',
                   }}>
                   <Animated.Text
-                    entering={FadeIn.duration(400)}
+                    entering={fadeInAnimation}
+                    exiting={fadeOutAnimation}
                     style={styles.text}>
                     ⚙️
                   </Animated.Text>
                 </Animated.View>
-              ) : null}
+              )}
               <Animated.Text
-                layout={LinearTransition.springify().duration(1000)}
+                layout={linearTransitionAnimation}
                 style={styles.text}>
                 까지
               </Animated.Text>

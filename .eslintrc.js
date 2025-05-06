@@ -40,16 +40,17 @@ module.exports = {
     'react/no-unused-prop-types': 'warn',
     'react/no-array-index-key': 'off',
     'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
+    'import/extensions': 'off',
+    // [
+    //   'error',
+    //   'ignorePackages',
+    //   {
+    //     js: 'never',
+    //     jsx: 'never',
+    //     ts: 'never',
+    //     tsx: 'never',
+    //   },
+    // ],
   },
   env: {
     jest: true,

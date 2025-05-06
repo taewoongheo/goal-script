@@ -31,9 +31,9 @@ export const websiteProject: GoalData = {
 };
 
 export const marathonPreparation: GoalData = {
-  title: '봄 마라톤봄 마라톤봄 마라톤봄 마라톤',
+  title: '🏃마라톤봄 마라톤',
   description:
-    '완주는 목표일 뿐, 과정 속 꾸준함과 건강한 삶의 습관을 만들어가는 여정입니다.', // 짧은 설명
+    '완주는 목표일 뿐, 과정 속 꾸준함과 건강한 삶의 습관을 만들어가는 여정입니다.',
   dDay: {
     date: '25.10.15',
     remainingDays: 175,

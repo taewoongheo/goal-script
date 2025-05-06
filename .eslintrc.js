@@ -13,6 +13,7 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
+    'plugin:import/typescript',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'prettier',
@@ -55,6 +56,9 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
       typescript: {
         project: './tsconfig.json',
       },

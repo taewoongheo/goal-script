@@ -7,12 +7,21 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import Animated, {
+  EntryAnimationsValues,
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 
-interface ListSectionProps {
+export interface ListSectionProps {
   items: string[];
   isExpanded: boolean;
-  onToggle: (key: ToggleKey) => void;
+  onToggle: (_key: ToggleKey) => void;
   toggleKey: ToggleKey;
   suffixText: string;
   styles: {
@@ -28,35 +37,51 @@ export function ListSection({
   items,
   isExpanded,
   onToggle,
-  toggleKey, // Use the passed toggleKey
-  suffixText, // Use the passed suffixText
+  toggleKey,
+  suffixText,
   styles,
 }: ListSectionProps) {
-  if (!items || items.length === 0) {
-    return null;
-  }
+  if (items.length === 0) return null;
 
   return (
-    <View style={styles.lineContainer}>
-      {/* Use toggleKey for the onPress handler */}
+    <Animated.View
+      layout={LinearTransition.springify().duration(1000)}
+      style={styles.lineContainer}>
       <TouchableOpacity onPress={() => onToggle(toggleKey)}>
         <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
           {items[0]}
         </Text>
       </TouchableOpacity>
 
-      {isExpanded && (
-        <View style={styles.dropdownContainer}>
-          {items.map((el, index) => (
-            <Text key={`${el}${index + 1}`} style={styles.dropdownItem}>
-              {el}
-            </Text>
-          ))}
-        </View>
-      )}
+      <Animated.View
+        layout={LinearTransition.duration(500)}
+        style={[
+          styles.dropdownContainer,
+          {
+            overflow: 'hidden',
+            backgroundColor: 'red',
+          },
+        ]}>
+        {isExpanded && (
+          <View>
+            {items.map((el, i) => (
+              <Animated.Text
+                entering={FadeIn.springify().delay(100 * (i + 1))}
+                exiting={FadeOut.springify()}
+                key={`${el}-${i}`}
+                style={styles.dropdownItem}>
+                {el}
+              </Animated.Text>
+            ))}
+          </View>
+        )}
+      </Animated.View>
 
-      {/* Use the dynamic suffixText */}
-      <Text style={styles.text}>{suffixText}</Text>
-    </View>
+      <Animated.Text
+        layout={LinearTransition.springify().duration(1000)}
+        style={styles.text}>
+        {suffixText}
+      </Animated.Text>
+    </Animated.View>
   );
 }

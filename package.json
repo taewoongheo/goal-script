@@ -12,7 +12,7 @@
     "build:android": "eas build --platform android",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "eslint app components --ext .ts,.tsx --ignore-path .eslintignore"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "jest": {
     "preset": "jest-expo"

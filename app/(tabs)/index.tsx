@@ -68,7 +68,7 @@ export default function MainScreen() {
           isExpanded={expandStates.achieved[0]}
           onToggle={handleToggle}
           toggleKey="achieved"
-          suffixText="들을 완료했고, "
+          suffixText="들을 완료했고,"
           styles={componentStyles}
         />
 
@@ -115,9 +115,8 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     width: '100%',
-    backgroundColor: '#f0f0f0',
-    padding: 8,
-    marginTop: 4,
+    // backgroundColor: '#f0f0f0',
+    // padding: 10,
     borderRadius: 4,
   },
   dropdownItem: {

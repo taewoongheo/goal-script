@@ -10,6 +10,7 @@ import {
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {ANIMATION_DURATION} from '@/constants/Animation';
+import {Pressable} from 'react-native-gesture-handler';
 
 export interface ListSectionProps {
   achievedItems: string[];
@@ -81,13 +82,13 @@ export function ListSection({
           </Animated.View>
 
           <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
-            들을 완료했고,
+            {todoItems.length ? '들을 완료했고,' : '들을 완료했어요.'}
           </Animated.Text>
         </Animated.View>
       )}
 
       {/* Todos 섹션 */}
-      {todoItems.length > 0 && (
+      {todoItems.length > 0 ? (
         <Animated.View
           layout={linearTransitionAnimation}
           style={styles.lineContainer}>
@@ -130,6 +131,14 @@ export function ListSection({
             들이 남았어요.
           </Animated.Text>
         </Animated.View>
+      ) : (
+        <Pressable onPress={() => console.log('add todo')}>
+          <Animated.Text
+            layout={linearTransitionAnimation}
+            style={[styles.text, styles.highlight]}>
+            앞으로 할 일은 무엇인가요?
+          </Animated.Text>
+        </Pressable>
       )}
     </View>
   );

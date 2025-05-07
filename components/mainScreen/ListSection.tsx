@@ -7,13 +7,9 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeOut,
-  LinearTransition,
-} from 'react-native-reanimated';
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
-import {ANIMATION_DURATION, ITEM_ANIMATION_DELAY} from '@/constants/Animation';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 
 export interface ListSectionProps {
   achievedItems: string[];
@@ -40,11 +36,6 @@ export function ListSection({
   styles,
   linearTransitionAnimation,
 }: ListSectionProps) {
-  const linearDelayTransitionAnimation = useMemo(
-    () => LinearTransition.delay(ANIMATION_DURATION.LINEAR_TRANSIION * 0.1),
-    [],
-  );
-
   const fadeOutItemAnimation = useMemo(() => FadeOut, []);
 
   return (
@@ -52,11 +43,7 @@ export function ListSection({
       {/* Achieved 섹션 */}
       {achievedItems.length > 0 && (
         <Animated.View
-          layout={
-            isAchievedExpanded
-              ? linearTransitionAnimation
-              : linearDelayTransitionAnimation
-          }
+          layout={linearTransitionAnimation}
           style={styles.lineContainer}>
           <TouchableOpacity onPress={() => onToggle('achieved')}>
             <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
@@ -70,14 +57,19 @@ export function ListSection({
               styles.dropdownContainer,
               {
                 overflow: 'hidden',
-                // backgroundColor: 'red',
               },
             ]}>
             {isAchievedExpanded && (
               <View>
                 {achievedItems.map((el, i) => (
                   <Animated.Text
-                    entering={FadeIn.delay(ITEM_ANIMATION_DELAY * (i + 1))}
+                    entering={FadeIn.duration(
+                      ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN,
+                    ).delay(
+                      ANIMATION_DURATION.LIST_ITEM_ANIMATION
+                        .ITEM_ANIMATION_DELAY *
+                        (i + 1),
+                    )}
                     exiting={fadeOutItemAnimation}
                     key={`achieved-${el}-${i}`}
                     style={styles.dropdownItem}>
@@ -88,13 +80,7 @@ export function ListSection({
             )}
           </Animated.View>
 
-          <Animated.Text
-            layout={
-              isAchievedExpanded
-                ? linearTransitionAnimation
-                : linearDelayTransitionAnimation
-            }
-            style={styles.text}>
+          <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
             들을 완료했고,
           </Animated.Text>
         </Animated.View>
@@ -103,11 +89,7 @@ export function ListSection({
       {/* Todos 섹션 */}
       {todoItems.length > 0 && (
         <Animated.View
-          layout={
-            isAchievedExpanded
-              ? linearTransitionAnimation
-              : linearDelayTransitionAnimation
-          }
+          layout={linearTransitionAnimation}
           style={styles.lineContainer}>
           <TouchableOpacity onPress={() => onToggle('todos')}>
             <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
@@ -127,7 +109,13 @@ export function ListSection({
               <View>
                 {todoItems.map((el, i) => (
                   <Animated.Text
-                    entering={FadeIn.delay(ITEM_ANIMATION_DELAY * (i + 1))}
+                    entering={FadeIn.duration(
+                      ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN,
+                    ).delay(
+                      ANIMATION_DURATION.LIST_ITEM_ANIMATION
+                        .ITEM_ANIMATION_DELAY *
+                        (i + 1),
+                    )}
                     exiting={fadeOutItemAnimation}
                     key={`todos-${el}-${i}`}
                     style={styles.dropdownItem}>
@@ -138,13 +126,7 @@ export function ListSection({
             )}
           </Animated.View>
 
-          <Animated.Text
-            layout={
-              isAchievedExpanded || isTodosExpanded
-                ? linearTransitionAnimation
-                : linearDelayTransitionAnimation
-            }
-            style={styles.text}>
+          <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
             들이 남았어요.
           </Animated.Text>
         </Animated.View>

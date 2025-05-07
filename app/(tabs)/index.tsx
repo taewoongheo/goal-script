@@ -45,7 +45,7 @@ export default function MainScreen() {
   );
 
   const fadeOutAnimation = useMemo(
-    () => FadeOut.duration(ANIMATION_DURATION.FADE_IN * 0.4),
+    () => FadeOut.duration(ANIMATION_DURATION.FADE_IN * 0.6),
     [],
   );
 
@@ -119,10 +119,11 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.large,
     fontWeight: Typography.fontWeight.regular,
     lineHeight: Typography.lineHeight.relaxed,
+    color: '#ACACAC',
   },
   highlight: {
     fontWeight: Typography.fontWeight.bold,
-    color: '#007AFF',
+    color: '#2F2F2F',
   },
   dropdownContainer: {
     width: '100%',

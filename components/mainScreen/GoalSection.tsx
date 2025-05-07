@@ -84,7 +84,7 @@ export function GoalSection({
           return (
             <View key={`${line}-${idx}`} style={styles.lineContainer}>
               <Pressable onPress={() => onToggleGoal('goal')}>
-                <Text style={styles.text}>{line}</Text>
+                <Text style={[styles.text, styles.highlight]}>{line}</Text>
               </Pressable>
               {isGoalExpanded && (
                 <Animated.View

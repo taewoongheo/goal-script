@@ -7,10 +7,12 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import Animated, {FadeOut} from 'react-native-reanimated';
+import {Pressable} from 'react-native-gesture-handler';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {Pressable} from 'react-native-gesture-handler';
+import {AchievedItem} from './AchievedItem';
+import {TodoItem} from './TodoItem';
 
 export interface ListSectionProps {
   achievedItems: string[];
@@ -37,8 +39,6 @@ export function ListSection({
   styles,
   linearTransitionAnimation,
 }: ListSectionProps) {
-  const fadeOutItemAnimation = useMemo(() => FadeOut, []);
-
   return (
     <View>
       {/* Achieved 섹션 */}
@@ -62,20 +62,13 @@ export function ListSection({
             ]}>
             {isAchievedExpanded && (
               <View>
-                {achievedItems.map((el, i) => (
-                  <Animated.Text
-                    entering={FadeIn.duration(
-                      ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN,
-                    ).delay(
-                      ANIMATION_DURATION.LIST_ITEM_ANIMATION
-                        .ITEM_ANIMATION_DELAY *
-                        (i + 1),
-                    )}
-                    exiting={fadeOutItemAnimation}
-                    key={`achieved-${el}-${i}`}
-                    style={styles.dropdownItem}>
-                    {el}
-                  </Animated.Text>
+                {achievedItems.map((item, index) => (
+                  <AchievedItem
+                    key={`achieved-${item}-${index}`}
+                    item={item}
+                    index={index}
+                    style={styles.dropdownItem}
+                  />
                 ))}
               </View>
             )}
@@ -108,20 +101,13 @@ export function ListSection({
             ]}>
             {isTodosExpanded && (
               <View>
-                {todoItems.map((el, i) => (
-                  <Animated.Text
-                    entering={FadeIn.duration(
-                      ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN,
-                    ).delay(
-                      ANIMATION_DURATION.LIST_ITEM_ANIMATION
-                        .ITEM_ANIMATION_DELAY *
-                        (i + 1),
-                    )}
-                    exiting={fadeOutItemAnimation}
-                    key={`todos-${el}-${i}`}
-                    style={styles.dropdownItem}>
-                    {el}
-                  </Animated.Text>
+                {todoItems.map((item, index) => (
+                  <TodoItem
+                    key={`todos-${item}-${index}`}
+                    item={item}
+                    index={index}
+                    style={styles.dropdownItem}
+                  />
                 ))}
               </View>
             )}

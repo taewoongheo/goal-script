@@ -17,7 +17,8 @@ import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
 import {getViewportWidth} from '@/utils/viewport';
-import {ListSection} from '@/components/mainScreen/ListSection';
+import {AchievedSection} from '@/components/mainScreen/AchievedSection';
+import {TodoSection} from '@/components/mainScreen/TodoSection';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
@@ -83,10 +84,17 @@ export default function MainScreen() {
           fadeOutAnimation={fadeOutAnimation}
         />
 
-        <ListSection
+        <AchievedSection
           achievedItems={achieved}
-          todoItems={todos}
           isAchievedExpanded={expandStates.achieved[0]}
+          onToggle={handleToggle}
+          styles={componentStyles}
+          linearTransitionAnimation={linearTransitionAnimation}
+          hasTodoItems={todos.length > 0}
+        />
+
+        <TodoSection
+          todoItems={todos}
           isTodosExpanded={expandStates.todos[0]}
           onToggle={handleToggle}
           styles={componentStyles}

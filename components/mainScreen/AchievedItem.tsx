@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {StyleProp, TextStyle} from 'react-native';
+import {StyleProp, TextStyle, View} from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
@@ -8,6 +8,7 @@ interface AchievedItemProps {
   item: string;
   index: number;
   style: StyleProp<TextStyle>;
+  selectedAchievedItem: {item: string; index: number} | null;
   setSelectedAchievedItem: ({
     item,
     index,
@@ -21,6 +22,7 @@ export function AchievedItem({
   item,
   index,
   style,
+  selectedAchievedItem,
   setSelectedAchievedItem,
 }: AchievedItemProps) {
   const fadeInAnimation = useMemo(
@@ -35,15 +37,26 @@ export function AchievedItem({
   const fadeOutAnimation = useMemo(() => FadeOut, []);
 
   return (
-    <Pressable
-      onPress={() => setSelectedAchievedItem({item, index})}
-      style={{marginVertical: 3, marginHorizontal: 8, paddingHorizontal: 12}}>
-      <Animated.Text
-        entering={fadeInAnimation}
-        exiting={fadeOutAnimation}
-        style={[style, {paddingVertical: 4}]}>
-        {item}
-      </Animated.Text>
-    </Pressable>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+      }}>
+      {selectedAchievedItem?.item === item && <Animated.Text>✅</Animated.Text>}
+      <Pressable
+        onPress={() => setSelectedAchievedItem({item, index})}
+        style={{
+          marginVertical: 3,
+          marginHorizontal: 8,
+        }}>
+        <Animated.Text
+          entering={fadeInAnimation}
+          exiting={fadeOutAnimation}
+          style={[style, {paddingVertical: 4}]}>
+          {item}
+        </Animated.Text>
+      </Pressable>
+    </View>
   );
 }

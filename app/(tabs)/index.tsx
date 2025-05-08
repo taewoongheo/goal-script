@@ -125,12 +125,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: Typography.fontSize.large,
-    fontWeight: Typography.fontWeight.regular,
     lineHeight: Typography.lineHeight.relaxed,
+    fontFamily: Typography.fontFamily.regular,
     color: '#ACACAC',
   },
   highlight: {
-    fontWeight: Typography.fontWeight.bold,
+    fontFamily: Typography.fontFamily.bold,
     color: '#2F2F2F',
   },
   dropdownContainer: {
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   },
   dropdownItem: {
     fontSize: Typography.fontSize.medium,
+    fontFamily: Typography.fontFamily.regular,
     paddingVertical: 4,
   },
 });

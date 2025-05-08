@@ -14,9 +14,10 @@ interface TypographyType {
     normal: number;
     relaxed: number;
   };
-  fontWeight: {
-    regular: '400' | 'normal';
-    bold: '800' | 'bold';
+  fontFamily: {
+    regular: string;
+    semiBold: string;
+    bold: string;
   };
 }
 
@@ -24,15 +25,16 @@ export const Typography: TypographyType = {
   fontSize: {
     small: 16,
     medium: 20,
-    large: 26,
+    large: 27,
   },
   lineHeight: {
     compact: 24,
     normal: 32,
     relaxed: 40,
   },
-  fontWeight: {
-    regular: '400',
-    bold: '800',
+  fontFamily: {
+    regular: 'Pretendard-Regular',
+    semiBold: 'Pretendard-SemiBold',
+    bold: 'Pretendard-Bold',
   },
 };

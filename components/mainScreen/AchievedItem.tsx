@@ -41,9 +41,7 @@ export function AchievedItem({
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
       }}>
-      {selectedAchievedItem?.item === item && <Animated.Text>✅</Animated.Text>}
       <Pressable
         onPress={() => setSelectedAchievedItem({item, index})}
         style={{

@@ -73,7 +73,6 @@ export function GoalSection({
           ]}
           onTextLayout={e => {
             const texts = e.nativeEvent.lines.map(l => l.text);
-            console.log(texts);
             setLines(parseLines(texts));
           }}>
           {goal}까지

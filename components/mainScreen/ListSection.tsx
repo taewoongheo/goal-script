@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,11 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  Alert,
 } from 'react-native';
-import Animated, {FadeOut} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import {Pressable} from 'react-native-gesture-handler';
 import {ToggleKey} from '@/hooks/useToggleExpand';
-import {ANIMATION_DURATION} from '@/constants/Animation';
 import {AchievedItem} from './AchievedItem';
 import {TodoItem} from './TodoItem';
 
@@ -39,6 +39,30 @@ export function ListSection({
   styles,
   linearTransitionAnimation,
 }: ListSectionProps) {
+  const [selectedAchievedItem, setSelectedAchievedItem] = useState<{
+    item: string;
+    index: number;
+  } | null>(null);
+
+  const [selectedTodoItem, setSelectedTodoItem] = useState<{
+    item: string;
+    index: number;
+  } | null>(null);
+
+  const handleAchievedItemSelect = useCallback(
+    ({item, index}: {item: string; index: number}) => {
+      setSelectedAchievedItem({item, index});
+    },
+    [],
+  );
+
+  const handleTodoItemSelect = useCallback(
+    ({item, index}: {item: string; index: number}) => {
+      setSelectedTodoItem({item, index});
+    },
+    [],
+  );
+
   return (
     <View>
       {/* Achieved 섹션 */}
@@ -68,6 +92,7 @@ export function ListSection({
                     item={item}
                     index={index}
                     style={styles.dropdownItem}
+                    setSelectedAchievedItem={handleAchievedItemSelect}
                   />
                 ))}
               </View>
@@ -107,6 +132,7 @@ export function ListSection({
                     item={item}
                     index={index}
                     style={styles.dropdownItem}
+                    setSelectedTodoItem={handleTodoItemSelect}
                   />
                 ))}
               </View>

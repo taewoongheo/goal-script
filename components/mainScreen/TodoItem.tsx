@@ -1,5 +1,11 @@
-import React, {useMemo, useEffect} from 'react';
-import {StyleProp, TextStyle, View, LayoutChangeEvent} from 'react-native';
+import React, {useMemo} from 'react';
+import {
+  StyleProp,
+  TextStyle,
+  View,
+  LayoutChangeEvent,
+  StyleSheet,
+} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -77,39 +83,24 @@ export function TodoItem({
       entering={fadeInAnimation}
       exiting={fadeOutAnimation}
       onLayout={onLayout}
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 3,
-      }}>
+      style={styles.container}>
       <Pressable
         onPress={toggleComplete}
-        style={{
-          marginHorizontal: 6,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          opacity: isSelected ? 1 : 0,
-        }}>
-        <View
-          style={{
-            position: 'relative',
-            width: 26,
-            height: 26,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        style={[styles.checkboxContainer, {opacity: isSelected ? 1 : 0}]}>
+        <View style={styles.checkbox}>
           <MaterialIcons
             name="check-box-outline-blank"
             size={20}
             color="black"
           />
-          <Animated.View style={[{position: 'absolute'}, checkboxStyle]}>
+          <Animated.View style={[styles.checkboxOverlay, checkboxStyle]}>
             <MaterialIcons name="check-box" size={20} color="black" />
           </Animated.View>
         </View>
       </Pressable>
-      <Pressable style={{flex: 1}} onPress={() => setSelectedIdx(index)}>
+      <Pressable
+        style={styles.textContainer}
+        onPress={() => setSelectedIdx(index)}>
         <Animated.Text style={[style, textStyle]} numberOfLines={1}>
           {item.text}
         </Animated.Text>
@@ -117,3 +108,30 @@ export function TodoItem({
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 3,
+  },
+  checkboxContainer: {
+    marginHorizontal: 6,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    position: 'relative',
+    width: 26,
+    height: 26,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxOverlay: {
+    position: 'absolute',
+  },
+  textContainer: {
+    flex: 1,
+  },
+});

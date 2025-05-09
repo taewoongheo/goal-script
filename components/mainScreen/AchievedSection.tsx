@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect, useRef, useMemo} from 'react';
+import React, {useState, useCallback, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ViewStyle,
   TextStyle,
   LayoutChangeEvent,
+  StyleSheet,
 } from 'react-native';
 import Animated, {
   FadeIn,
@@ -80,34 +81,27 @@ export function AchievedSection({
         </Text>
       </TouchableOpacity>
 
-      <View style={{position: 'relative', width: '100%'}}>
+      <View style={localStyles.relativeContainer}>
         {isAchievedExpanded && (
           <Animated.View
             layout={highlightAnimation}
             entering={FadeIn}
             exiting={FadeOut}
-            style={{
-              position: 'absolute',
-              backgroundColor: 'rgba(255, 255, 0, 0.3)',
-              borderRadius: 8,
-              height,
-              width: getViewportWidth(),
-              left: -containerPadding,
-              top: selectedIdx * height,
-              zIndex: -1,
-            }}
+            style={[
+              localStyles.highlightBackground,
+              {
+                height,
+                width: getViewportWidth(),
+                left: -containerPadding,
+                top: selectedIdx * height,
+              },
+            ]}
           />
         )}
 
         <Animated.View
           layout={linearTransitionAnimation}
-          style={[
-            styles.dropdownContainer,
-            {
-              position: 'relative',
-              overflow: 'hidden',
-            },
-          ]}>
+          style={[styles.dropdownContainer, localStyles.dropdownOverride]}>
           {isAchievedExpanded && (
             <View>
               {achievedItems.map((item, index) => (
@@ -134,3 +128,20 @@ export function AchievedSection({
     </Animated.View>
   );
 }
+
+const localStyles = StyleSheet.create({
+  relativeContainer: {
+    position: 'relative',
+    width: '100%',
+  },
+  highlightBackground: {
+    position: 'absolute',
+    backgroundColor: 'rgb(217, 255, 0)',
+    borderRadius: 8,
+    zIndex: -1,
+  },
+  dropdownOverride: {
+    position: 'relative',
+    overflow: 'hidden',
+  },
+});

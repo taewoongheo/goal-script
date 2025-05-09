@@ -1,6 +1,11 @@
-import {useState} from 'react';
-import {marathonPreparation, GoalData} from '@/constants/SampleData';
+import {useState, useRef} from 'react';
+import {
+  marathonPreparation,
+  GoalData,
+  websiteProject,
+} from '@/constants/SampleData';
 import {generateUUID} from '@/utils/uuid';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 
 export type TaskItem = {
   id: string;
@@ -8,50 +13,168 @@ export type TaskItem = {
   completed: boolean;
 };
 
+type PendingMoveTask = {
+  id: string;
+  timeoutId: ReturnType<typeof setTimeout>;
+  sourceList: 'achieved' | 'todos';
+};
+
 export function useGoalData() {
   const [goalData, setGoalData] = useState<GoalData>(marathonPreparation);
 
-  const toggleTaskStatus = (taskId: string) => {
+  const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
+
+  const toggleTaskCompletion = (
+    taskId: string,
+    source: 'achieved' | 'todos',
+  ) => {
+    // 이미 지연 처리 중인 작업이 있으면 취소
+    if (pendingMoves.current[taskId]) {
+      clearTimeout(pendingMoves.current[taskId].timeoutId);
+
+      if (pendingMoves.current[taskId].sourceList === source) {
+        setGoalData(prev => {
+          const sourceList = [...prev[source]];
+          const taskIndex = sourceList.findIndex(task => task.id === taskId);
+
+          if (taskIndex === -1) return prev;
+
+          const originalCompleted = source === 'achieved';
+          const updatedTask = {
+            ...sourceList[taskIndex],
+            completed: originalCompleted,
+          };
+          sourceList[taskIndex] = updatedTask;
+
+          return {
+            ...prev,
+            [source]: sourceList,
+          };
+        });
+
+        delete pendingMoves.current[taskId];
+        return;
+      }
+
+      delete pendingMoves.current[taskId];
+    }
+
+    // 즉시 UI 업데이트 (completed 상태만 변경)
     setGoalData(prev => {
-      const newTasks = prev.tasks.map(task =>
-        task.id === taskId ? {...task, completed: !task.completed} : task,
-      );
-      return {...prev, tasks: newTasks};
+      const sourceList = [...prev[source]];
+      const taskIndex = sourceList.findIndex(task => task.id === taskId);
+
+      if (taskIndex === -1) return prev;
+
+      const newCompleted = source === 'todos';
+      const updatedTask = {...sourceList[taskIndex], completed: newCompleted};
+      const updatedSourceList = [...sourceList];
+      updatedSourceList[taskIndex] = updatedTask;
+
+      return {
+        ...prev,
+        [source]: updatedSourceList,
+      };
     });
+
+    // 지연된 이동 처리 설정
+    const timeoutId = setTimeout(() => {
+      delete pendingMoves.current[taskId];
+
+      setGoalData(prev => {
+        const sourceList = [...prev[source]];
+        const taskIndex = sourceList.findIndex(task => task.id === taskId);
+
+        if (taskIndex === -1) return prev;
+
+        const taskToMove = sourceList[taskIndex];
+
+        const targetListName = source === 'achieved' ? 'todos' : 'achieved';
+
+        const updatedSourceList = sourceList.filter((_, i) => i !== taskIndex);
+        const updatedTargetList = [...prev[targetListName], taskToMove];
+
+        return {
+          ...prev,
+          [source]: updatedSourceList,
+          [targetListName]: updatedTargetList,
+        };
+      });
+    }, ANIMATION_DURATION.TASK_STATUS.TASK_MOVE_DELAY);
+
+    // 보류 중인 작업 추적
+    pendingMoves.current[taskId] = {
+      id: taskId,
+      timeoutId,
+      sourceList: source,
+    };
   };
 
-  const addTask = (text: string, completed: boolean = false) => {
+  const toggleAchievedTask = (taskId: string) => {
+    toggleTaskCompletion(taskId, 'achieved');
+  };
+
+  const toggleTodoTask = (taskId: string) => {
+    toggleTaskCompletion(taskId, 'todos');
+  };
+
+  const addTodoTask = (text: string) => {
     const newTask: TaskItem = {
       id: generateUUID(),
       text,
-      completed,
+      completed: false,
     };
 
     setGoalData(prev => ({
       ...prev,
-      tasks: [...prev.tasks, newTask],
+      todos: [...prev.todos, newTask],
     }));
   };
 
-  const removeTask = (taskId: string) => {
+  const addAchievedTask = (text: string) => {
+    const newTask: TaskItem = {
+      id: generateUUID(),
+      text,
+      completed: true,
+    };
+
     setGoalData(prev => ({
       ...prev,
-      tasks: prev.tasks.filter(task => task.id !== taskId),
+      achieved: [...prev.achieved, newTask],
     }));
   };
 
-  const achievedTasks = goalData.tasks.filter(task => task.completed);
-  const todoTasks = goalData.tasks.filter(task => !task.completed);
+  const removeTask = (taskId: string, source: 'achieved' | 'todos') => {
+    if (pendingMoves.current[taskId]) {
+      clearTimeout(pendingMoves.current[taskId].timeoutId);
+      delete pendingMoves.current[taskId];
+    }
+
+    setGoalData(prev => ({
+      ...prev,
+      [source]: prev[source].filter(task => task.id !== taskId),
+    }));
+  };
+
+  const removeAchievedTask = (taskId: string) => {
+    removeTask(taskId, 'achieved');
+  };
+
+  const removeTodoTask = (taskId: string) => {
+    removeTask(taskId, 'todos');
+  };
 
   return {
-    goalData,
     title: goalData.title,
     dDay: goalData.dDay.remainingDays,
     rDay: goalData.dDay.date,
-    achieved: achievedTasks,
-    todos: todoTasks,
-    toggleTaskStatus,
-    addTask,
-    removeTask,
+    achieved: goalData.achieved,
+    todos: goalData.todos,
+    toggleAchievedTask,
+    toggleTodoTask,
+    addTodoTask,
+    addAchievedTask,
+    removeAchievedTask,
+    removeTodoTask,
   };
 }

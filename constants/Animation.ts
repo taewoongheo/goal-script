@@ -6,4 +6,8 @@ export const ANIMATION_DURATION = Object.freeze({
     FADE_IN: 400,
     ITEM_ANIMATION_DELAY: 50,
   },
+  TASK_STATUS: {
+    CHECKBOX_ANIMATION: 400,
+    TASK_MOVE_DELAY: 1500,
+  },
 });

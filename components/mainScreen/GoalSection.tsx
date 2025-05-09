@@ -9,10 +9,11 @@ import {getViewportWidth} from '@/utils/viewport';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {FontAwesome5} from '@expo/vector-icons';
+import {Entypo, FontAwesome5} from '@expo/vector-icons';
 
 interface GoalSectionProps {
-  goal: string;
+  title: string;
+  icon: string;
   isGoalExpanded: boolean;
   onToggleGoal: (_key: ToggleKey) => void;
   styles: {
@@ -26,7 +27,8 @@ interface GoalSectionProps {
 }
 
 export function GoalSection({
-  goal,
+  title,
+  icon,
   isGoalExpanded,
   onToggleGoal,
   styles,
@@ -38,7 +40,7 @@ export function GoalSection({
 
   useEffect(() => {
     setLines(null);
-  }, [goal]);
+  }, [title]);
 
   const expandWidth = (values: EntryAnimationsValues) => {
     'worklet';
@@ -84,12 +86,12 @@ export function GoalSection({
             const texts = e.nativeEvent.lines.map(l => l.text);
             setLines(parseLines(texts));
           }}>
-          {goal}까지
+          {title}까지
         </Text>
       )}
 
       <FontAwesome5
-        name="running"
+        name={icon as any}
         size={25}
         color="black"
         style={{marginRight: 6}}

@@ -1,6 +1,13 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useEffect} from 'react';
 import {StyleProp, Text, TextStyle, View} from 'react-native';
-import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  LinearTransition,
+} from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
 import {MaterialIcons} from '@expo/vector-icons';
@@ -21,6 +28,9 @@ export function TodoItem({
   linearTransitionAnimation,
   onUpdate,
 }: TodoItemProps) {
+  const checkboxOpacity = useSharedValue(item.completed ? 1 : 0);
+  const textOpacity = useSharedValue(item.completed ? 0.6 : 1);
+
   const fadeInAnimation = useMemo(
     () =>
       FadeIn.duration(ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN).delay(
@@ -32,7 +42,24 @@ export function TodoItem({
 
   const fadeOutAnimation = useMemo(() => FadeOut, []);
 
+  const checkboxStyle = useAnimatedStyle(() => ({
+    opacity: checkboxOpacity.value,
+  }));
+
+  const textStyle = useAnimatedStyle(() => ({
+    opacity: textOpacity.value,
+    textDecorationLine: checkboxOpacity.value > 0.5 ? 'line-through' : 'none',
+  }));
+
   const toggleComplete = () => {
+    checkboxOpacity.value = withTiming(item.completed ? 0 : 1, {
+      duration: ANIMATION_DURATION.TASK_STATUS.CHECKBOX_ANIMATION,
+    });
+
+    textOpacity.value = withTiming(item.completed ? 1 : 0.6, {
+      duration: ANIMATION_DURATION.TASK_STATUS.CHECKBOX_ANIMATION,
+    });
+
     onUpdate(item.id);
   };
 
@@ -44,34 +71,37 @@ export function TodoItem({
       style={{
         flexDirection: 'row',
         alignItems: 'center',
+        marginVertical: 3,
       }}>
       <Pressable
         onPress={toggleComplete}
         style={{
-          marginVertical: 3,
-          marginHorizontal: 8,
+          marginHorizontal: 6,
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <MaterialIcons
-          name={item.completed ? 'check-box' : 'check-box-outline-blank'}
-          size={20}
-          color="black"
-          style={{marginRight: 6}}
-        />
-        <Text
-          style={[
-            style,
-            {
-              paddingVertical: 4,
-              textDecorationLine: item.completed ? 'line-through' : 'none',
-              opacity: item.completed ? 0.6 : 1,
-            },
-          ]}>
-          {item.text}
-        </Text>
+        <View
+          style={{
+            position: 'relative',
+            width: 26,
+            height: 26,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <MaterialIcons
+            name="check-box-outline-blank"
+            size={20}
+            color="black"
+          />
+          <Animated.View style={[{position: 'absolute'}, checkboxStyle]}>
+            <MaterialIcons name="check-box" size={20} color="black" />
+          </Animated.View>
+        </View>
       </Pressable>
+      <Animated.Text style={[style, textStyle, {paddingVertical: 4}]}>
+        {item.text}
+      </Animated.Text>
     </Animated.View>
   );
 }

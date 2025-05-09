@@ -13,7 +13,8 @@ export type GoalData = {
     date: string;
     remainingDays: number;
   };
-  tasks: TaskItem[];
+  achieved: TaskItem[];
+  todos: TaskItem[];
 };
 
 export const websiteProject: GoalData = {
@@ -23,10 +24,12 @@ export const websiteProject: GoalData = {
     date: '25.05.30',
     remainingDays: 37,
   },
-  tasks: [
+  achieved: [
     {id: generateUUID(), text: '와이어프레임 완성', completed: true},
     {id: generateUUID(), text: '디자인 시안 승인', completed: true},
     {id: generateUUID(), text: '메인 페이지 프론트엔드 구현', completed: true},
+  ],
+  todos: [
     {id: generateUUID(), text: '서브 페이지 퍼블리싱', completed: false},
     {id: generateUUID(), text: '반응형 레이아웃 구현', completed: false},
     {id: generateUUID(), text: 'API 연동', completed: false},
@@ -41,7 +44,7 @@ export const marathonPreparation: GoalData = {
     date: '25.10.15',
     remainingDays: 175,
   },
-  tasks: [
+  achieved: [
     {id: generateUUID(), text: '5km 30분 내 주파 달성', completed: true},
     {id: generateUUID(), text: '러닝화 구매 완료', completed: true},
     {id: generateUUID(), text: '일주일에 3회 조깅 습관 형성', completed: true},
@@ -51,6 +54,8 @@ export const marathonPreparation: GoalData = {
       completed: true,
     },
     {id: generateUUID(), text: '하프 마라톤 참가 신청 완료', completed: true},
+  ],
+  todos: [
     {id: generateUUID(), text: '10km 완주 연습', completed: false},
     {id: generateUUID(), text: '하프 마라톤 완주 연습', completed: false},
     {id: generateUUID(), text: '풀 마라톤 대회 신청', completed: false},
@@ -75,7 +80,7 @@ export const academicPaper: GoalData = {
     date: '25.12.20',
     remainingDays: 111241,
   },
-  tasks: [
+  achieved: [
     {
       id: generateUUID(),
       text: '연구 주제 선정 및 지도교수 승인받기',
@@ -101,6 +106,8 @@ export const academicPaper: GoalData = {
       completed: true,
     },
     {id: generateUUID(), text: '학술대회 발표자료 준비', completed: true},
+  ],
+  todos: [
     {
       id: generateUUID(),
       text: '본 설문조사 배포 및 데이터 수집',

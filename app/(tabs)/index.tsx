@@ -22,19 +22,14 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
   const {
-    title: goal,
+    title,
     dDay,
     rDay,
     achieved,
     todos,
-    toggleTaskStatus,
-    addTask,
-    removeTask,
+    toggleAchievedTask,
+    toggleTodoTask,
   } = useGoalData();
-
-  console.log(achieved);
-  console.log(todos);
-  console.log('============');
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -65,7 +60,8 @@ export default function MainScreen() {
         style={styles.textContainer}
         layout={linearTransitionAnimation}>
         <GoalSection
-          goal={goal}
+          title={title}
+          icon="trophy"
           isGoalExpanded={expandStates.goal[0]}
           onToggleGoal={handleToggle}
           styles={componentStyles}
@@ -92,7 +88,7 @@ export default function MainScreen() {
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
           hasTodoItems={todos.length > 0}
-          onUpdateItem={toggleTaskStatus}
+          onUpdateItem={toggleAchievedTask}
         />
 
         <TodoSection
@@ -101,7 +97,7 @@ export default function MainScreen() {
           onToggle={handleToggle}
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
-          onUpdateItem={toggleTaskStatus}
+          onUpdateItem={toggleTodoTask}
         />
       </Animated.View>
     </View>

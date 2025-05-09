@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,19 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  LayoutChangeEvent,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  FadeOut,
+  FadeIn,
+  LinearTransition,
+} from 'react-native-reanimated';
 import {Pressable} from 'react-native-gesture-handler';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
+import {getViewportWidth} from '@/utils/viewport';
+import {Layout} from '@/constants/Layout';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 import {TodoItem} from './TodoItem';
 
 interface TodoSectionProps {
@@ -36,6 +44,27 @@ export function TodoSection({
   linearTransitionAnimation,
   onUpdateItem,
 }: TodoSectionProps) {
+  const [height, setHeight] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const heightMeasured = useRef(false);
+
+  const containerPadding = useMemo(
+    () => ((1 - Layout.padding.horizontal) * getViewportWidth()) / 2,
+    [],
+  );
+
+  const highlightAnimation = useMemo(
+    () => LinearTransition.duration(ANIMATION_DURATION.HIGHLIGHT_TRANSITION),
+    [],
+  );
+
+  const getHeight = useCallback((event: LayoutChangeEvent) => {
+    if (!heightMeasured.current) {
+      setHeight(event.nativeEvent.layout.height);
+      heightMeasured.current = true;
+    }
+  }, []);
+
   if (todoItems.length === 0) {
     return (
       <Pressable onPress={() => console.log('add todo')}>
@@ -58,29 +87,53 @@ export function TodoSection({
         </Text>
       </TouchableOpacity>
 
-      <Animated.View
-        layout={linearTransitionAnimation}
-        style={[
-          styles.dropdownContainer,
-          {
-            overflow: 'hidden',
-          },
-        ]}>
+      <View style={{position: 'relative', width: '100%'}}>
         {isTodosExpanded && (
-          <View>
-            {todoItems.map((item, index) => (
-              <TodoItem
-                key={item.id}
-                item={item}
-                index={index}
-                style={styles.dropdownItem}
-                linearTransitionAnimation={linearTransitionAnimation}
-                onUpdate={onUpdateItem}
-              />
-            ))}
-          </View>
+          <Animated.View
+            layout={highlightAnimation}
+            entering={FadeIn}
+            exiting={FadeOut}
+            style={{
+              position: 'absolute',
+              backgroundColor: 'rgba(255, 255, 0, 0.3)',
+              borderRadius: 8,
+              height,
+              width: getViewportWidth(),
+              left: -containerPadding,
+              top: selectedIdx * height,
+              zIndex: -1,
+            }}
+          />
         )}
-      </Animated.View>
+
+        <Animated.View
+          layout={linearTransitionAnimation}
+          style={[
+            styles.dropdownContainer,
+            {
+              position: 'relative',
+              overflow: 'hidden',
+            },
+          ]}>
+          {isTodosExpanded && (
+            <View>
+              {todoItems.map((item, index) => (
+                <TodoItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  style={styles.dropdownItem}
+                  linearTransitionAnimation={linearTransitionAnimation}
+                  onUpdate={onUpdateItem}
+                  onLayout={getHeight}
+                  setSelectedIdx={setSelectedIdx}
+                  selectedIdx={selectedIdx}
+                />
+              ))}
+            </View>
+          )}
+        </Animated.View>
+      </View>
 
       <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
         들이 남았어요.

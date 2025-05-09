@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useCallback, useEffect, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -6,10 +6,18 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  LayoutChangeEvent,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+} from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
+import {getViewportWidth} from '@/utils/viewport';
+import {Layout} from '@/constants/Layout';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 import {AchievedItem} from './AchievedItem';
 
 interface AchievedSectionProps {
@@ -37,6 +45,27 @@ export function AchievedSection({
   hasTodoItems,
   onUpdateItem,
 }: AchievedSectionProps) {
+  const [height, setHeight] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const heightMeasured = useRef(false);
+
+  const containerPadding = useMemo(
+    () => ((1 - Layout.padding.horizontal) * getViewportWidth()) / 2,
+    [],
+  );
+
+  const highlightAnimation = useMemo(
+    () => LinearTransition.duration(ANIMATION_DURATION.HIGHLIGHT_TRANSITION),
+    [],
+  );
+
+  const getHeight = useCallback((event: LayoutChangeEvent) => {
+    if (!heightMeasured.current) {
+      setHeight(event.nativeEvent.layout.height);
+      heightMeasured.current = true;
+    }
+  }, []);
+
   if (achievedItems.length === 0) {
     return null;
   }
@@ -51,29 +80,53 @@ export function AchievedSection({
         </Text>
       </TouchableOpacity>
 
-      <Animated.View
-        layout={linearTransitionAnimation}
-        style={[
-          styles.dropdownContainer,
-          {
-            overflow: 'hidden',
-          },
-        ]}>
+      <View style={{position: 'relative', width: '100%'}}>
         {isAchievedExpanded && (
-          <View>
-            {achievedItems.map((item, index) => (
-              <AchievedItem
-                key={item.id}
-                item={item}
-                index={index}
-                style={styles.dropdownItem}
-                linearTransitionAnimation={linearTransitionAnimation}
-                onUpdate={onUpdateItem}
-              />
-            ))}
-          </View>
+          <Animated.View
+            layout={highlightAnimation}
+            entering={FadeIn}
+            exiting={FadeOut}
+            style={{
+              position: 'absolute',
+              backgroundColor: 'rgba(255, 255, 0, 0.3)',
+              borderRadius: 8,
+              height,
+              width: getViewportWidth(),
+              left: -containerPadding,
+              top: selectedIdx * height,
+              zIndex: -1,
+            }}
+          />
         )}
-      </Animated.View>
+
+        <Animated.View
+          layout={linearTransitionAnimation}
+          style={[
+            styles.dropdownContainer,
+            {
+              position: 'relative',
+              overflow: 'hidden',
+            },
+          ]}>
+          {isAchievedExpanded && (
+            <View>
+              {achievedItems.map((item, index) => (
+                <AchievedItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  style={styles.dropdownItem}
+                  linearTransitionAnimation={linearTransitionAnimation}
+                  onUpdate={onUpdateItem}
+                  onLayout={getHeight}
+                  setSelectedIdx={setSelectedIdx}
+                  selectedIdx={selectedIdx}
+                />
+              ))}
+            </View>
+          )}
+        </Animated.View>
+      </View>
 
       <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
         {hasTodoItems ? '들을 완료했고,' : '들을 완료했어요.'}

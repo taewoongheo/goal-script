@@ -10,4 +10,5 @@ export const ANIMATION_DURATION = Object.freeze({
     CHECKBOX_ANIMATION: 400,
     TASK_MOVE_DELAY: 1500,
   },
+  HIGHLIGHT_TRANSITION: 300,
 });

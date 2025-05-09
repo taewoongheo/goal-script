@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {StyleProp, TextStyle, View} from 'react-native';
+import {LayoutChangeEvent, StyleProp, TextStyle, View} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -18,6 +18,9 @@ interface AchievedItemProps {
   style: StyleProp<TextStyle>;
   linearTransitionAnimation: any;
   onUpdate: (taskId: string) => void;
+  onLayout: (event: LayoutChangeEvent) => void;
+  setSelectedIdx: (idx: number) => void;
+  selectedIdx: number;
 }
 
 export function AchievedItem({
@@ -26,6 +29,9 @@ export function AchievedItem({
   style,
   linearTransitionAnimation,
   onUpdate,
+  onLayout,
+  setSelectedIdx,
+  selectedIdx,
 }: AchievedItemProps) {
   const checkboxOpacity = useSharedValue(item.completed ? 1 : 0);
   const textOpacity = useSharedValue(item.completed ? 0.6 : 1);
@@ -50,6 +56,8 @@ export function AchievedItem({
     textDecorationLine: checkboxOpacity.value > 0.5 ? 'line-through' : 'none',
   }));
 
+  const isSelected = index === selectedIdx;
+
   const toggleComplete = () => {
     checkboxOpacity.value = withTiming(item.completed ? 0 : 1, {
       duration: ANIMATION_DURATION.TASK_STATUS.CHECKBOX_ANIMATION,
@@ -60,6 +68,7 @@ export function AchievedItem({
     });
 
     onUpdate(item.id);
+    setSelectedIdx(index);
   };
 
   return (
@@ -67,10 +76,11 @@ export function AchievedItem({
       layout={linearTransitionAnimation}
       entering={fadeInAnimation}
       exiting={fadeOutAnimation}
+      onLayout={onLayout}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 3,
+        paddingVertical: 3,
       }}>
       <Pressable
         onPress={toggleComplete}
@@ -79,6 +89,7 @@ export function AchievedItem({
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          opacity: isSelected ? 1 : 0,
         }}>
         <View
           style={{
@@ -98,9 +109,11 @@ export function AchievedItem({
           </Animated.View>
         </View>
       </Pressable>
-      <Animated.Text style={[style, textStyle, {paddingVertical: 4}]}>
-        {item.text}
-      </Animated.Text>
+      <Pressable style={{flex: 1}} onPress={() => setSelectedIdx(index)}>
+        <Animated.Text style={[style, textStyle]} numberOfLines={1}>
+          {item.text}
+        </Animated.Text>
+      </Pressable>
     </Animated.View>
   );
 }

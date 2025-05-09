@@ -1,12 +1,11 @@
 import React, {useMemo, useEffect} from 'react';
-import {StyleProp, Text, TextStyle, View} from 'react-native';
+import {StyleProp, TextStyle, View, LayoutChangeEvent} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-  LinearTransition,
 } from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
@@ -19,6 +18,9 @@ interface TodoItemProps {
   style: StyleProp<TextStyle>;
   linearTransitionAnimation: any;
   onUpdate: (taskId: string) => void;
+  onLayout: (event: LayoutChangeEvent) => void;
+  setSelectedIdx: (idx: number) => void;
+  selectedIdx: number;
 }
 
 export function TodoItem({
@@ -27,6 +29,9 @@ export function TodoItem({
   style,
   linearTransitionAnimation,
   onUpdate,
+  onLayout,
+  setSelectedIdx,
+  selectedIdx,
 }: TodoItemProps) {
   const checkboxOpacity = useSharedValue(item.completed ? 1 : 0);
   const textOpacity = useSharedValue(item.completed ? 0.6 : 1);
@@ -51,6 +56,8 @@ export function TodoItem({
     textDecorationLine: checkboxOpacity.value > 0.5 ? 'line-through' : 'none',
   }));
 
+  const isSelected = index === selectedIdx;
+
   const toggleComplete = () => {
     checkboxOpacity.value = withTiming(item.completed ? 0 : 1, {
       duration: ANIMATION_DURATION.TASK_STATUS.CHECKBOX_ANIMATION,
@@ -61,6 +68,7 @@ export function TodoItem({
     });
 
     onUpdate(item.id);
+    setSelectedIdx(index);
   };
 
   return (
@@ -68,10 +76,11 @@ export function TodoItem({
       layout={linearTransitionAnimation}
       entering={fadeInAnimation}
       exiting={fadeOutAnimation}
+      onLayout={onLayout}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 3,
+        paddingVertical: 3,
       }}>
       <Pressable
         onPress={toggleComplete}
@@ -80,6 +89,7 @@ export function TodoItem({
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          opacity: isSelected ? 1 : 0,
         }}>
         <View
           style={{
@@ -99,9 +109,11 @@ export function TodoItem({
           </Animated.View>
         </View>
       </Pressable>
-      <Animated.Text style={[style, textStyle, {paddingVertical: 4}]}>
-        {item.text}
-      </Animated.Text>
+      <Pressable style={{flex: 1}} onPress={() => setSelectedIdx(index)}>
+        <Animated.Text style={[style, textStyle]} numberOfLines={1}>
+          {item.text}
+        </Animated.Text>
+      </Pressable>
     </Animated.View>
   );
 }

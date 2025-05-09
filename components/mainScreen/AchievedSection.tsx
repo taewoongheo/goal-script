@@ -12,7 +12,10 @@ import {ToggleKey} from '@/hooks/useToggleExpand';
 import {AchievedItem} from './AchievedItem';
 
 interface AchievedSectionProps {
-  achievedItems: string[];
+  achievedItems: {
+    text: string;
+    completed: boolean;
+  }[];
   isAchievedExpanded: boolean;
   onToggle: (_key: ToggleKey) => void;
   styles: {
@@ -24,6 +27,7 @@ interface AchievedSectionProps {
   };
   linearTransitionAnimation: any;
   hasTodoItems: boolean;
+  onUpdateItem: (index: number, completed: boolean) => void;
 }
 
 export function AchievedSection({
@@ -33,20 +37,21 @@ export function AchievedSection({
   styles,
   linearTransitionAnimation,
   hasTodoItems,
+  onUpdateItem,
 }: AchievedSectionProps) {
-  const [selectedAchievedItem, setSelectedAchievedItem] = useState<{
-    item: string;
-    index: number;
-  } | null>(null);
+  // const [selectedAchievedItem, setSelectedAchievedItem] = useState<{
+  //   text: string;
+  //   index: number;
+  // } | null>(null);
 
-  const handleAchievedItemSelect = useCallback(
-    ({item, index}: {item: string; index: number}) => {
-      setSelectedAchievedItem(prev =>
-        prev?.item === item && prev?.index === index ? null : {item, index},
-      );
-    },
-    [],
-  );
+  // const handleAchievedItemSelect = useCallback(
+  //   ({text, index}: {text: string; index: number}) => {
+  //     setSelectedAchievedItem(prev =>
+  //       prev?.text === text && prev?.index === index ? null : {text, index},
+  //     );
+  //   },
+  //   [],
+  // );
 
   if (achievedItems.length === 0) {
     return null;
@@ -58,7 +63,7 @@ export function AchievedSection({
       style={styles.lineContainer}>
       <TouchableOpacity onPress={() => onToggle('achieved')}>
         <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
-          {achievedItems[0]}
+          {achievedItems[0].text}
         </Text>
       </TouchableOpacity>
 
@@ -74,12 +79,11 @@ export function AchievedSection({
           <View>
             {achievedItems.map((item, index) => (
               <AchievedItem
-                key={`achieved-${item}-${index}`}
+                key={`achieved-${item.text}-${index}`}
                 item={item}
                 index={index}
                 style={styles.dropdownItem}
-                selectedAchievedItem={selectedAchievedItem}
-                setSelectedAchievedItem={handleAchievedItemSelect}
+                onUpdate={onUpdateItem}
               />
             ))}
           </View>

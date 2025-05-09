@@ -1,30 +1,25 @@
 import React, {useMemo} from 'react';
-import {StyleProp, TextStyle, View} from 'react-native';
+import {StyleProp, Text, TextStyle, View} from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
 import {MaterialIcons} from '@expo/vector-icons';
 
 interface AchievedItemProps {
-  item: string;
+  item: {
+    text: string;
+    completed: boolean;
+  };
   index: number;
   style: StyleProp<TextStyle>;
-  selectedAchievedItem: {item: string; index: number} | null;
-  setSelectedAchievedItem: ({
-    item,
-    index,
-  }: {
-    item: string;
-    index: number;
-  }) => void;
+  onUpdate: (index: number, completed: boolean) => void;
 }
 
 export function AchievedItem({
   item,
   index,
   style,
-  selectedAchievedItem,
-  setSelectedAchievedItem,
+  onUpdate,
 }: AchievedItemProps) {
   const fadeInAnimation = useMemo(
     () =>
@@ -37,14 +32,20 @@ export function AchievedItem({
 
   const fadeOutAnimation = useMemo(() => FadeOut, []);
 
+  const toggleComplete = () => {
+    onUpdate(index, !item.completed);
+  };
+
   return (
-    <View
+    <Animated.View
+      entering={fadeInAnimation}
+      exiting={fadeOutAnimation}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
       }}>
       <Pressable
-        onPress={() => setSelectedAchievedItem({item, index})}
+        onPress={toggleComplete}
         style={{
           marginVertical: 3,
           marginHorizontal: 8,
@@ -53,19 +54,23 @@ export function AchievedItem({
           alignItems: 'center',
         }}>
         <MaterialIcons
-          name="check-box-outline-blank"
+          name={item.completed ? 'check-box' : 'check-box-outline-blank'}
           size={20}
           color="black"
           style={{marginRight: 6}}
-          opacity={selectedAchievedItem?.item === item ? 1 : 0}
         />
-        <Animated.Text
-          entering={fadeInAnimation}
-          exiting={fadeOutAnimation}
-          style={[style, {paddingVertical: 4}]}>
-          {item}
-        </Animated.Text>
+        <Text
+          style={[
+            style,
+            {
+              paddingVertical: 4,
+              textDecorationLine: item.completed ? 'line-through' : 'none',
+              opacity: item.completed ? 0.6 : 1,
+            },
+          ]}>
+          {item.text}
+        </Text>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }

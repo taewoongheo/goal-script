@@ -13,7 +13,10 @@ import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TodoItem} from './TodoItem';
 
 interface TodoSectionProps {
-  todoItems: string[];
+  todoItems: {
+    text: string;
+    completed: boolean;
+  }[];
   isTodosExpanded: boolean;
   onToggle: (_key: ToggleKey) => void;
   styles: {
@@ -24,6 +27,7 @@ interface TodoSectionProps {
     dropdownItem: StyleProp<TextStyle>;
   };
   linearTransitionAnimation: any;
+  onUpdateItem: (index: number, completed: boolean) => void;
 }
 
 export function TodoSection({
@@ -32,20 +36,21 @@ export function TodoSection({
   onToggle,
   styles,
   linearTransitionAnimation,
+  onUpdateItem,
 }: TodoSectionProps) {
-  const [selectedTodoItem, setSelectedTodoItem] = useState<{
-    item: string;
-    index: number;
-  } | null>(null);
+  // const [selectedTodoItem, setSelectedTodoItem] = useState<{
+  //   text: string;
+  //   index: number;
+  // } | null>(null);
 
-  const handleTodoItemSelect = useCallback(
-    ({item, index}: {item: string; index: number}) => {
-      setSelectedTodoItem(prev =>
-        prev?.item === item && prev?.index === index ? null : {item, index},
-      );
-    },
-    [],
-  );
+  // const handleTodoItemSelect = useCallback(
+  //   ({text, index}: {text: string; index: number}) => {
+  //     setSelectedTodoItem(prev =>
+  //       prev?.text === text && prev?.index === index ? null : {text, index},
+  //     );
+  //   },
+  //   [],
+  // );
 
   if (todoItems.length === 0) {
     return (
@@ -65,7 +70,7 @@ export function TodoSection({
       style={styles.lineContainer}>
       <TouchableOpacity onPress={() => onToggle('todos')}>
         <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
-          {todoItems[0]}
+          {todoItems[0].text}
         </Text>
       </TouchableOpacity>
 
@@ -81,12 +86,11 @@ export function TodoSection({
           <View>
             {todoItems.map((item, index) => (
               <TodoItem
-                key={`todos-${item}-${index}`}
+                key={`todos-${item.text}-${index}`}
                 item={item}
                 index={index}
                 style={styles.dropdownItem}
-                selectedTodoItem={selectedTodoItem}
-                setSelectedTodoItem={handleTodoItemSelect}
+                onUpdate={onUpdateItem}
               />
             ))}
           </View>

@@ -6,14 +6,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useMemo} from 'react';
 import {Layout} from '@/constants/Layout';
-import {
-  marathonPreparation,
-  // academicPaper,
-  // marathonPreparation,
-} from '@/constants/SampleData';
 import {Typography} from '@/constants/Typography';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
-// Import the new components
+import {useGoalData} from '@/hooks/useGoalData';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
 import {getViewportWidth} from '@/utils/viewport';
@@ -24,16 +19,17 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
 
-const sampleData = marathonPreparation;
-
-const goal = sampleData.title;
-const dDay = sampleData.dDay.remainingDays;
-const rDay = sampleData.dDay.date;
-const {achieved} = sampleData;
-const {todos} = sampleData;
-
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
+  const {
+    title: goal,
+    dDay,
+    rDay,
+    achieved,
+    todos,
+    updateAchievedItem,
+    updateTodoItem,
+  } = useGoalData();
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -91,6 +87,7 @@ export default function MainScreen() {
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
           hasTodoItems={todos.length > 0}
+          onUpdateItem={updateAchievedItem}
         />
 
         <TodoSection
@@ -99,6 +96,7 @@ export default function MainScreen() {
           onToggle={handleToggle}
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
+          onUpdateItem={updateTodoItem}
         />
       </Animated.View>
     </View>

@@ -3,6 +3,7 @@ import {StyleProp, TextStyle, View} from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
+import {MaterialIcons} from '@expo/vector-icons';
 
 interface AchievedItemProps {
   item: string;
@@ -47,7 +48,17 @@ export function AchievedItem({
         style={{
           marginVertical: 3,
           marginHorizontal: 8,
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
         }}>
+        <MaterialIcons
+          name="check-box-outline-blank"
+          size={20}
+          color="black"
+          style={{marginRight: 6}}
+          opacity={selectedAchievedItem?.item === item ? 1 : 0}
+        />
         <Animated.Text
           entering={fadeInAnimation}
           exiting={fadeOutAnimation}

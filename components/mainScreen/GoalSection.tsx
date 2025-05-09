@@ -9,6 +9,7 @@ import {getViewportWidth} from '@/utils/viewport';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
+import {FontAwesome5} from '@expo/vector-icons';
 
 interface GoalSectionProps {
   goal: string;
@@ -55,7 +56,15 @@ export function GoalSection({
   };
 
   return (
-    <View style={styles.lineContainer}>
+    <View
+      style={
+        (styles.lineContainer,
+        {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+        })
+      }>
       {lines === null && (
         <Text
           style={[
@@ -79,6 +88,12 @@ export function GoalSection({
         </Text>
       )}
 
+      <FontAwesome5
+        name="running"
+        size={25}
+        color="black"
+        style={{marginRight: 6}}
+      />
       {lines?.map((line, idx) => {
         if (idx === lines.length - 1) {
           return (

@@ -41,8 +41,9 @@ export function AchievedSection({
 
   const handleAchievedItemSelect = useCallback(
     ({item, index}: {item: string; index: number}) => {
-      setSelectedAchievedItem({item, index});
-      console.log(item);
+      setSelectedAchievedItem(prev =>
+        prev?.item === item && prev?.index === index ? null : {item, index},
+      );
     },
     [],
   );

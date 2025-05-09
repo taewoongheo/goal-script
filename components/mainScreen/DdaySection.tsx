@@ -3,6 +3,7 @@ import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {FontAwesome} from '@expo/vector-icons';
 
 interface DdaySectionProps {
   dDay: number;
@@ -32,8 +33,16 @@ export function DdaySection({
   return (
     <View style={styles.lineContainer}>
       <View style={{flexDirection: 'row'}}>
-        <Pressable onPress={() => onToggleDday('dday')}>
-          <Text style={[styles.text, styles.highlight]}>📅D-{dDay} </Text>
+        <Pressable
+          style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}
+          onPress={() => onToggleDday('dday')}>
+          <FontAwesome
+            name="calendar"
+            size={25}
+            color="black"
+            style={{marginRight: 6}}
+          />
+          <Text style={[styles.text, styles.highlight]}>D-{dDay} </Text>
         </Pressable>
         <Animated.View
           style={{overflow: 'hidden'}}

@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginBottom: 4,
+    // marginBottom: 4,
     width: '100%',
   },
   text: {

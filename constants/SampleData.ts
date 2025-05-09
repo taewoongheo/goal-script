@@ -1,6 +1,7 @@
 export type GoalData = {
   title: string;
-  description: string; // 👈 추가됨
+  icon: string;
+  description: string;
   dDay: {
     date: string;
     remainingDays: number;
@@ -31,7 +32,8 @@ export const websiteProject: GoalData = {
 };
 
 export const marathonPreparation: GoalData = {
-  title: '🏃마라톤봄 마라톤',
+  title: '마라톤봄 마라톤',
+  icon: 'running',
   description:
     '완주는 목표일 뿐, 과정 속 꾸준함과 건강한 삶의 습관을 만들어가는 여정입니다.',
   dDay: {

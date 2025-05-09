@@ -40,7 +40,9 @@ export function TodoSection({
 
   const handleTodoItemSelect = useCallback(
     ({item, index}: {item: string; index: number}) => {
-      setSelectedTodoItem({item, index});
+      setSelectedTodoItem(prev =>
+        prev?.item === item && prev?.index === index ? null : {item, index},
+      );
     },
     [],
   );
@@ -83,6 +85,7 @@ export function TodoSection({
                 item={item}
                 index={index}
                 style={styles.dropdownItem}
+                selectedTodoItem={selectedTodoItem}
                 setSelectedTodoItem={handleTodoItemSelect}
               />
             ))}

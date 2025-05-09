@@ -10,13 +10,11 @@ import {
 import Animated from 'react-native-reanimated';
 import {Pressable} from 'react-native-gesture-handler';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {TaskItem} from '@/hooks/useGoalData';
 import {TodoItem} from './TodoItem';
 
 interface TodoSectionProps {
-  todoItems: {
-    text: string;
-    completed: boolean;
-  }[];
+  todoItems: TaskItem[];
   isTodosExpanded: boolean;
   onToggle: (_key: ToggleKey) => void;
   styles: {
@@ -27,7 +25,7 @@ interface TodoSectionProps {
     dropdownItem: StyleProp<TextStyle>;
   };
   linearTransitionAnimation: any;
-  onUpdateItem: (index: number, completed: boolean) => void;
+  onUpdateItem: (taskId: string) => void;
 }
 
 export function TodoSection({
@@ -38,20 +36,6 @@ export function TodoSection({
   linearTransitionAnimation,
   onUpdateItem,
 }: TodoSectionProps) {
-  // const [selectedTodoItem, setSelectedTodoItem] = useState<{
-  //   text: string;
-  //   index: number;
-  // } | null>(null);
-
-  // const handleTodoItemSelect = useCallback(
-  //   ({text, index}: {text: string; index: number}) => {
-  //     setSelectedTodoItem(prev =>
-  //       prev?.text === text && prev?.index === index ? null : {text, index},
-  //     );
-  //   },
-  //   [],
-  // );
-
   if (todoItems.length === 0) {
     return (
       <Pressable onPress={() => console.log('add todo')}>
@@ -86,10 +70,11 @@ export function TodoSection({
           <View>
             {todoItems.map((item, index) => (
               <TodoItem
-                key={`todos-${item.text}-${index}`}
+                key={item.id}
                 item={item}
                 index={index}
                 style={styles.dropdownItem}
+                linearTransitionAnimation={linearTransitionAnimation}
                 onUpdate={onUpdateItem}
               />
             ))}

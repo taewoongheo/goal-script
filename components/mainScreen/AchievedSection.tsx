@@ -9,13 +9,11 @@ import {
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {TaskItem} from '@/hooks/useGoalData';
 import {AchievedItem} from './AchievedItem';
 
 interface AchievedSectionProps {
-  achievedItems: {
-    text: string;
-    completed: boolean;
-  }[];
+  achievedItems: TaskItem[];
   isAchievedExpanded: boolean;
   onToggle: (_key: ToggleKey) => void;
   styles: {
@@ -27,7 +25,7 @@ interface AchievedSectionProps {
   };
   linearTransitionAnimation: any;
   hasTodoItems: boolean;
-  onUpdateItem: (index: number, completed: boolean) => void;
+  onUpdateItem: (taskId: string) => void;
 }
 
 export function AchievedSection({
@@ -39,20 +37,6 @@ export function AchievedSection({
   hasTodoItems,
   onUpdateItem,
 }: AchievedSectionProps) {
-  // const [selectedAchievedItem, setSelectedAchievedItem] = useState<{
-  //   text: string;
-  //   index: number;
-  // } | null>(null);
-
-  // const handleAchievedItemSelect = useCallback(
-  //   ({text, index}: {text: string; index: number}) => {
-  //     setSelectedAchievedItem(prev =>
-  //       prev?.text === text && prev?.index === index ? null : {text, index},
-  //     );
-  //   },
-  //   [],
-  // );
-
   if (achievedItems.length === 0) {
     return null;
   }
@@ -79,10 +63,11 @@ export function AchievedSection({
           <View>
             {achievedItems.map((item, index) => (
               <AchievedItem
-                key={`achieved-${item.text}-${index}`}
+                key={item.id}
                 item={item}
                 index={index}
                 style={styles.dropdownItem}
+                linearTransitionAnimation={linearTransitionAnimation}
                 onUpdate={onUpdateItem}
               />
             ))}

@@ -4,18 +4,23 @@ import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
 import {MaterialIcons} from '@expo/vector-icons';
+import {TaskItem} from '@/hooks/useGoalData';
 
 interface TodoItemProps {
-  item: {
-    text: string;
-    completed: boolean;
-  };
+  item: TaskItem;
   index: number;
   style: StyleProp<TextStyle>;
-  onUpdate: (index: number, completed: boolean) => void;
+  linearTransitionAnimation: any;
+  onUpdate: (taskId: string) => void;
 }
 
-export function TodoItem({item, index, style, onUpdate}: TodoItemProps) {
+export function TodoItem({
+  item,
+  index,
+  style,
+  linearTransitionAnimation,
+  onUpdate,
+}: TodoItemProps) {
   const fadeInAnimation = useMemo(
     () =>
       FadeIn.duration(ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN).delay(
@@ -28,11 +33,12 @@ export function TodoItem({item, index, style, onUpdate}: TodoItemProps) {
   const fadeOutAnimation = useMemo(() => FadeOut, []);
 
   const toggleComplete = () => {
-    onUpdate(index, !item.completed);
+    onUpdate(item.id);
   };
 
   return (
     <Animated.View
+      layout={linearTransitionAnimation}
       entering={fadeInAnimation}
       exiting={fadeOutAnimation}
       style={{

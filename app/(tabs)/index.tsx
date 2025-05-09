@@ -27,9 +27,14 @@ export default function MainScreen() {
     rDay,
     achieved,
     todos,
-    updateAchievedItem,
-    updateTodoItem,
+    toggleTaskStatus,
+    addTask,
+    removeTask,
   } = useGoalData();
+
+  console.log(achieved);
+  console.log(todos);
+  console.log('============');
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -87,7 +92,7 @@ export default function MainScreen() {
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
           hasTodoItems={todos.length > 0}
-          onUpdateItem={updateAchievedItem}
+          onUpdateItem={toggleTaskStatus}
         />
 
         <TodoSection
@@ -96,7 +101,7 @@ export default function MainScreen() {
           onToggle={handleToggle}
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
-          onUpdateItem={updateTodoItem}
+          onUpdateItem={toggleTaskStatus}
         />
       </Animated.View>
     </View>

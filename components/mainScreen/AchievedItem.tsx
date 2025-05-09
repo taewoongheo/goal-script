@@ -1,24 +1,28 @@
 import React, {useMemo} from 'react';
 import {StyleProp, Text, TextStyle, View} from 'react-native';
-import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+} from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
 import {MaterialIcons} from '@expo/vector-icons';
+import {TaskItem} from '@/hooks/useGoalData';
 
 interface AchievedItemProps {
-  item: {
-    text: string;
-    completed: boolean;
-  };
+  item: TaskItem;
   index: number;
   style: StyleProp<TextStyle>;
-  onUpdate: (index: number, completed: boolean) => void;
+  linearTransitionAnimation: any;
+  onUpdate: (taskId: string) => void;
 }
 
 export function AchievedItem({
   item,
   index,
   style,
+  linearTransitionAnimation,
   onUpdate,
 }: AchievedItemProps) {
   const fadeInAnimation = useMemo(
@@ -33,11 +37,12 @@ export function AchievedItem({
   const fadeOutAnimation = useMemo(() => FadeOut, []);
 
   const toggleComplete = () => {
-    onUpdate(index, !item.completed);
+    onUpdate(item.id);
   };
 
   return (
     <Animated.View
+      layout={linearTransitionAnimation}
       entering={fadeInAnimation}
       exiting={fadeOutAnimation}
       style={{

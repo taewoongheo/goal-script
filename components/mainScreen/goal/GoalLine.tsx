@@ -14,6 +14,7 @@ export function GoalLine({
   linearTransitionAnimation,
   fadeInAnimation,
   fadeOutAnimation,
+  bottomSheetRef,
 }: GoalLineProps) {
   if (!isLastLine) {
     return (
@@ -37,7 +38,7 @@ export function GoalLine({
           {isGoalExpanded && (
             <Pressable
               android_ripple={null}
-              onPress={() => console.log('settings')}>
+              onPress={() => bottomSheetRef.current?.expand()}>
               <Animated.Text
                 entering={fadeInAnimation}
                 exiting={fadeOutAnimation}

@@ -41,6 +41,7 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
     'import/extensions': 'off',
+    'import/no-extraneous-dependencies': 'off',
     // [
     //   'error',
     //   'ignorePackages',
@@ -67,5 +68,6 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    'import/ignore': ['@gorhom/bottom-sheet'],
   },
 };

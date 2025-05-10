@@ -15,6 +15,7 @@ export function GoalSection({
   linearTransitionAnimation,
   fadeInAnimation,
   fadeOutAnimation,
+  bottomSheetRef,
 }: GoalSectionProps) {
   const [lines, setLines] = useState<string[] | null>(null);
 
@@ -39,6 +40,7 @@ export function GoalSection({
             linearTransitionAnimation={linearTransitionAnimation}
             fadeInAnimation={fadeInAnimation}
             fadeOutAnimation={fadeOutAnimation}
+            bottomSheetRef={bottomSheetRef}
           />
         ))}
       </View>

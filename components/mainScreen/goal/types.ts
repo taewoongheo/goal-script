@@ -1,9 +1,15 @@
+import React from 'react';
 import {StyleProp, ViewStyle, TextStyle} from 'react-native';
+import {LinearTransition, FadeIn, FadeOut} from 'react-native-reanimated';
+import BottomSheet from '@gorhom/bottom-sheet';
+import {ToggleKey} from '@/hooks/useToggleExpand';
 
 export interface GoalSectionStyles {
   lineContainer: StyleProp<ViewStyle>;
   text: StyleProp<TextStyle>;
   highlight: StyleProp<TextStyle>;
+  dropdownContainer: StyleProp<ViewStyle>;
+  dropdownItem: StyleProp<TextStyle>;
 }
 
 export interface GoalLineProps {
@@ -12,18 +18,20 @@ export interface GoalLineProps {
   onToggleGoal: () => void;
   isGoalExpanded: boolean;
   styles: GoalSectionStyles;
-  linearTransitionAnimation: any;
-  fadeInAnimation: any;
-  fadeOutAnimation: any;
+  linearTransitionAnimation: LinearTransition;
+  fadeInAnimation: FadeIn;
+  fadeOutAnimation: FadeOut;
+  bottomSheetRef: React.RefObject<BottomSheet>;
 }
 
 export interface GoalSectionProps {
   title: string;
   icon: string;
   isGoalExpanded: boolean;
-  onToggleGoal: (_key: string) => void;
+  onToggleGoal: (key: ToggleKey) => void;
   styles: GoalSectionStyles;
-  linearTransitionAnimation: any;
-  fadeInAnimation: any;
-  fadeOutAnimation: any;
+  linearTransitionAnimation: LinearTransition;
+  fadeInAnimation: FadeIn;
+  fadeOutAnimation: FadeOut;
+  bottomSheetRef: React.RefObject<BottomSheet>;
 }

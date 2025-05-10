@@ -15,6 +15,7 @@ import {getViewportWidth} from '@/utils/viewport';
 import {AchievedSection} from '@/components/mainScreen/AchievedSection';
 import {TodoSection} from '@/components/mainScreen/TodoSection';
 import {ANIMATION_DURATION} from '@/constants/Animation';
+import {useBottomSheet} from '@/contexts/BottomSheetContext';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
@@ -31,6 +32,8 @@ export default function MainScreen() {
     toggleAchievedTask,
     toggleTodoTask,
   } = useGoalData();
+
+  const {bottomSheetRef} = useBottomSheet();
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -69,6 +72,7 @@ export default function MainScreen() {
           linearTransitionAnimation={linearTransitionAnimation}
           fadeInAnimation={fadeInAnimation}
           fadeOutAnimation={fadeOutAnimation}
+          bottomSheetRef={bottomSheetRef}
         />
 
         <DdaySection

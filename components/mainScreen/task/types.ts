@@ -21,6 +21,8 @@ export interface TaskItemProps {
   onLayout: (event: any) => void;
   setSelectedIdx: (idx: number) => void;
   selectedIdx: number;
+  isLongPressing: boolean;
+  setLongPressing: (index: number, isLongPressing: boolean) => void;
 }
 
 export interface TaskSectionProps {

@@ -10,6 +10,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 type BottomSheetRefs = {
   goalBottomSheetRef: React.RefObject<BottomSheet>;
   ddayBottomSheetRef: React.RefObject<BottomSheet>;
+  listItemBottomSheetRef: React.RefObject<BottomSheet>;
 };
 
 type BottomSheetContextType = BottomSheetRefs;
@@ -21,11 +22,13 @@ const BottomSheetContext = createContext<BottomSheetContextType | undefined>(
 export function BottomSheetProvider({children}: {children: ReactNode}) {
   const goalBottomSheetRef = useRef<BottomSheet>(null);
   const ddayBottomSheetRef = useRef<BottomSheet>(null);
+  const listItemBottomSheetRef = useRef<BottomSheet>(null);
 
   const value = useMemo(
     () => ({
       goalBottomSheetRef,
       ddayBottomSheetRef,
+      listItemBottomSheetRef,
     }),
     [],
   );

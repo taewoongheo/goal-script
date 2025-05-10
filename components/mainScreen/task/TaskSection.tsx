@@ -10,6 +10,9 @@ import Animated, {
   FadeIn,
   FadeOut,
   LinearTransition,
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
 } from 'react-native-reanimated';
 import {Pressable} from 'react-native-gesture-handler';
 import {getViewportWidth} from '@/utils/viewport';
@@ -34,7 +37,9 @@ export function TaskSection({
 }: TaskSectionProps) {
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
+  const [longPressingIdx, setLongPressingIdx] = useState<number | null>(null);
   const heightMeasured = useRef(false);
+  const highlightBgColor = useSharedValue(HighlightColor.light);
 
   const containerPadding = useMemo(
     () => ((1 - Layout.padding.horizontal) * getViewportWidth()) / 2,
@@ -52,6 +57,27 @@ export function TaskSection({
       heightMeasured.current = true;
     }
   }, []);
+
+  const setLongPressing = useCallback(
+    (index: number, isLongPressing: boolean) => {
+      if (isLongPressing) {
+        setLongPressingIdx(index);
+        highlightBgColor.value = withTiming('rgba(180, 180, 220, 0.8)', {
+          duration: 300,
+        });
+      } else {
+        setLongPressingIdx(null);
+        highlightBgColor.value = withTiming(HighlightColor.light, {
+          duration: 300,
+        });
+      }
+    },
+    [],
+  );
+
+  const highlightStyle = useAnimatedStyle(() => ({
+    backgroundColor: highlightBgColor.value,
+  }));
 
   // 항목이 없는 경우 처리
   if (items.length === 0) {
@@ -101,6 +127,7 @@ export function TaskSection({
             exiting={FadeOut}
             style={[
               localStyles.highlightBackground,
+              highlightStyle,
               {
                 height,
                 width: getViewportWidth(),
@@ -127,6 +154,8 @@ export function TaskSection({
                     onLayout: getHeight,
                     setSelectedIdx,
                     selectedIdx,
+                    isLongPressing: index === longPressingIdx,
+                    setLongPressing,
                   })}
                 </React.Fragment>
               ))}
@@ -149,7 +178,6 @@ const localStyles = StyleSheet.create({
   },
   highlightBackground: {
     position: 'absolute',
-    backgroundColor: HighlightColor.light,
     borderRadius: 8,
     zIndex: -1,
   },

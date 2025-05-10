@@ -3,9 +3,9 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
-import {useEffect, useMemo, useCallback} from 'react';
+import React, {useEffect, useMemo, useCallback, useState} from 'react';
 import Animated from 'react-native-reanimated';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
@@ -17,14 +17,43 @@ import {
   useBottomSheet,
 } from '@/contexts/BottomSheetContext';
 import {Typography} from '@/constants/Typography';
+import {TaskItem} from '@/hooks/useGoalData';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+// Context for selected task item
+export type SelectedTaskContextType = {
+  selectedTask: TaskItem | null;
+  setSelectedTask: (task: TaskItem | null) => void;
+};
+
+export const SelectedTaskContext = React.createContext<
+  SelectedTaskContextType | undefined
+>(undefined);
+
+export const useSelectedTask = () => {
+  const context = React.useContext(SelectedTaskContext);
+  if (context === undefined) {
+    throw new Error(
+      'useSelectedTask must be used within a SelectedTaskProvider',
+    );
+  }
+  return context;
+};
+
 function RootLayoutContent() {
-  const {goalBottomSheetRef, ddayBottomSheetRef} = useBottomSheet();
+  const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
+    useBottomSheet();
   const colorScheme = useColorScheme();
   const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
+
+  // Context 값을 메모이제이션
+  const selectedTaskValue = useMemo(
+    () => ({selectedTask, setSelectedTask}),
+    [selectedTask],
+  );
 
   // 배경 컴포넌트 렌더링 함수
   const renderBackdrop = useCallback(
@@ -42,43 +71,75 @@ function RootLayoutContent() {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
+      <SelectedTaskContext.Provider value={selectedTaskValue}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
 
-        {/* Goal BottomSheet */}
-        <BottomSheet
-          ref={goalBottomSheetRef}
-          snapPoints={snapPoints}
-          index={-1}
-          enablePanDownToClose
-          backdropComponent={renderBackdrop}
-          handleIndicatorStyle={{backgroundColor: '#999'}}
-          backgroundStyle={{backgroundColor: 'white'}}
-          style={styles.bottomSheet}>
-          <BottomSheetView style={styles.contentContainer}>
-            <Animated.Text style={styles.text}>목표 설정</Animated.Text>
-          </BottomSheetView>
-        </BottomSheet>
+          {/* Goal BottomSheet */}
+          <BottomSheet
+            ref={goalBottomSheetRef}
+            snapPoints={snapPoints}
+            index={-1}
+            enablePanDownToClose
+            backdropComponent={renderBackdrop}
+            handleIndicatorStyle={{backgroundColor: '#999'}}
+            backgroundStyle={{backgroundColor: 'white'}}
+            style={styles.bottomSheet}>
+            <BottomSheetView style={styles.contentContainer}>
+              <Animated.Text style={styles.text}>목표 설정</Animated.Text>
+            </BottomSheetView>
+          </BottomSheet>
 
-        {/* D-day BottomSheet */}
-        <BottomSheet
-          ref={ddayBottomSheetRef}
-          snapPoints={snapPoints}
-          index={-1}
-          enablePanDownToClose
-          backdropComponent={renderBackdrop}
-          handleIndicatorStyle={{backgroundColor: '#999'}}
-          backgroundStyle={{backgroundColor: 'white'}}
-          style={styles.bottomSheet}>
-          <BottomSheetView style={styles.contentContainer}>
-            <Animated.Text style={styles.text}>디데이 설정</Animated.Text>
-          </BottomSheetView>
-        </BottomSheet>
-      </ThemeProvider>
+          {/* D-day BottomSheet */}
+          <BottomSheet
+            ref={ddayBottomSheetRef}
+            snapPoints={snapPoints}
+            index={-1}
+            enablePanDownToClose
+            backdropComponent={renderBackdrop}
+            handleIndicatorStyle={{backgroundColor: '#999'}}
+            backgroundStyle={{backgroundColor: 'white'}}
+            style={styles.bottomSheet}>
+            <BottomSheetView style={styles.contentContainer}>
+              <Animated.Text style={styles.text}>디데이 설정</Animated.Text>
+            </BottomSheetView>
+          </BottomSheet>
+
+          {/* List Item BottomSheet */}
+          <BottomSheet
+            ref={listItemBottomSheetRef}
+            snapPoints={snapPoints}
+            index={-1}
+            enablePanDownToClose
+            backdropComponent={renderBackdrop}
+            handleIndicatorStyle={{backgroundColor: '#999'}}
+            backgroundStyle={{backgroundColor: 'white'}}
+            style={styles.bottomSheet}>
+            <BottomSheetView style={styles.contentContainer}>
+              <Text style={styles.title}>Task Details</Text>
+              {selectedTask && (
+                <View style={styles.taskDetails}>
+                  <Text style={styles.label}>Task:</Text>
+                  <Text style={styles.value}>{selectedTask.text}</Text>
+
+                  <Text style={styles.label}>Status:</Text>
+                  <Text style={styles.value}>
+                    {selectedTask.completed ? 'Completed' : 'In Progress'}
+                  </Text>
+
+                  <Text style={styles.label}>ID:</Text>
+                  <Text style={styles.value}>{selectedTask.id}</Text>
+                </View>
+              )}
+            </BottomSheetView>
+          </BottomSheet>
+        </ThemeProvider>
+      </SelectedTaskContext.Provider>
     </GestureHandlerRootView>
   );
 }
@@ -122,12 +183,32 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
   },
   text: {
     fontSize: Typography.fontSize.large,
     fontFamily: Typography.fontFamily.regular,
     color: '#2F2F2F',
+  },
+  title: {
+    fontSize: Typography.fontSize.large,
+    fontFamily: Typography.fontFamily.bold,
+    color: '#2F2F2F',
+    marginBottom: 16,
+  },
+  taskDetails: {
+    marginTop: 8,
+  },
+  label: {
+    fontSize: Typography.fontSize.medium,
+    fontFamily: Typography.fontFamily.bold,
+    color: '#2F2F2F',
+    marginTop: 8,
+  },
+  value: {
+    fontSize: Typography.fontSize.medium,
+    fontFamily: Typography.fontFamily.regular,
+    color: '#2F2F2F',
+    marginBottom: 8,
   },
 });

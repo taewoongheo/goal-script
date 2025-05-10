@@ -8,8 +8,15 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {Pressable} from 'react-native-gesture-handler';
+import {
+  Pressable,
+  LongPressGestureHandler,
+  TapGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 import {MaterialIcons} from '@expo/vector-icons';
+import {useBottomSheet} from '@/contexts/BottomSheetContext';
+import {useSelectedTask} from '@/app/_layout';
 import {TaskItemProps} from './types';
 
 export function TaskItem({
@@ -24,6 +31,8 @@ export function TaskItem({
 }: TaskItemProps) {
   const checkboxOpacity = useSharedValue(item.completed ? 1 : 0);
   const textOpacity = useSharedValue(item.completed ? 0.6 : 1);
+  const {listItemBottomSheetRef} = useBottomSheet();
+  const {setSelectedTask} = useSelectedTask();
 
   const fadeInAnimation = useMemo(
     () =>
@@ -60,6 +69,16 @@ export function TaskItem({
     setSelectedIdx(index);
   };
 
+  const handleTextTap = () => {
+    setSelectedIdx(index);
+  };
+
+  const handleLongPress = () => {
+    setSelectedTask(item);
+    setSelectedIdx(index);
+    listItemBottomSheetRef.current?.expand();
+  };
+
   return (
     <Animated.View
       layout={linearTransitionAnimation}
@@ -81,13 +100,27 @@ export function TaskItem({
           </Animated.View>
         </View>
       </Pressable>
-      <Pressable
-        style={styles.textContainer}
-        onPress={() => setSelectedIdx(index)}>
-        <Animated.Text style={[style, textStyle]} numberOfLines={1}>
-          {item.text}
-        </Animated.Text>
-      </Pressable>
+
+      <LongPressGestureHandler
+        minDurationMs={800}
+        onHandlerStateChange={({nativeEvent}) => {
+          if (nativeEvent.state === State.ACTIVE) {
+            handleLongPress();
+          }
+        }}>
+        <TapGestureHandler
+          onHandlerStateChange={({nativeEvent}) => {
+            if (nativeEvent.state === State.END) {
+              handleTextTap();
+            }
+          }}>
+          <Animated.View style={styles.textContainer}>
+            <Animated.Text style={[style, textStyle]} numberOfLines={1}>
+              {item.text}
+            </Animated.Text>
+          </Animated.View>
+        </TapGestureHandler>
+      </LongPressGestureHandler>
     </Animated.View>
   );
 }

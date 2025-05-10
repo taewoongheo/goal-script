@@ -3,22 +3,8 @@ import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
-import {FontAwesome} from '@expo/vector-icons';
-
-interface DdaySectionProps {
-  dDay: number;
-  rDay: string;
-  isDdayExpanded: boolean;
-  onToggleDday: (_key: ToggleKey) => void;
-  styles: {
-    lineContainer: StyleProp<ViewStyle>;
-    text: StyleProp<TextStyle>;
-    highlight: StyleProp<TextStyle>;
-  };
-  linearTransitionAnimation: any;
-  fadeInAnimation: any;
-  fadeOutAnimation: any;
-}
+import {FontAwesome, Ionicons} from '@expo/vector-icons';
+import {DdaySectionProps} from './dday/types';
 
 export function DdaySection({
   dDay,
@@ -29,6 +15,7 @@ export function DdaySection({
   linearTransitionAnimation,
   fadeInAnimation,
   fadeOutAnimation,
+  bottomSheetRef,
 }: DdaySectionProps) {
   return (
     <View style={styles.lineContainer}>
@@ -49,12 +36,12 @@ export function DdaySection({
           layout={linearTransitionAnimation}>
           {isDdayExpanded && (
             <Pressable
-              onPress={() => console.log('dday')}
+              onPress={() => bottomSheetRef.current?.expand()}
               android_ripple={null}>
               <Animated.Text
                 entering={fadeInAnimation}
                 exiting={fadeOutAnimation}
-                style={[styles.text, styles.highlight]}>
+                style={[styles.text, styles.highlight, {marginRight: 6}]}>
                 {rDay}{' '}
               </Animated.Text>
             </Pressable>

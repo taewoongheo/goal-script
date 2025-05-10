@@ -33,7 +33,7 @@ export default function MainScreen() {
     toggleTodoTask,
   } = useGoalData();
 
-  const {bottomSheetRef} = useBottomSheet();
+  const {goalBottomSheetRef, ddayBottomSheetRef} = useBottomSheet();
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -72,7 +72,7 @@ export default function MainScreen() {
           linearTransitionAnimation={linearTransitionAnimation}
           fadeInAnimation={fadeInAnimation}
           fadeOutAnimation={fadeOutAnimation}
-          bottomSheetRef={bottomSheetRef}
+          bottomSheetRef={goalBottomSheetRef}
         />
 
         <DdaySection
@@ -84,6 +84,7 @@ export default function MainScreen() {
           linearTransitionAnimation={linearTransitionAnimation}
           fadeInAnimation={fadeInAnimation}
           fadeOutAnimation={fadeOutAnimation}
+          bottomSheetRef={ddayBottomSheetRef}
         />
 
         <AchievedSection

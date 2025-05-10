@@ -19,7 +19,7 @@ import {Typography} from '@/constants/Typography';
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutContent() {
-  const {bottomSheetRef} = useBottomSheet();
+  const {goalBottomSheetRef, ddayBottomSheetRef} = useBottomSheet();
   const colorScheme = useColorScheme();
   const snapPoints = useMemo(() => ['25%', '50%'], []);
 
@@ -32,8 +32,9 @@ function RootLayoutContent() {
         </Stack>
         <StatusBar style="auto" />
 
+        {/* Goal BottomSheet */}
         <BottomSheet
-          ref={bottomSheetRef}
+          ref={goalBottomSheetRef}
           snapPoints={snapPoints}
           index={-1}
           enablePanDownToClose
@@ -41,7 +42,21 @@ function RootLayoutContent() {
           backgroundStyle={{backgroundColor: 'white'}}
           style={styles.bottomSheet}>
           <BottomSheetView style={styles.contentContainer}>
-            <Animated.Text style={styles.text}>설정</Animated.Text>
+            <Animated.Text style={styles.text}>목표 설정</Animated.Text>
+          </BottomSheetView>
+        </BottomSheet>
+
+        {/* D-day BottomSheet */}
+        <BottomSheet
+          ref={ddayBottomSheetRef}
+          snapPoints={snapPoints}
+          index={-1}
+          enablePanDownToClose
+          handleIndicatorStyle={{backgroundColor: '#999'}}
+          backgroundStyle={{backgroundColor: 'white'}}
+          style={styles.bottomSheet}>
+          <BottomSheetView style={styles.contentContainer}>
+            <Animated.Text style={styles.text}>디데이 설정</Animated.Text>
           </BottomSheetView>
         </BottomSheet>
       </ThemeProvider>

@@ -78,7 +78,7 @@ export const academicPaper: GoalData = {
   icon: 'docs',
   dDay: {
     date: '25.12.20',
-    remainingDays: 111241,
+    remainingDays: 97,
   },
   achieved: [
     {

@@ -3,12 +3,15 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
-import {useEffect, useMemo} from 'react';
+import {useEffect, useMemo, useCallback} from 'react';
 import Animated from 'react-native-reanimated';
 import {StyleSheet, View} from 'react-native';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  BottomSheetView,
+  BottomSheetBackdrop,
+} from '@gorhom/bottom-sheet';
 import {
   BottomSheetProvider,
   useBottomSheet,
@@ -22,6 +25,20 @@ function RootLayoutContent() {
   const {goalBottomSheetRef, ddayBottomSheetRef} = useBottomSheet();
   const colorScheme = useColorScheme();
   const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // 배경 컴포넌트 렌더링 함수
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.5}
+        pressBehavior="close"
+      />
+    ),
+    [],
+  );
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -38,6 +55,7 @@ function RootLayoutContent() {
           snapPoints={snapPoints}
           index={-1}
           enablePanDownToClose
+          backdropComponent={renderBackdrop}
           handleIndicatorStyle={{backgroundColor: '#999'}}
           backgroundStyle={{backgroundColor: 'white'}}
           style={styles.bottomSheet}>
@@ -52,6 +70,7 @@ function RootLayoutContent() {
           snapPoints={snapPoints}
           index={-1}
           enablePanDownToClose
+          backdropComponent={renderBackdrop}
           handleIndicatorStyle={{backgroundColor: '#999'}}
           backgroundStyle={{backgroundColor: 'white'}}
           style={styles.bottomSheet}>

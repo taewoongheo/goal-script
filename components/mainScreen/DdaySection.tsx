@@ -35,16 +35,18 @@ export function DdaySection({
           style={{overflow: 'hidden'}}
           layout={linearTransitionAnimation}>
           {isDdayExpanded && (
-            <Pressable
-              onPress={() => bottomSheetRef.current?.expand()}
-              android_ripple={null}>
-              <Animated.Text
-                entering={fadeInAnimation}
-                exiting={fadeOutAnimation}
-                style={[styles.text, styles.highlight, {marginRight: 6}]}>
-                {rDay}{' '}
-              </Animated.Text>
-            </Pressable>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Pressable
+                onPress={() => bottomSheetRef.current?.expand()}
+                android_ripple={null}>
+                <Animated.Text
+                  entering={fadeInAnimation}
+                  exiting={fadeOutAnimation}
+                  style={[styles.text, styles.highlight, {marginRight: 6}]}>
+                  {rDay}{' '}
+                </Animated.Text>
+              </Pressable>
+            </View>
           )}
         </Animated.View>
         <Animated.Text layout={linearTransitionAnimation} style={styles.text}>

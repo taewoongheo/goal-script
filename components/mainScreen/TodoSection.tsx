@@ -21,6 +21,7 @@ import {getViewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
+import {FontAwesome6, MaterialCommunityIcons} from '@expo/vector-icons';
 import {TodoItem} from './TodoItem';
 
 interface TodoSectionProps {
@@ -83,10 +84,26 @@ export function TodoSection({
     <Animated.View
       layout={linearTransitionAnimation}
       style={styles.lineContainer}>
-      <TouchableOpacity activeOpacity={1} onPress={() => onToggle('todos')}>
-        <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
-          {todoItems[0].text}
-        </Text>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+        activeOpacity={1}
+        onPress={() => onToggle('todos')}>
+        <FontAwesome6
+          name="list"
+          size={24}
+          color="black"
+          style={{marginRight: 6}}
+        />
+        <View style={{flex: 1}}>
+          <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
+            {isTodosExpanded
+              ? `${todoItems.length}개의 할 일`
+              : todoItems[0].text}
+          </Text>
+        </View>
       </TouchableOpacity>
 
       <View style={localStyles.relativeContainer}>

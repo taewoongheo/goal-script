@@ -20,6 +20,7 @@ import {getViewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
+import {FontAwesome6} from '@expo/vector-icons';
 import {AchievedItem} from './AchievedItem';
 
 interface AchievedSectionProps {
@@ -76,10 +77,26 @@ export function AchievedSection({
     <Animated.View
       layout={linearTransitionAnimation}
       style={styles.lineContainer}>
-      <TouchableOpacity activeOpacity={1} onPress={() => onToggle('achieved')}>
-        <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
-          {achievedItems[0].text}
-        </Text>
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => onToggle('achieved')}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <FontAwesome6
+          name="list-check"
+          size={24}
+          color="black"
+          style={{marginRight: 6}}
+        />
+        <View style={{flex: 1}}>
+          <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
+            {isAchievedExpanded
+              ? `${achievedItems.length}개의 할 일`
+              : achievedItems[0].text}
+          </Text>
+        </View>
       </TouchableOpacity>
 
       <View style={localStyles.relativeContainer}>

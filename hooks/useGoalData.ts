@@ -3,6 +3,7 @@ import {
   marathonPreparation,
   GoalData,
   websiteProject,
+  academicPaper,
 } from '@/constants/SampleData';
 import {generateUUID} from '@/utils/uuid';
 import {ANIMATION_DURATION} from '@/constants/Animation';
@@ -20,7 +21,7 @@ type PendingMoveTask = {
 };
 
 export function useGoalData() {
-  const [goalData, setGoalData] = useState<GoalData>(marathonPreparation);
+  const [goalData, setGoalData] = useState<GoalData>(academicPaper);
 
   const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
 
@@ -166,6 +167,7 @@ export function useGoalData() {
 
   return {
     title: goalData.title,
+    icon: goalData.icon,
     dDay: goalData.dDay.remainingDays,
     rDay: goalData.dDay.date,
     achieved: goalData.achieved,

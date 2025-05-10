@@ -48,12 +48,16 @@ export function DdaySection({
           style={{overflow: 'hidden'}}
           layout={linearTransitionAnimation}>
           {isDdayExpanded && (
-            <Animated.Text
-              entering={fadeInAnimation}
-              exiting={fadeOutAnimation}
-              style={[styles.text, styles.highlight]}>
-              {rDay}{' '}
-            </Animated.Text>
+            <Pressable
+              onPress={() => console.log('dday')}
+              android_ripple={null}>
+              <Animated.Text
+                entering={fadeInAnimation}
+                exiting={fadeOutAnimation}
+                style={[styles.text, styles.highlight]}>
+                {rDay}{' '}
+              </Animated.Text>
+            </Pressable>
           )}
         </Animated.View>
         <Animated.Text layout={linearTransitionAnimation} style={styles.text}>

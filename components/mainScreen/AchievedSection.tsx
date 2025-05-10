@@ -19,6 +19,7 @@ import {TaskItem} from '@/hooks/useGoalData';
 import {getViewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
+import {HighlightColor} from '@/constants/Colors';
 import {AchievedItem} from './AchievedItem';
 
 interface AchievedSectionProps {
@@ -75,7 +76,7 @@ export function AchievedSection({
     <Animated.View
       layout={linearTransitionAnimation}
       style={styles.lineContainer}>
-      <TouchableOpacity onPress={() => onToggle('achieved')}>
+      <TouchableOpacity activeOpacity={1} onPress={() => onToggle('achieved')}>
         <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
           {achievedItems[0].text}
         </Text>
@@ -136,7 +137,7 @@ const localStyles = StyleSheet.create({
   },
   highlightBackground: {
     position: 'absolute',
-    backgroundColor: 'rgb(217, 255, 0)',
+    backgroundColor: HighlightColor.light,
     borderRadius: 8,
     zIndex: -1,
   },

@@ -1,15 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
-import {Pressable} from 'react-native-gesture-handler';
 import Animated, {
   EntryAnimationsValues,
   withTiming,
+  useSharedValue,
+  useAnimatedStyle,
+  FadeIn,
+  FadeOut,
+  Layout,
 } from 'react-native-reanimated';
-import {getViewportWidth} from '@/utils/viewport';
 import {ToggleKey} from '@/hooks/useToggleExpand';
-import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {Entypo, FontAwesome5} from '@expo/vector-icons';
+import {FontAwesome5, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
+import {getViewportWidth} from '@/utils/viewport';
+import {Pressable} from 'react-native-gesture-handler';
+import {Layout as LayoutConstants} from '@/constants/Layout';
 
 interface GoalSectionProps {
   title: string;
@@ -38,103 +43,103 @@ export function GoalSection({
 }: GoalSectionProps) {
   const [lines, setLines] = useState<string[] | null>(null);
 
-  useEffect(() => {
-    setLines(null);
-  }, [title]);
-
-  const expandWidth = (values: EntryAnimationsValues) => {
-    'worklet';
-
-    const finalW = values.targetWidth;
-
-    return {
-      initialValues: {width: 0},
-      animations: {
-        width: withTiming(finalW, {
-          duration: ANIMATION_DURATION.LINEAR_TRANSIION,
-        }),
-      },
-    };
-  };
+  console.log(lines);
 
   return (
-    <View
-      style={
-        (styles.lineContainer,
-        {
-          display: 'flex',
+    <View style={styles.lineContainer}>
+      {/* visible lines */}
+      <View
+        style={{
           flexDirection: 'row',
           alignItems: 'center',
-        })
-      }>
-      {lines === null && (
-        <Text
-          style={[
-            styles.text,
-            {
-              position: 'absolute',
-              width: getViewportWidth() * Layout.padding.horizontal,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              opacity: 0,
-              zIndex: -1,
-            },
-          ]}
-          onTextLayout={e => {
-            const texts = e.nativeEvent.lines.map(l => l.text);
-            setLines(parseLines(texts));
-          }}>
-          {title}까지
-        </Text>
-      )}
+          flexWrap: 'wrap',
+        }}>
+        <SimpleLineIcons
+          name={icon as any}
+          size={25}
+          color="black"
+          style={{marginRight: 6}}
+        />
 
-      <FontAwesome5
-        name={icon as any}
-        size={25}
-        color="black"
-        style={{marginRight: 6}}
-      />
-      {lines?.map((line, idx) => {
-        if (idx === lines.length - 1) {
+        {lines?.map((line, index) => {
+          if (index === lines.length - 1) {
+            return (
+              <View key={`${line}-${index}`} style={styles.lineContainer}>
+                <View style={{flexDirection: 'row'}}>
+                  <Pressable onPress={() => onToggleGoal('goal')}>
+                    <Text style={[styles.text, styles.highlight]}>{line} </Text>
+                  </Pressable>
+                  <Animated.View
+                    style={{
+                      overflow: 'hidden',
+                    }}
+                    layout={linearTransitionAnimation}>
+                    {isGoalExpanded && (
+                      <Pressable
+                        android_ripple={null}
+                        onPress={() => console.log('settings')}>
+                        <Animated.Text
+                          entering={fadeInAnimation}
+                          exiting={fadeOutAnimation}
+                          style={[
+                            styles.text,
+                            styles.highlight,
+                            {marginRight: 6},
+                          ]}>
+                          <Ionicons
+                            name="settings-sharp"
+                            size={24}
+                            color="black"
+                          />
+                        </Animated.Text>
+                      </Pressable>
+                    )}
+                  </Animated.View>
+                  <Animated.Text
+                    layout={linearTransitionAnimation}
+                    style={styles.text}>
+                    까지
+                  </Animated.Text>
+                </View>
+              </View>
+            );
+          }
           return (
-            <View key={`${line}-${idx}`} style={styles.lineContainer}>
-              <Pressable onPress={() => onToggleGoal('goal')}>
+            <View key={index} style={{flexDirection: 'row'}}>
+              <Pressable
+                onPress={() => {
+                  onToggleGoal('goal');
+                }}>
                 <Text style={[styles.text, styles.highlight]}>{line}</Text>
               </Pressable>
-              {isGoalExpanded && (
-                <Animated.View
-                  entering={expandWidth}
-                  style={{
-                    overflow: 'hidden',
-                  }}>
-                  <Animated.Text
-                    entering={fadeInAnimation}
-                    exiting={fadeOutAnimation}
-                    style={styles.text}>
-                    ⚙️
-                  </Animated.Text>
-                </Animated.View>
-              )}
-              <Animated.Text
-                layout={linearTransitionAnimation}
-                style={styles.text}>
-                까지
-              </Animated.Text>
             </View>
           );
-        }
+        })}
+      </View>
 
-        return (
-          <Pressable
-            onPress={() => onToggleGoal('goal')}
-            key={`${line}-${idx}`}
-            style={styles.lineContainer}>
-            <Text style={styles.text}>{line}</Text>
-          </Pressable>
-        );
-      })}
+      {/* hidden lines */}
+      <Text
+        style={[
+          styles.text,
+          {
+            position: 'absolute',
+            width: getViewportWidth() * LayoutConstants.padding.horizontal,
+            top: 1000,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0,
+            zIndex: -1,
+          },
+        ]}
+        onTextLayout={e => {
+          const texts = e.nativeEvent.lines.map(l => l.text);
+          if (texts === null) return;
+
+          setLines(parseLines(texts));
+        }}>
+        ✅ {title} 까지
+      </Text>
     </View>
   );
 }
@@ -154,5 +159,9 @@ function parseLines(lines: string[]): string[] {
     trimLines[len - 1] = lastLine.substring(0, lastLine.length - 2);
   }
 
-  return trimLines;
+  const firstLine = trimLines[0].split(' ');
+  firstLine.shift();
+  trimLines[0] = firstLine.join(' ');
+
+  return trimLines.map(el => el.trim()).filter(el => el.length > 0);
 }

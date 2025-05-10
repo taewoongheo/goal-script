@@ -23,6 +23,7 @@ export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
   const {
     title,
+    icon,
     dDay,
     rDay,
     achieved,
@@ -61,7 +62,7 @@ export default function MainScreen() {
         layout={linearTransitionAnimation}>
         <GoalSection
           title={title}
-          icon="trophy"
+          icon={icon}
           isGoalExpanded={expandStates.goal[0]}
           onToggleGoal={handleToggle}
           styles={componentStyles}

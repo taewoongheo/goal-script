@@ -1,6 +1,7 @@
 import React from 'react';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {TaskSection} from './task/TaskSection';
 import {TaskItemProps, TaskStyles} from './task/types';
 import {TaskItem as TaskItemComponent} from './task/TaskItem';
@@ -13,6 +14,8 @@ interface AchievedSectionProps {
   linearTransitionAnimation: any;
   hasTodoItems: boolean;
   onUpdateItem: (taskId: string) => void;
+  onEditItem?: (taskId: string, newText: string) => void;
+  listItemBottomSheetRef?: React.RefObject<BottomSheet>;
 }
 
 export function AchievedSection({
@@ -23,6 +26,8 @@ export function AchievedSection({
   linearTransitionAnimation,
   hasTodoItems,
   onUpdateItem,
+  onEditItem,
+  listItemBottomSheetRef,
 }: AchievedSectionProps) {
   const renderTaskItem = (props: TaskItemProps) => (
     <TaskItemComponent {...props} />
@@ -36,10 +41,12 @@ export function AchievedSection({
       styles={styles}
       linearTransitionAnimation={linearTransitionAnimation}
       onUpdateItem={onUpdateItem}
+      onEditItem={onEditItem}
       icon="list-check"
       title="achieved"
       suffix={hasTodoItems ? '들을 완료했고,' : '들을 완료했어요.'}
       renderItem={renderTaskItem}
+      listItemBottomSheetRef={listItemBottomSheetRef}
     />
   );
 }

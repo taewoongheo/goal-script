@@ -31,9 +31,12 @@ export default function MainScreen() {
     todos,
     toggleAchievedTask,
     toggleTodoTask,
+    editAchievedTask,
+    editTodoTask,
   } = useGoalData();
 
-  const {goalBottomSheetRef, ddayBottomSheetRef} = useBottomSheet();
+  const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
+    useBottomSheet();
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -95,6 +98,8 @@ export default function MainScreen() {
           linearTransitionAnimation={linearTransitionAnimation}
           hasTodoItems={todos.length > 0}
           onUpdateItem={toggleAchievedTask}
+          onEditItem={editAchievedTask}
+          listItemBottomSheetRef={listItemBottomSheetRef}
         />
 
         <TodoSection
@@ -104,6 +109,8 @@ export default function MainScreen() {
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
           onUpdateItem={toggleTodoTask}
+          onEditItem={editTodoTask}
+          listItemBottomSheetRef={listItemBottomSheetRef}
         />
       </Animated.View>
     </View>

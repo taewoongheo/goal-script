@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
 import {SimpleLineIcons} from '@expo/vector-icons';
 import {parseLines} from '@/utils/goalText';
 import {GoalSectionProps} from './goal/types';
@@ -22,12 +22,14 @@ export function GoalSection({
   return (
     <View style={styles.lineContainer}>
       <View style={localStyles.container}>
-        <SimpleLineIcons
-          name={icon as any}
-          size={25}
-          color="black"
-          style={{marginRight: 6}}
-        />
+        <Pressable onPress={() => bottomSheetRef.current?.expand()}>
+          <SimpleLineIcons
+            name={icon as any}
+            size={25}
+            color="black"
+            style={{marginRight: 6}}
+          />
+        </Pressable>
 
         {lines?.map((line, index) => (
           <GoalLine

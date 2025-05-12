@@ -3,6 +3,7 @@ import {StyleProp, TextStyle, ViewStyle} from 'react-native';
 import {LinearTransition} from 'react-native-reanimated';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 export interface TaskStyles {
   lineContainer: StyleProp<ViewStyle>;
@@ -21,8 +22,7 @@ export interface TaskItemProps {
   onLayout: (event: any) => void;
   setSelectedIdx: (idx: number) => void;
   selectedIdx: number;
-  isLongPressing: boolean;
-  setLongPressing: (index: number, isLongPressing: boolean) => void;
+  listItemBottomSheetRef?: React.RefObject<BottomSheet>;
 }
 
 export interface TaskSectionProps {
@@ -32,9 +32,11 @@ export interface TaskSectionProps {
   styles: TaskStyles;
   linearTransitionAnimation: LinearTransition;
   onUpdateItem: (taskId: string) => void;
+  onEditItem?: (taskId: string, newText: string) => void;
   icon: string;
   title: string;
   suffix?: string;
   emptyMessage?: string;
   renderItem: (props: TaskItemProps) => React.ReactElement;
+  listItemBottomSheetRef?: React.RefObject<BottomSheet>;
 }

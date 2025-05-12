@@ -29,15 +29,16 @@ export function TaskSection({
   styles,
   linearTransitionAnimation,
   onUpdateItem,
+  onEditItem,
   icon,
   title,
   suffix = '',
   emptyMessage,
   renderItem,
+  listItemBottomSheetRef,
 }: TaskSectionProps) {
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const [longPressingIdx, setLongPressingIdx] = useState<number | null>(null);
   const heightMeasured = useRef(false);
   const highlightBgColor = useSharedValue(HighlightColor.light);
 
@@ -57,23 +58,6 @@ export function TaskSection({
       heightMeasured.current = true;
     }
   }, []);
-
-  const setLongPressing = useCallback(
-    (index: number, isLongPressing: boolean) => {
-      if (isLongPressing) {
-        setLongPressingIdx(index);
-        highlightBgColor.value = withTiming('rgba(180, 180, 220, 0.8)', {
-          duration: 300,
-        });
-      } else {
-        setLongPressingIdx(null);
-        highlightBgColor.value = withTiming(HighlightColor.light, {
-          duration: 300,
-        });
-      }
-    },
-    [],
-  );
 
   const highlightStyle = useAnimatedStyle(() => ({
     backgroundColor: highlightBgColor.value,
@@ -154,8 +138,7 @@ export function TaskSection({
                     onLayout: getHeight,
                     setSelectedIdx,
                     selectedIdx,
-                    isLongPressing: index === longPressingIdx,
-                    setLongPressing,
+                    listItemBottomSheetRef,
                   })}
                 </React.Fragment>
               ))}

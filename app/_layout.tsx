@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
 import React, {useEffect, useMemo, useCallback, useState} from 'react';
 import Animated from 'react-native-reanimated';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Keyboard} from 'react-native';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
@@ -17,12 +17,12 @@ import {
   useBottomSheet,
 } from '@/contexts/BottomSheetContext';
 import {Typography} from '@/constants/Typography';
-import {TaskItem} from '@/hooks/useGoalData';
+import {TaskItem, useGoalData} from '@/hooks/useGoalData';
+import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
+import {ListItemBottomSheet} from '@/components/mainScreen/ListItemBottomSheet';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-// Context for selected task item
 export type SelectedTaskContextType = {
   selectedTask: TaskItem | null;
   setSelectedTask: (task: TaskItem | null) => void;
@@ -46,16 +46,26 @@ function RootLayoutContent() {
   const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
     useBottomSheet();
   const colorScheme = useColorScheme();
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const snapPoints = useMemo(() => ['50%'], []);
+  const defaultSnapPoints = useMemo(() => ['25%', '50%'], []);
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
+  const {
+    title,
+    icon,
+    achieved,
+    dDay,
+    rDay,
+    editAchievedTask,
+    editTodoTask,
+    removeAchievedTask,
+    removeTodoTask,
+  } = useGoalData();
 
-  // Context 값을 메모이제이션
   const selectedTaskValue = useMemo(
     () => ({selectedTask, setSelectedTask}),
     [selectedTask],
   );
 
-  // 배경 컴포넌트 렌더링 함수
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
@@ -67,6 +77,48 @@ function RootLayoutContent() {
       />
     ),
     [],
+  );
+
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index === -1) {
+      Keyboard.dismiss();
+      // 바텀시트가 닫힐 때 선택된 작업 초기화
+      setSelectedTask(null);
+    }
+  }, []);
+
+  // 선택된 작업 편집 처리
+  const handleEditTask = useCallback(
+    (taskId: string, newText: string) => {
+      if (!selectedTask) return;
+
+      if (selectedTask.completed) {
+        editAchievedTask(taskId, newText);
+      } else {
+        editTodoTask(taskId, newText);
+      }
+
+      // 편집 후 바텀시트 닫기
+      listItemBottomSheetRef.current?.close();
+    },
+    [selectedTask, editAchievedTask, editTodoTask, listItemBottomSheetRef],
+  );
+
+  // 선택된 작업 삭제 처리
+  const handleDeleteTask = useCallback(
+    (taskId: string) => {
+      if (!selectedTask) return;
+
+      if (selectedTask.completed) {
+        removeAchievedTask(taskId);
+      } else {
+        removeTodoTask(taskId);
+      }
+
+      // 삭제 후 바텀시트 닫기
+      listItemBottomSheetRef.current?.close();
+    },
+    [selectedTask, removeAchievedTask, removeTodoTask, listItemBottomSheetRef],
   );
 
   return (
@@ -85,13 +137,26 @@ function RootLayoutContent() {
             ref={goalBottomSheetRef}
             snapPoints={snapPoints}
             index={-1}
-            enablePanDownToClose
             backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor: '#999'}}
             backgroundStyle={{backgroundColor: 'white'}}
-            style={styles.bottomSheet}>
+            style={styles.bottomSheet}
+            onChange={handleSheetChanges}
+            handleIndicatorStyle={{backgroundColor: '#999'}}
+            enablePanDownToClose
+            // keyboardBehavior="interactive"
+            // keyboardBlurBehavior="none"
+          >
             <BottomSheetView style={styles.contentContainer}>
-              <Animated.Text style={styles.text}>목표 설정</Animated.Text>
+              <GoalBottomSheet
+                icon={icon}
+                title={title}
+                achieved={achieved}
+                dDay={dDay}
+                rDay={rDay}
+                onTitleChange={newTitle => console.log('제목 변경:', newTitle)}
+                onAchieveGoal={() => console.log('목표 달성 클릭')}
+                onDeleteGoal={() => console.log('목표 삭제 클릭')}
+              />
             </BottomSheetView>
           </BottomSheet>
 
@@ -104,7 +169,10 @@ function RootLayoutContent() {
             backdropComponent={renderBackdrop}
             handleIndicatorStyle={{backgroundColor: '#999'}}
             backgroundStyle={{backgroundColor: 'white'}}
-            style={styles.bottomSheet}>
+            style={styles.bottomSheet}
+            onChange={handleSheetChanges}
+            keyboardBehavior="interactive"
+            keyboardBlurBehavior="none">
             <BottomSheetView style={styles.contentContainer}>
               <Animated.Text style={styles.text}>디데이 설정</Animated.Text>
             </BottomSheetView>
@@ -119,23 +187,15 @@ function RootLayoutContent() {
             backdropComponent={renderBackdrop}
             handleIndicatorStyle={{backgroundColor: '#999'}}
             backgroundStyle={{backgroundColor: 'white'}}
-            style={styles.bottomSheet}>
+            style={styles.bottomSheet}
+            onChange={handleSheetChanges}
+            keyboardBehavior="interactive"
+            keyboardBlurBehavior="none">
             <BottomSheetView style={styles.contentContainer}>
-              <Text style={styles.title}>Task Details</Text>
-              {selectedTask && (
-                <View style={styles.taskDetails}>
-                  <Text style={styles.label}>Task:</Text>
-                  <Text style={styles.value}>{selectedTask.text}</Text>
-
-                  <Text style={styles.label}>Status:</Text>
-                  <Text style={styles.value}>
-                    {selectedTask.completed ? 'Completed' : 'In Progress'}
-                  </Text>
-
-                  <Text style={styles.label}>ID:</Text>
-                  <Text style={styles.value}>{selectedTask.id}</Text>
-                </View>
-              )}
+              <ListItemBottomSheet
+                onEditItem={handleEditTask}
+                onDeleteItem={handleDeleteTask}
+              />
             </BottomSheetView>
           </BottomSheet>
         </ThemeProvider>
@@ -183,32 +243,28 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: 16,
   },
   text: {
-    fontSize: Typography.fontSize.large,
+    fontSize: 24,
+    textAlign: 'center',
     fontFamily: Typography.fontFamily.regular,
-    color: '#2F2F2F',
   },
   title: {
-    fontSize: Typography.fontSize.large,
-    fontFamily: Typography.fontFamily.bold,
-    color: '#2F2F2F',
-    marginBottom: 16,
-  },
-  taskDetails: {
-    marginTop: 8,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   label: {
-    fontSize: Typography.fontSize.medium,
-    fontFamily: Typography.fontFamily.bold,
-    color: '#2F2F2F',
-    marginTop: 8,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 10,
   },
   value: {
-    fontSize: Typography.fontSize.medium,
-    fontFamily: Typography.fontFamily.regular,
-    color: '#2F2F2F',
-    marginBottom: 8,
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  taskDetails: {
+    paddingHorizontal: 20,
   },
 });

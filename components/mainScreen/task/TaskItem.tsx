@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -8,14 +8,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {
-  Pressable,
-  LongPressGestureHandler,
-  TapGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
-import {MaterialIcons} from '@expo/vector-icons';
-import {useBottomSheet} from '@/contexts/BottomSheetContext';
+import {Pressable} from 'react-native-gesture-handler';
+import {MaterialIcons, Feather} from '@expo/vector-icons';
 import {useSelectedTask} from '@/app/_layout';
 import {TaskItemProps} from './types';
 
@@ -28,10 +22,10 @@ export function TaskItem({
   onLayout,
   setSelectedIdx,
   selectedIdx,
+  listItemBottomSheetRef,
 }: TaskItemProps) {
   const checkboxOpacity = useSharedValue(item.completed ? 1 : 0);
   const textOpacity = useSharedValue(item.completed ? 0.6 : 1);
-  const {listItemBottomSheetRef} = useBottomSheet();
   const {setSelectedTask} = useSelectedTask();
 
   const fadeInAnimation = useMemo(
@@ -73,10 +67,11 @@ export function TaskItem({
     setSelectedIdx(index);
   };
 
-  const handleLongPress = () => {
+  const handleOpenBottomSheet = () => {
+    // 선택된 작업 설정
     setSelectedTask(item);
-    setSelectedIdx(index);
-    listItemBottomSheetRef.current?.expand();
+    // 바텀시트 열기
+    listItemBottomSheetRef?.current?.expand();
   };
 
   return (
@@ -101,26 +96,22 @@ export function TaskItem({
         </View>
       </Pressable>
 
-      <LongPressGestureHandler
-        minDurationMs={800}
-        onHandlerStateChange={({nativeEvent}) => {
-          if (nativeEvent.state === State.ACTIVE) {
-            handleLongPress();
-          }
-        }}>
-        <TapGestureHandler
-          onHandlerStateChange={({nativeEvent}) => {
-            if (nativeEvent.state === State.END) {
-              handleTextTap();
-            }
-          }}>
-          <Animated.View style={styles.textContainer}>
-            <Animated.Text style={[style, textStyle]} numberOfLines={1}>
-              {item.text}
-            </Animated.Text>
-          </Animated.View>
-        </TapGestureHandler>
-      </LongPressGestureHandler>
+      <View style={styles.contentContainer}>
+        <Pressable style={styles.textContainer} onPress={handleTextTap}>
+          <Animated.Text style={[style, textStyle]} numberOfLines={1}>
+            {item.text}
+          </Animated.Text>
+        </Pressable>
+
+        {isSelected && (
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={handleOpenBottomSheet}
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+            <Feather name="edit-2" size={14} color="#555" />
+          </TouchableOpacity>
+        )}
+      </View>
     </Animated.View>
   );
 }
@@ -130,6 +121,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 3,
+    minHeight: 36,
   },
   checkboxContainer: {
     marginHorizontal: 6,
@@ -147,7 +139,23 @@ const styles = StyleSheet.create({
   checkboxOverlay: {
     position: 'absolute',
   },
+  contentContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   textContainer: {
     flex: 1,
+    paddingVertical: 6,
+  },
+  editButton: {
+    width: 28,
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 4,
+    backgroundColor: 'rgba(245, 245, 245, 0.9)',
+    borderRadius: 14,
   },
 });

@@ -165,6 +165,37 @@ export function useGoalData() {
     removeTask(taskId, 'todos');
   };
 
+  const editTaskText = (
+    taskId: string,
+    newText: string,
+    source: 'achieved' | 'todos',
+  ) => {
+    if (!newText.trim()) return; // 빈 텍스트는 무시
+
+    setGoalData(prev => {
+      const sourceList = [...prev[source]];
+      const taskIndex = sourceList.findIndex(task => task.id === taskId);
+
+      if (taskIndex === -1) return prev;
+
+      const updatedTask = {...sourceList[taskIndex], text: newText};
+      sourceList[taskIndex] = updatedTask;
+
+      return {
+        ...prev,
+        [source]: sourceList,
+      };
+    });
+  };
+
+  const editAchievedTask = (taskId: string, newText: string) => {
+    editTaskText(taskId, newText, 'achieved');
+  };
+
+  const editTodoTask = (taskId: string, newText: string) => {
+    editTaskText(taskId, newText, 'todos');
+  };
+
   return {
     title: goalData.title,
     icon: goalData.icon,
@@ -178,5 +209,7 @@ export function useGoalData() {
     addAchievedTask,
     removeAchievedTask,
     removeTodoTask,
+    editAchievedTask,
+    editTodoTask,
   };
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {TaskSection} from './task/TaskSection';
 import {TaskItemProps, TaskStyles} from './task/types';
 import {TaskItem as TaskItemComponent} from './task/TaskItem';
@@ -12,6 +13,8 @@ interface TodoSectionProps {
   styles: TaskStyles;
   linearTransitionAnimation: any;
   onUpdateItem: (taskId: string) => void;
+  onEditItem?: (taskId: string, newText: string) => void;
+  listItemBottomSheetRef?: React.RefObject<BottomSheet>;
 }
 
 export function TodoSection({
@@ -21,6 +24,8 @@ export function TodoSection({
   styles,
   linearTransitionAnimation,
   onUpdateItem,
+  onEditItem,
+  listItemBottomSheetRef,
 }: TodoSectionProps) {
   const renderTaskItem = (props: TaskItemProps) => (
     <TaskItemComponent {...props} />
@@ -34,11 +39,13 @@ export function TodoSection({
       styles={styles}
       linearTransitionAnimation={linearTransitionAnimation}
       onUpdateItem={onUpdateItem}
+      onEditItem={onEditItem}
       icon="list"
       title="todos"
       suffix="들이 남았어요."
       emptyMessage="앞으로 할 일은 무엇인가요?"
       renderItem={renderTaskItem}
+      listItemBottomSheetRef={listItemBottomSheetRef}
     />
   );
 }

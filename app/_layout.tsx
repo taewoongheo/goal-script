@@ -6,12 +6,12 @@ import {StatusBar} from 'expo-status-bar';
 import React, {useEffect, useMemo, useCallback, useState} from 'react';
 import Animated from 'react-native-reanimated';
 import {StyleSheet, View, Text, Keyboard} from 'react-native';
-import {useColorScheme} from '@/hooks/useColorScheme';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
+import {useColorScheme} from '@/hooks/useColorScheme';
 import {
   BottomSheetProvider,
   useBottomSheet,
@@ -143,9 +143,10 @@ function RootLayoutContent() {
             onChange={handleSheetChanges}
             handleIndicatorStyle={{backgroundColor: '#999'}}
             enablePanDownToClose
-            // keyboardBehavior="interactive"
-            // keyboardBlurBehavior="none"
-          >
+            keyboardBehavior="interactive"
+            keyboardBlurBehavior="restore"
+            android_keyboardInputMode="adjustResize"
+            enableDynamicSizing>
             <BottomSheetView style={styles.contentContainer}>
               <GoalBottomSheet
                 icon={icon}
@@ -172,7 +173,9 @@ function RootLayoutContent() {
             style={styles.bottomSheet}
             onChange={handleSheetChanges}
             keyboardBehavior="interactive"
-            keyboardBlurBehavior="none">
+            keyboardBlurBehavior="restore"
+            android_keyboardInputMode="adjustResize"
+            enableDynamicSizing>
             <BottomSheetView style={styles.contentContainer}>
               <Animated.Text style={styles.text}>디데이 설정</Animated.Text>
             </BottomSheetView>
@@ -190,7 +193,9 @@ function RootLayoutContent() {
             style={styles.bottomSheet}
             onChange={handleSheetChanges}
             keyboardBehavior="interactive"
-            keyboardBlurBehavior="none">
+            keyboardBlurBehavior="restore"
+            android_keyboardInputMode="adjustResize"
+            enableDynamicSizing>
             <BottomSheetView style={styles.contentContainer}>
               <ListItemBottomSheet
                 onEditItem={handleEditTask}

@@ -1,15 +1,14 @@
 import React, {useState, useRef} from 'react';
+import {View, Text, Pressable, StyleSheet, Keyboard} from 'react-native';
 import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  Platform,
-} from 'react-native';
-import {SimpleLineIcons} from '@expo/vector-icons';
+  SimpleLineIcons,
+  MaterialCommunityIcons,
+  Ionicons,
+  FontAwesome6,
+} from '@expo/vector-icons';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
+import {TextInput} from 'react-native-gesture-handler';
 import {TaskItem} from '@/hooks/useGoalData';
-import {useBottomSheet} from '@/contexts/BottomSheetContext';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -57,155 +56,176 @@ export function GoalBottomSheet({
   };
 
   return (
-    <View style={styles.container}>
-      {/* 목표 아이콘과 제목 */}
+    <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
       <View style={styles.headerRow}>
-        <SimpleLineIcons
-          name={icon as any}
-          size={28}
-          color="#444"
-          style={styles.icon}
+        <View style={styles.iconContainer}>
+          <SimpleLineIcons name={icon as any} size={24} color="#666" />
+        </View>
+        <Ionicons
+          name="chevron-down"
+          size={18}
+          color="#666"
+          style={styles.dropdownIcon}
         />
-        <View style={styles.titleInputContainer}>
-          {/* <TextInput
+        <View style={styles.inputContainer}>
+          <BottomSheetTextInput
             ref={titleInputRef}
             value={editableTitle}
             onChangeText={handleTitleChange}
-            style={styles.titleInput}
-            placeholder="목표를 입력해주세요"
-            placeholderTextColor="#AAA"
-            multiline={false}
-            numberOfLines={1}
-            maxLength={100}
-            keyboardType="default"
-            returnKeyType="done"
-            scrollEnabled
-            {...(Platform.OS === 'ios'
-              ? {
-                  allowFontScaling: false,
-                  dataDetectorTypes: 'none',
-                }
-              : {})}
-          /> */}
-          <TextInput
-            ref={titleInputRef}
-            value={editableTitle}
-            onChangeText={handleTitleChange}
-            style={styles.basicTitleInput}
-            placeholder="목표를 입력해주세요"
+            style={styles.goalTitleInput}
+            placeholder="Folder name"
+            placeholderTextColor="#A0A0A0"
           />
+          <View style={styles.underline} />
         </View>
       </View>
 
-      {/* 정보 박스 */}
-      <View style={styles.infoBox}>
-        <View style={styles.infoItem}>
-          <Text style={styles.infoLabel}>완료한 일들</Text>
-          <Text style={styles.infoValue}>{achieved.length}개</Text>
+      {/* 상단 통계 섹션 */}
+      <View style={styles.statsContainer}>
+        {/* 달성한 할 일들 achieved.length */}
+        <View style={styles.statItem}>
+          <View style={styles.statIconContainer}>
+            <FontAwesome6 name="fire" size={32} color="#ef4444" />
+          </View>
+          <Text style={styles.statValue}>{achieved.length}</Text>
+          <Text style={styles.statLabel}>완료한 일들</Text>
         </View>
-        <View style={styles.divider} />
-        <View style={styles.infoItem}>
-          <Text style={styles.infoLabel}>남은 날짜</Text>
-          <Text style={styles.infoValue}>
-            {dDay}일 ({rDay})
-          </Text>
+
+        {/* 남은 날짜들 rDay */}
+        <View style={styles.statItem}>
+          <View style={styles.statIconContainer}>
+            <View style={styles.gaugeBackground}>
+              <View style={[styles.gaugeProgress, {width: '70%'}]} />
+            </View>
+          </View>
+          <Text style={styles.statValue}>D-{dDay}</Text>
+          <Text style={styles.statLabel}>{rDay}</Text>
         </View>
       </View>
 
-      {/* 목표 달성 버튼 */}
-      <Pressable style={styles.achieveButton} onPress={handleAchieveGoal}>
-        <Text style={styles.achieveButtonText}>목표 달성</Text>
-      </Pressable>
+      {/* 완료 및 삭제 */}
+      <View style={styles.footerSection}>
+        {/* 완료 버튼 */}
+        <Pressable style={styles.completeButton} onPress={handleAchieveGoal}>
+          <Text style={styles.completeButtonText}>목표달성 완료</Text>
+        </Pressable>
 
-      {/* 목표 삭제 버튼 */}
-      <Pressable onPress={handleDeleteGoal} style={styles.deleteButton}>
-        <Text style={styles.deleteButtonText}>목표 삭제</Text>
-      </Pressable>
-    </View>
+        {/* 삭제 버튼 */}
+        <Text onPress={handleDeleteGoal} style={styles.deleteButtonText}>
+          목표 삭제
+        </Text>
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
     backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   headerRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 20,
+    alignItems: 'center',
+    marginBottom: 30,
   },
-  icon: {
-    marginRight: 15,
-    marginTop: 8,
+  iconContainer: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  titleInputContainer: {
+  inputContainer: {
     flex: 1,
-    // overflow: 'hidden',
   },
-  titleInput: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: '#333',
-    paddingVertical: 6,
-    paddingHorizontal: 0,
-    borderWidth: 0,
-    height: 40,
-    textAlign: 'left',
-    includeFontPadding: false,
-  },
-  basicTitleInput: {
+  goalTitleInput: {
     fontSize: 18,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#CCCCCC',
-    borderRadius: 5,
-  },
-  infoBox: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#EAEAEA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-  },
-  infoItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-  },
-  infoValue: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '400',
     color: '#333',
+    paddingVertical: 8,
+    paddingHorizontal: 0,
   },
-  divider: {
-    width: 1,
-    backgroundColor: '#EAEAEA',
-    marginHorizontal: 10,
+  underline: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginTop: 2,
   },
-  achieveButton: {
-    backgroundColor: '#4A6FFF',
-    borderRadius: 12,
-    padding: 16,
+  dropdownIcon: {
+    marginHorizontal: 4,
+    marginRight: 12,
+  },
+  footerSection: {
+    marginTop: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    gap: 8,
     alignItems: 'center',
-    marginBottom: 16,
   },
-  achieveButtonText: {
-    color: 'white',
+  completeButton: {
+    backgroundColor: 'black',
+    borderRadius: 8,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  completeButtonText: {
     fontSize: 16,
-    fontWeight: '600',
-  },
-  deleteButton: {
-    alignItems: 'center',
-    padding: 12,
+    fontWeight: '500',
+    color: '#fff',
   },
   deleteButtonText: {
-    color: 'red',
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#ff4d4f',
+    marginVertical: 16,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    height: 120,
+    flexDirection: 'column',
+  },
+  statIconContainer: {
+    // width: 50,
+    // height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 0.4,
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#1f2937',
+    // marginVertical: 4,
+    flex: 0.3,
+  },
+  statLabel: {
     fontSize: 14,
+    color: '#6b7280',
+    flex: 0.3,
+  },
+  gaugeBackground: {
+    width: 100,
+    height: 10,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  gaugeProgress: {
+    height: '100%',
+    backgroundColor: '#ef4444',
+    borderRadius: 4,
   },
 });

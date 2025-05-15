@@ -1,15 +1,12 @@
 import React, {useState, useRef} from 'react';
 import {View, Text, Pressable, StyleSheet, Keyboard} from 'react-native';
-import {
-  SimpleLineIcons,
-  MaterialCommunityIcons,
-  Ionicons,
-  FontAwesome6,
-} from '@expo/vector-icons';
+import {SimpleLineIcons, FontAwesome6, AntDesign} from '@expo/vector-icons';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {TextInput} from 'react-native-gesture-handler';
+import {moderateScale, scale} from 'react-native-size-matters';
 import {TaskItem} from '@/hooks/useGoalData';
 import {Theme} from '@/constants/Theme';
+import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -66,19 +63,19 @@ export function GoalBottomSheet({
             color={Theme.colors.highlight}
           />
         </View>
-        <Ionicons
+        {/* <Ionicons
           name="chevron-down"
           size={Theme.iconSize.small}
           color={Theme.colors.highlight}
           style={styles.dropdownIcon}
-        />
+        /> */}
         <View style={styles.inputContainer}>
           <BottomSheetTextInput
             ref={titleInputRef}
             value={editableTitle}
             onChangeText={handleTitleChange}
             style={styles.goalTitleInput}
-            placeholder="Folder name"
+            placeholder="목표 이름을 입력해주세요"
             placeholderTextColor="#A0A0A0"
           />
           <View style={styles.underline} />
@@ -103,9 +100,11 @@ export function GoalBottomSheet({
         {/* 남은 날짜들 rDay */}
         <View style={styles.statItem}>
           <View style={styles.statIconContainer}>
-            <View style={styles.gaugeBackground}>
-              <View style={[styles.gaugeProgress, {width: '70%'}]} />
-            </View>
+            <AntDesign
+              name="clockcircle"
+              size={Theme.iconSize.large}
+              color={Theme.colors.highlight}
+            />
           </View>
           <Text style={styles.statValue}>D-{dDay}</Text>
           <Text style={styles.statLabel}>{rDay}</Text>
@@ -115,14 +114,18 @@ export function GoalBottomSheet({
       {/* 완료 및 삭제 */}
       <View style={styles.footerSection}>
         {/* 완료 버튼 */}
-        <Pressable style={styles.completeButton} onPress={handleAchieveGoal}>
-          <Text style={styles.completeButtonText}>목표달성 완료</Text>
-        </Pressable>
+        <BottomSheetButton
+          label="목표달성 완료"
+          onPress={handleAchieveGoal}
+          type="primary"
+        />
 
         {/* 삭제 버튼 */}
-        <Text onPress={handleDeleteGoal} style={styles.deleteButtonText}>
-          목표 삭제
-        </Text>
+        <BottomSheetButton
+          label="목표 삭제"
+          onPress={handleDeleteGoal}
+          type="text"
+        />
       </View>
     </Pressable>
   );
@@ -130,111 +133,76 @@ export function GoalBottomSheet({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    paddingHorizontal: Theme.spacing.large,
+    paddingVertical: Theme.spacing.medium,
+    backgroundColor: Theme.colors.dropdownBackground,
+    borderTopLeftRadius: Theme.borderRadius.large + 8, // 20
+    borderTopRightRadius: Theme.borderRadius.large + 8, // 20
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: Theme.spacing.large - scale(2),
   },
   iconContainer: {
-    width: 48,
-    height: 48,
+    width: Theme.iconSize.large + scale(18),
+    height: Theme.iconSize.large + scale(18),
     backgroundColor: '#F5F5F5',
-    borderRadius: 8,
+    borderRadius: Theme.borderRadius.medium,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: Theme.iconSpace.medium,
   },
   inputContainer: {
     flex: 1,
   },
   goalTitleInput: {
-    fontSize: 18,
-    fontWeight: '400',
-    color: '#333',
-    paddingVertical: 8,
-    paddingHorizontal: 0,
+    fontSize: Theme.fontSize.large - scale(5),
+    fontFamily: Theme.fontFamily.regular,
+    color: Theme.colors.highlight,
+    paddingVertical: Theme.spacing.xs * scale(1.5),
   },
   underline: {
-    height: 1,
+    height: scale(1),
     backgroundColor: '#E0E0E0',
-    marginTop: 2,
   },
   dropdownIcon: {
-    marginHorizontal: 4,
-    marginRight: 12,
+    marginHorizontal: Theme.spacing.xs,
+    marginRight: Theme.spacing.medium - scale(4),
   },
   footerSection: {
-    marginTop: 20,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    gap: 8,
+    gap: Theme.spacing.xs * scale(1.5),
     alignItems: 'center',
-  },
-  completeButton: {
-    backgroundColor: 'black',
-    borderRadius: 8,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  completeButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#fff',
-  },
-  deleteButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#ff4d4f',
-    marginVertical: 16,
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: Theme.spacing.medium,
   },
   statItem: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    height: 120,
+    height: moderateScale(120, 0.3),
     flexDirection: 'column',
   },
   statIconContainer: {
-    // width: 50,
-    // height: 30,
     justifyContent: 'center',
     alignItems: 'center',
     flex: 0.4,
   },
   statValue: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#1f2937',
-    // marginVertical: 4,
+    fontFamily: Theme.fontFamily.bold,
+    color: Theme.colors.highlight,
     flex: 0.3,
   },
   statLabel: {
     fontSize: 14,
-    color: '#6b7280',
+    fontFamily: Theme.fontFamily.regular,
+    color: Theme.colors.textSecondary,
     flex: 0.3,
-  },
-  gaugeBackground: {
-    width: 100,
-    height: 10,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  gaugeProgress: {
-    height: '100%',
-    backgroundColor: '#ef4444',
-    borderRadius: 4,
   },
 });

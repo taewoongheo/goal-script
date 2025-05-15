@@ -9,6 +9,7 @@ import {
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {TextInput} from 'react-native-gesture-handler';
 import {TaskItem} from '@/hooks/useGoalData';
+import {Theme} from '@/constants/Theme';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -59,12 +60,16 @@ export function GoalBottomSheet({
     <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
       <View style={styles.headerRow}>
         <View style={styles.iconContainer}>
-          <SimpleLineIcons name={icon as any} size={24} color="#666" />
+          <SimpleLineIcons
+            name={icon as any}
+            size={Theme.iconSize.medium}
+            color={Theme.colors.highlight}
+          />
         </View>
         <Ionicons
           name="chevron-down"
-          size={18}
-          color="#666"
+          size={Theme.iconSize.small}
+          color={Theme.colors.highlight}
           style={styles.dropdownIcon}
         />
         <View style={styles.inputContainer}>
@@ -85,7 +90,11 @@ export function GoalBottomSheet({
         {/* 달성한 할 일들 achieved.length */}
         <View style={styles.statItem}>
           <View style={styles.statIconContainer}>
-            <FontAwesome6 name="fire" size={32} color="#ef4444" />
+            <FontAwesome6
+              name="fire"
+              size={Theme.iconSize.large}
+              color={Theme.colors.highlight}
+            />
           </View>
           <Text style={styles.statValue}>{achieved.length}</Text>
           <Text style={styles.statLabel}>완료한 일들</Text>

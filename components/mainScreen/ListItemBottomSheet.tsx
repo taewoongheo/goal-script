@@ -9,6 +9,7 @@ import {
 import {Feather} from '@expo/vector-icons';
 import {TaskItem} from '@/hooks/useGoalData';
 import {useSelectedTask} from '@/app/_layout';
+import {Theme} from '@/constants/Theme';
 
 interface ListItemBottomSheetProps {
   onEditItem?: (taskId: string, newText: string) => void;
@@ -74,14 +75,22 @@ export function ListItemBottomSheet({
 
       <View style={styles.actionButtons}>
         <TouchableOpacity style={styles.editButton} onPress={handleEditTask}>
-          <Feather name="edit-2" size={18} color="#FFF" />
+          <Feather
+            name="edit-2"
+            size={Theme.iconSize.small}
+            color={Theme.colors.highlight}
+          />
           <Text style={styles.editButtonText}>수정하기</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.deleteButton}
           onPress={handleDeleteTask}>
-          <Feather name="trash-2" size={16} color="#FF5555" />
+          <Feather
+            name="trash-2"
+            size={Theme.iconSize.small}
+            color={Theme.colors.highlight}
+          />
           <Text style={styles.deleteButtonText}>삭제하기</Text>
         </TouchableOpacity>
       </View>

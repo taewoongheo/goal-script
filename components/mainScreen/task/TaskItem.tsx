@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -7,11 +7,12 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {ANIMATION_DURATION} from '@/constants/Animation';
 import {Pressable} from 'react-native-gesture-handler';
-import {MaterialIcons, Feather} from '@expo/vector-icons';
+import {MaterialIcons, Entypo} from '@expo/vector-icons';
+import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useSelectedTask} from '@/app/_layout';
 import {TaskItemProps} from './types';
+import {Theme} from '@/constants/Theme';
 
 export function TaskItem({
   item,
@@ -81,35 +82,48 @@ export function TaskItem({
       exiting={fadeOutAnimation}
       onLayout={onLayout}
       style={styles.container}>
-      <Pressable
-        onPress={toggleComplete}
-        style={[styles.checkboxContainer, {opacity: isSelected ? 1 : 0}]}>
-        <View style={styles.checkbox}>
-          <MaterialIcons
-            name="check-box-outline-blank"
-            size={20}
-            color="black"
-          />
-          <Animated.View style={[styles.checkboxOverlay, checkboxStyle]}>
-            <MaterialIcons name="check-box" size={20} color="black" />
-          </Animated.View>
-        </View>
-      </Pressable>
+      <View style={[styles.contentContainer]}>
+        <Pressable
+          onPress={toggleComplete}
+          style={[styles.checkboxContainer, {opacity: isSelected ? 1 : 0}]}>
+          <View style={styles.checkbox}>
+            <MaterialIcons
+              name="check-box-outline-blank"
+              size={Theme.iconSize.small}
+              color={Theme.colors.highlight}
+            />
+            <Animated.View style={[styles.checkboxOverlay, checkboxStyle]}>
+              <MaterialIcons
+                name="check-box"
+                size={Theme.iconSize.small}
+                color={Theme.colors.highlight}
+              />
+            </Animated.View>
+          </View>
+        </Pressable>
 
-      <View style={styles.contentContainer}>
-        <Pressable style={styles.textContainer} onPress={handleTextTap}>
+        <Pressable
+          style={[
+            {marginHorizontal: Theme.iconSpace.medium},
+            styles.textContainer,
+          ]}
+          onPress={handleTextTap}>
           <Animated.Text style={[style, textStyle]} numberOfLines={1}>
             {item.text}
           </Animated.Text>
         </Pressable>
 
         {isSelected && (
-          <TouchableOpacity
-            style={styles.editButton}
+          <Pressable
+            style={[styles.editButton]}
             onPress={handleOpenBottomSheet}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-            <Feather name="edit-2" size={14} color="#555" />
-          </TouchableOpacity>
+            <Entypo
+              name="edit"
+              size={Theme.iconSize.small}
+              color={Theme.colors.highlight}
+            />
+          </Pressable>
         )}
       </View>
     </Animated.View>
@@ -120,19 +134,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 3,
-    minHeight: 36,
   },
   checkboxContainer: {
-    marginHorizontal: 6,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },
   checkbox: {
     position: 'relative',
-    width: 26,
-    height: 26,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -149,13 +158,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 6,
   },
-  editButton: {
-    width: 28,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 4,
-    backgroundColor: 'rgba(245, 245, 245, 0.9)',
-    borderRadius: 14,
-  },
+  editButton: {},
 });

@@ -5,6 +5,7 @@ import {parseLines} from '@/utils/goalText';
 import {GoalSectionProps} from './goal/types';
 import {GoalLine} from './goal/GoalLine';
 import {styles as localStyles} from './goal/styles';
+import {Theme} from '@/constants/Theme';
 
 export function GoalSection({
   title,
@@ -25,9 +26,9 @@ export function GoalSection({
         <Pressable onPress={() => bottomSheetRef.current?.expand()}>
           <SimpleLineIcons
             name={icon as any}
-            size={25}
-            color="black"
-            style={{marginRight: 6}}
+            size={Theme.iconSize.medium}
+            color={Theme.colors.highlight}
+            style={localStyles.iconContainer}
           />
         </Pressable>
 

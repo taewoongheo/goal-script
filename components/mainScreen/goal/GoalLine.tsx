@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {Pressable} from 'react-native-gesture-handler';
 import {Ionicons} from '@expo/vector-icons';
 import {GoalLineProps} from './types';
+import {Theme} from '@/constants/Theme';
 
 export function GoalLine({
   line,
@@ -42,8 +43,16 @@ export function GoalLine({
               <Animated.Text
                 entering={fadeInAnimation}
                 exiting={fadeOutAnimation}
-                style={[styles.text, styles.highlight, {marginRight: 6}]}>
-                <Ionicons name="settings-sharp" size={24} color="black" />
+                style={[
+                  styles.text,
+                  styles.highlight,
+                  iconStyles.iconContainer,
+                ]}>
+                <Ionicons
+                  name="settings-sharp"
+                  size={Theme.iconSize.medium}
+                  color={Theme.colors.highlight}
+                />
               </Animated.Text>
             </Pressable>
           )}
@@ -55,3 +64,9 @@ export function GoalLine({
     </View>
   );
 }
+
+const iconStyles = StyleSheet.create({
+  iconContainer: {
+    marginRight: Theme.iconSpace.medium,
+  },
+});

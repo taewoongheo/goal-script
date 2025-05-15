@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, StyleProp, ViewStyle, TextStyle} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
-import {ToggleKey} from '@/hooks/useToggleExpand';
-import {FontAwesome, Ionicons} from '@expo/vector-icons';
+import {FontAwesome} from '@expo/vector-icons';
 import {DdaySectionProps} from './dday/types';
+import {Theme} from '@/constants/Theme';
 
 export function DdaySection({
   dDay,
@@ -19,30 +19,30 @@ export function DdaySection({
 }: DdaySectionProps) {
   return (
     <View style={styles.lineContainer}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={localStyles.row}>
         <Pressable
-          style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}
+          style={localStyles.calendarButton}
           onPress={() => onToggleDday('dday')}>
           <FontAwesome
             name="calendar"
-            size={25}
-            color="black"
-            style={{marginRight: 6}}
+            size={Theme.iconSize.medium}
+            color={Theme.colors.highlight}
+            style={localStyles.iconContainer}
           />
           <Text style={[styles.text, styles.highlight]}>D-{dDay} </Text>
         </Pressable>
         <Animated.View
-          style={{overflow: 'hidden'}}
+          style={localStyles.overflowContainer}
           layout={linearTransitionAnimation}>
           {isDdayExpanded && (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={localStyles.expandedContent}>
               <Pressable
                 onPress={() => bottomSheetRef.current?.expand()}
                 android_ripple={null}>
                 <Animated.Text
                   entering={fadeInAnimation}
                   exiting={fadeOutAnimation}
-                  style={[styles.text, styles.highlight, {marginRight: 6}]}>
+                  style={[styles.text, styles.highlight]}>
                   {rDay}{' '}
                 </Animated.Text>
               </Pressable>
@@ -56,3 +56,23 @@ export function DdaySection({
     </View>
   );
 }
+
+const localStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+  },
+  calendarButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    marginRight: Theme.iconSpace.medium,
+  },
+  overflowContainer: {
+    overflow: 'hidden',
+  },
+  expandedContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});

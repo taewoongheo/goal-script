@@ -1,7 +1,7 @@
 import React from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
-import BottomSheet from '@gorhom/bottom-sheet';
 import {TaskSection} from './task/TaskSection';
 import {TaskItemProps, TaskStyles} from './task/types';
 import {TaskItem as TaskItemComponent} from './task/TaskItem';

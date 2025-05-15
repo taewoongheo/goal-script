@@ -1,21 +1,20 @@
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import Animated, {
   LinearTransition,
   FadeIn,
   FadeOut,
 } from 'react-native-reanimated';
 import {useMemo} from 'react';
-import {Layout} from '@/constants/Layout';
-import {Typography} from '@/constants/Typography';
+import {ScaledSheet} from 'react-native-size-matters';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {useGoalData} from '@/hooks/useGoalData';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
-import {getViewportWidth} from '@/utils/viewport';
 import {AchievedSection} from '@/components/mainScreen/AchievedSection';
 import {TodoSection} from '@/components/mainScreen/TodoSection';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
+import {Theme} from '@/constants/Theme';
 
 // TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
 //  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
@@ -117,7 +116,7 @@ export default function MainScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'stretch',
     flexDirection: 'column',
-    width: getViewportWidth() * Layout.padding.horizontal,
+    width: Theme.screen.width * Theme.padding.horizontal,
   },
   lineContainer: {
     flexDirection: 'row',
@@ -135,22 +134,22 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    fontSize: Typography.fontSize.large,
-    lineHeight: Typography.lineHeight.relaxed,
-    fontFamily: Typography.fontFamily.regular,
-    color: '#ACACAC',
+    fontSize: '27@ms',
+    lineHeight: Theme.lineHeight.relaxed,
+    fontFamily: Theme.fontFamily.regular,
+    color: Theme.colors.textSecondary,
   },
   highlight: {
-    fontFamily: Typography.fontFamily.bold,
-    color: '#2F2F2F',
+    fontFamily: Theme.fontFamily.bold,
+    color: Theme.colors.highlight,
   },
   dropdownContainer: {
     width: '100%',
-    borderRadius: 4,
+    borderRadius: Theme.borderRadius.small,
   },
   dropdownItem: {
-    fontSize: Typography.fontSize.medium,
-    fontFamily: Typography.fontFamily.regular,
-    paddingVertical: 4,
+    fontSize: '20@ms',
+    fontFamily: Theme.fontFamily.regular,
+    paddingVertical: '4@vs',
   },
 });

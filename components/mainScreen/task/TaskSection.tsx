@@ -10,17 +10,15 @@ import Animated, {
   FadeIn,
   FadeOut,
   LinearTransition,
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
 } from 'react-native-reanimated';
+import {FontAwesome6} from '@expo/vector-icons';
 import {Pressable} from 'react-native-gesture-handler';
 import {getViewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
-import {FontAwesome6} from '@expo/vector-icons';
 import {TaskSectionProps} from './types';
+import {Theme} from '@/constants/Theme';
 
 export function TaskSection({
   items,
@@ -40,7 +38,6 @@ export function TaskSection({
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const heightMeasured = useRef(false);
-  const highlightBgColor = useSharedValue(HighlightColor.light);
 
   const containerPadding = useMemo(
     () => ((1 - Layout.padding.horizontal) * getViewportWidth()) / 2,
@@ -52,16 +49,23 @@ export function TaskSection({
     [],
   );
 
+  const highlightFadeIn = useMemo(
+    () =>
+      FadeIn.duration(ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN).delay(
+        ANIMATION_DURATION.LIST_ITEM_ANIMATION.ITEM_ANIMATION_DELAY *
+          (selectedIdx + 1),
+      ),
+    [selectedIdx],
+  );
+
+  const highlightFadeOut = useMemo(() => FadeOut, []);
+
   const getHeight = useCallback((event: LayoutChangeEvent) => {
     if (!heightMeasured.current) {
       setHeight(event.nativeEvent.layout.height);
       heightMeasured.current = true;
     }
   }, []);
-
-  const highlightStyle = useAnimatedStyle(() => ({
-    backgroundColor: highlightBgColor.value,
-  }));
 
   // 항목이 없는 경우 처리
   if (items.length === 0) {
@@ -86,17 +90,14 @@ export function TaskSection({
       <TouchableOpacity
         activeOpacity={1}
         onPress={() => onToggle(title.toLowerCase() as any)}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
+        style={localStyles.headerContainer}>
         <FontAwesome6
           name={icon}
-          size={24}
-          color="black"
-          style={{marginRight: 6}}
+          size={Theme.iconSize.medium}
+          color={Theme.colors.highlight}
+          style={localStyles.iconContainer}
         />
-        <View style={{flex: 1}}>
+        <View style={localStyles.headerTextContainer}>
           <Text numberOfLines={1} style={[styles.text, styles.highlight]}>
             {isExpanded ? `${items.length}개의 할 일` : items[0].text}
           </Text>
@@ -107,12 +108,12 @@ export function TaskSection({
         {isExpanded && (
           <Animated.View
             layout={highlightAnimation}
-            entering={FadeIn}
-            exiting={FadeOut}
+            entering={highlightFadeIn}
+            exiting={highlightFadeOut}
             style={[
               localStyles.highlightBackground,
-              highlightStyle,
               {
+                backgroundColor: HighlightColor.light,
                 height,
                 width: getViewportWidth(),
                 left: -containerPadding,
@@ -159,13 +160,22 @@ const localStyles = StyleSheet.create({
     position: 'relative',
     width: '100%',
   },
+  iconContainer: {
+    marginRight: Theme.iconSpace.medium,
+  },
   highlightBackground: {
     position: 'absolute',
-    borderRadius: 8,
     zIndex: -1,
   },
   dropdownOverride: {
     position: 'relative',
     overflow: 'hidden',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerTextContainer: {
+    flex: 1,
   },
 });

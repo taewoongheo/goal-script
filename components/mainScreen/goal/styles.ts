@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {getViewportWidth} from '@/utils/viewport';
 import {Layout as LayoutConstants} from '@/constants/Layout';
+import {Theme} from '@/constants/Theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -17,5 +18,8 @@ export const styles = StyleSheet.create({
     bottom: 0,
     opacity: 0,
     zIndex: -1,
+  },
+  iconContainer: {
+    marginRight: Theme.iconSpace.medium,
   },
 });

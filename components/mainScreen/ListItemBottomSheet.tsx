@@ -10,6 +10,7 @@ import {Feather} from '@expo/vector-icons';
 import {TaskItem} from '@/hooks/useGoalData';
 import {useSelectedTask} from '@/app/_layout';
 import {Theme} from '@/constants/Theme';
+import {Colors} from '@/constants/Colors';
 
 interface ListItemBottomSheetProps {
   onEditItem?: (taskId: string, newText: string) => void;
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingBottom: 24,
-    backgroundColor: 'white',
+    backgroundColor: Colors.light.white,
   },
   handleContainer: {
     alignItems: 'center',
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: Colors.light.buttonDisabled,
   },
   headerRow: {
     flexDirection: 'row',
@@ -132,21 +133,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: Colors.light.buttonDisabled,
     borderRadius: 8,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: Colors.light.formBackground,
   },
   actionButtons: {
     gap: 12,
   },
   editButton: {
-    backgroundColor: '#4A6FFF',
+    backgroundColor: Colors.light.primary,
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    shadowColor: '#4A6FFF',
+    shadowColor: Colors.light.primary,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   editButtonText: {
-    color: 'white',
+    color: Colors.light.white,
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,

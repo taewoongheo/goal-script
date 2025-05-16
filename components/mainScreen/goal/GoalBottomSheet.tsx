@@ -7,6 +7,7 @@ import {moderateScale, scale} from 'react-native-size-matters';
 import {TaskItem} from '@/hooks/useGoalData';
 import {Theme} from '@/constants/Theme';
 import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
+import {Colors} from '@/constants/Colors';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -76,7 +77,7 @@ export function GoalBottomSheet({
             onChangeText={handleTitleChange}
             style={styles.goalTitleInput}
             placeholder="목표 이름을 입력해주세요"
-            placeholderTextColor="#A0A0A0"
+            placeholderTextColor={Colors.light.textSecondary}
           />
           <View style={styles.underline} />
         </View>
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: Theme.iconSize.large + scale(18),
     height: Theme.iconSize.large + scale(18),
-    backgroundColor: '#F5F5F5',
+    backgroundColor: Colors.light.inputBackground,
     borderRadius: Theme.borderRadius.medium,
     justifyContent: 'center',
     alignItems: 'center',
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   },
   underline: {
     height: scale(1),
-    backgroundColor: '#E0E0E0',
+    backgroundColor: Colors.light.buttonDisabled,
   },
   dropdownIcon: {
     marginHorizontal: Theme.spacing.xs,

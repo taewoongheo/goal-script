@@ -1,6 +1,8 @@
 import React from 'react';
 import {Pressable, Text, StyleSheet} from 'react-native';
+import {scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
+import {Colors} from '@/constants/Colors';
 
 type ButtonType = 'primary' | 'danger' | 'text';
 
@@ -52,7 +54,7 @@ export function BottomSheetButton({
 const styles = StyleSheet.create({
   button: {
     borderRadius: Theme.borderRadius.medium,
-    paddingVertical: Theme.spacing.medium,
+    paddingVertical: Theme.spacing.medium - scale(2),
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
@@ -61,24 +63,24 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.highlight,
   },
   dangerButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.light.transparent,
     borderWidth: 1,
     borderColor: 'rgba(255, 85, 85, 0.3)',
   },
   disabledButton: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: Colors.light.buttonDisabled,
     opacity: 0.5,
   },
   buttonText: {
     fontSize: Theme.fontSize.small,
     fontFamily: Theme.fontFamily.semiBold,
-    color: '#fff',
+    color: Colors.light.white,
   },
   dangerButtonText: {
     color: '#ff4d4f',
   },
   disabledButtonText: {
-    color: '#999',
+    color: Colors.light.gray,
   },
   textButton: {
     fontSize: Theme.fontSize.small,
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   disabledText: {
-    color: '#999',
+    color: Colors.light.gray,
     opacity: 0.5,
   },
 });

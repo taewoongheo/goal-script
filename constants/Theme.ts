@@ -13,12 +13,7 @@ export const Theme = {
     heightPercent: (percent: number) => SCREEN_HEIGHT * (percent / 100),
   },
 
-  colors: {
-    ...Colors.light,
-    highlight: '#2F2F2F',
-    textSecondary: '#ACACAC',
-    dropdownBackground: 'white',
-  },
+  colors: Colors.light,
 
   fontSize: {
     small: moderateScale(16),
@@ -68,4 +63,9 @@ export const Theme = {
     medium: scale(8),
     large: scale(12),
   },
+};
+
+// Function to update theme based on color scheme
+export const updateThemeColors = (colorScheme: 'light' | 'dark') => {
+  Theme.colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
 };

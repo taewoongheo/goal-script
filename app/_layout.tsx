@@ -3,7 +3,7 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
-import React, {useEffect, useMemo, useCallback, useState} from 'react';
+import React, {useEffect, useMemo, useCallback, useState, useRef} from 'react';
 import Animated from 'react-native-reanimated';
 import {StyleSheet, View, Text, Keyboard} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -21,6 +21,8 @@ import {TaskItem, useGoalData} from '@/hooks/useGoalData';
 import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
 import {ListItemBottomSheet} from '@/components/mainScreen/ListItemBottomSheet';
 import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
+import {Colors} from '@/constants/Colors';
+import {Theme, updateThemeColors} from '@/constants/Theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -66,6 +68,16 @@ function RootLayoutContent() {
     () => ({selectedTask, setSelectedTask}),
     [selectedTask],
   );
+
+  // Update Theme colors when colorScheme changes
+  useEffect(() => {
+    if (colorScheme === 'light' || colorScheme === 'dark') {
+      updateThemeColors(colorScheme);
+    } else {
+      // Default to light if undefined or null
+      updateThemeColors('light');
+    }
+  }, [colorScheme]);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -139,10 +151,10 @@ function RootLayoutContent() {
             snapPoints={snapPoints}
             index={-1}
             backdropComponent={renderBackdrop}
-            backgroundStyle={{backgroundColor: 'white'}}
+            backgroundStyle={{backgroundColor: Colors.light.white}}
             style={styles.bottomSheet}
             onChange={handleSheetChanges}
-            handleIndicatorStyle={{backgroundColor: '#999'}}
+            handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
             enablePanDownToClose
             keyboardBehavior="interactive"
             keyboardBlurBehavior="restore"
@@ -169,8 +181,8 @@ function RootLayoutContent() {
             index={-1}
             enablePanDownToClose
             backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor: '#999'}}
-            backgroundStyle={{backgroundColor: 'white'}}
+            handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
+            backgroundStyle={{backgroundColor: Colors.light.white}}
             style={styles.bottomSheet}
             onChange={handleSheetChanges}
             keyboardBehavior="interactive"
@@ -194,8 +206,8 @@ function RootLayoutContent() {
             index={-1}
             enablePanDownToClose
             backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor: '#999'}}
-            backgroundStyle={{backgroundColor: 'white'}}
+            handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
+            backgroundStyle={{backgroundColor: Colors.light.white}}
             style={styles.bottomSheet}
             onChange={handleSheetChanges}
             keyboardBehavior="interactive"

@@ -1,10 +1,13 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Calendar, DateData} from 'react-native-calendars';
 import {FontAwesome} from '@expo/vector-icons';
+import {scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
-import dateUtils from '@/utils/dateUtils';
+import {dateUtils} from '@/utils/dateUtils';
 import '@/constants/CalendarLocale'; // 한국어 로케일 설정 자동 적용
+import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
+import {Colors} from '@/constants/Colors';
 
 // 달력에서 사용하는 날짜 형식을 위한 인터페이스 정의
 interface DayObject {
@@ -90,7 +93,7 @@ export function DDayBottomSheet({
     result[todayFormatted] = {
       customStyles: {
         container: {
-          backgroundColor: '#dddddd',
+          backgroundColor: Colors.light.lightGray,
           borderRadius: Theme.borderRadius.small,
         },
         text: {
@@ -110,7 +113,7 @@ export function DDayBottomSheet({
           },
           text: {
             fontFamily: Theme.fontFamily.semiBold,
-            color: 'white',
+            color: Colors.light.white,
           },
         },
       };
@@ -147,8 +150,8 @@ export function DDayBottomSheet({
         markingType="custom" // 날짜 마킹 스타일 타입
         minDate={todayFormatted} // 오늘 이전 날짜 선택 불가능하게 설정
         theme={{
-          backgroundColor: '#ffffff', // 배경색
-          calendarBackground: '#ffffff', // 캘린더 배경색
+          backgroundColor: Colors.light.calendarBackground, // 배경색
+          calendarBackground: Colors.light.calendarBackground, // 캘린더 배경색
           textSectionTitleColor: Theme.colors.textSecondary, // 섹션 제목 텍스트 색상
           todayTextColor: Theme.colors.highlight, // 오늘 날짜 텍스트 색상
           dayTextColor: Theme.colors.highlight, // 날짜 텍스트 색상
@@ -173,9 +176,10 @@ export function DDayBottomSheet({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Theme.spacing.medium,
-    backgroundColor: 'white',
-    marginBottom: 100,
+    paddingHorizontal: Theme.spacing.large,
+    paddingVertical: Theme.spacing.medium,
+    backgroundColor: Colors.light.white,
+    marginBottom: scale(90),
   },
   header: {
     flexDirection: 'row',
@@ -192,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: Theme.spacing.medium,
     paddingVertical: Theme.spacing.small,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: Colors.light.inputBackground,
     borderRadius: Theme.borderRadius.medium,
   },
   selectedDateText: {

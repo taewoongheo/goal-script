@@ -38,12 +38,13 @@ export function DdaySection({
             <View style={localStyles.expandedContent}>
               <Pressable
                 onPress={() => bottomSheetRef.current?.expand()}
+                style={localStyles.calendarButtonContainer}
                 android_ripple={null}>
                 <Animated.Text
                   entering={fadeInAnimation}
                   exiting={fadeOutAnimation}
                   style={[styles.text, styles.highlight]}>
-                  {rDay}{' '}
+                  {rDay}
                 </Animated.Text>
               </Pressable>
             </View>
@@ -74,5 +75,11 @@ const localStyles = StyleSheet.create({
   expandedContent: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  calendarButtonContainer: {
+    marginRight: Theme.iconSpace.small,
+    backgroundColor: Theme.colors.lineHighlight,
+    borderRadius: Theme.borderRadius.small,
+    paddingHorizontal: Theme.iconSpace.small,
   },
 });

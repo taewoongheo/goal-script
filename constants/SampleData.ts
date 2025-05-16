@@ -39,7 +39,7 @@ export const websiteProject: GoalData = {
 
 export const marathonPreparation: GoalData = {
   title: '마라톤봄 마라톤',
-  icon: 'running',
+  icon: 'flag-checkered',
   dDay: {
     date: '25.10.15',
     remainingDays: 175,

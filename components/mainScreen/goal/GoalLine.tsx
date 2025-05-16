@@ -31,7 +31,7 @@ export function GoalLine({
     <View style={styles.lineContainer}>
       <View style={{flexDirection: 'row'}}>
         <Pressable onPress={onToggleGoal}>
-          <Text style={[styles.text, styles.highlight]}>{line} </Text>
+          <Text style={[styles.text, styles.highlight]}>{line}</Text>
         </Pressable>
         <Animated.View
           style={{overflow: 'hidden'}}
@@ -67,6 +67,9 @@ export function GoalLine({
 
 const iconStyles = StyleSheet.create({
   iconContainer: {
-    marginRight: Theme.iconSpace.medium,
+    marginHorizontal: Theme.iconSpace.small,
+    backgroundColor: Theme.colors.lineHighlight,
+    borderRadius: Theme.borderRadius.small,
+    paddingHorizontal: Theme.iconSpace.small,
   },
 });

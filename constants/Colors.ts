@@ -26,6 +26,7 @@ export const Colors = {
     lightGray: '#eeeeee',
     gray: '#999',
     primary: '#4A6FFF',
+    lineHighlight: 'rgb(217, 255, 0)',
   },
   dark: {
     text: '#ECEDEE',

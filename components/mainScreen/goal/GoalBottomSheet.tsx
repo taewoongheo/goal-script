@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   footerSection: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    gap: Theme.spacing.xs * scale(1.5),
+    gap: Theme.spacing.medium,
     alignItems: 'center',
   },
   statsContainer: {

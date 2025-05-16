@@ -19,7 +19,7 @@ import {
 import {Typography} from '@/constants/Typography';
 import {TaskItem, useGoalData} from '@/hooks/useGoalData';
 import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
-import {ListItemBottomSheet} from '@/components/mainScreen/ListItemBottomSheet';
+import {ListItemBottomSheet} from '@/components/mainScreen/task/ListItemBottomSheet';
 import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
 import {Colors} from '@/constants/Colors';
 import {Theme, updateThemeColors} from '@/constants/Theme';
@@ -50,7 +50,7 @@ function RootLayoutContent() {
     useBottomSheet();
   const colorScheme = useColorScheme();
   const snapPoints = useMemo(() => ['50%'], []);
-  const defaultSnapPoints = useMemo(() => ['25%', '50%'], []);
+  const listItemSnapPoints = useMemo(() => ['35%'], []);
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const {
     title,
@@ -202,7 +202,7 @@ function RootLayoutContent() {
           {/* List Item BottomSheet */}
           <BottomSheet
             ref={listItemBottomSheetRef}
-            snapPoints={snapPoints}
+            snapPoints={listItemSnapPoints}
             index={-1}
             enablePanDownToClose
             backdropComponent={renderBackdrop}
@@ -212,8 +212,7 @@ function RootLayoutContent() {
             onChange={handleSheetChanges}
             keyboardBehavior="interactive"
             keyboardBlurBehavior="restore"
-            android_keyboardInputMode="adjustResize"
-            enableDynamicSizing>
+            android_keyboardInputMode="adjustResize">
             <BottomSheetView style={styles.contentContainer}>
               <ListItemBottomSheet
                 onEditItem={handleEditTask}

@@ -21,7 +21,7 @@ type PendingMoveTask = {
 };
 
 export function useGoalData() {
-  const [goalData, setGoalData] = useState<GoalData>(academicPaper);
+  const [goalData, setGoalData] = useState<GoalData>(websiteProject);
 
   const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
 

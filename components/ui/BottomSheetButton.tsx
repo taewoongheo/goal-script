@@ -1,6 +1,6 @@
 import React from 'react';
 import {Pressable, Text, StyleSheet} from 'react-native';
-import {scale} from 'react-native-size-matters';
+import {scale, moderateScale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
 
@@ -54,7 +54,7 @@ export function BottomSheetButton({
 const styles = StyleSheet.create({
   button: {
     borderRadius: Theme.borderRadius.medium,
-    paddingVertical: Theme.spacing.medium - scale(2),
+    paddingVertical: Theme.spacing.medium,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    fontSize: Theme.fontSize.small,
+    fontSize: moderateScale(15),
     fontFamily: Theme.fontFamily.semiBold,
     color: Colors.light.white,
   },
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
     color: Colors.light.gray,
   },
   textButton: {
-    fontSize: Theme.fontSize.small,
+    fontSize: moderateScale(15),
     fontFamily: Theme.fontFamily.semiBold,
     color: '#ff4d4f',
-    marginVertical: Theme.spacing.medium,
+    marginVertical: moderateScale(10),
     textAlign: 'center',
   },
   disabledText: {

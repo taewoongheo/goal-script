@@ -20,6 +20,7 @@ import {Typography} from '@/constants/Typography';
 import {TaskItem, useGoalData} from '@/hooks/useGoalData';
 import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
 import {ListItemBottomSheet} from '@/components/mainScreen/ListItemBottomSheet';
+import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -177,7 +178,12 @@ function RootLayoutContent() {
             android_keyboardInputMode="adjustResize"
             enableDynamicSizing>
             <BottomSheetView style={styles.contentContainer}>
-              <Animated.Text style={styles.text}>디데이 설정</Animated.Text>
+              <DDayBottomSheet
+                initialDate={rDay}
+                dDay={dDay}
+                onSaveDate={date => console.log('선택된 날짜:', date)}
+                onCancel={() => ddayBottomSheetRef.current?.close()}
+              />
             </BottomSheetView>
           </BottomSheet>
 

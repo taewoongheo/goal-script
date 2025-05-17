@@ -1,15 +1,25 @@
 import React, {useState} from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {FontAwesome5} from '@expo/vector-icons';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {parseLines} from '@/utils/goalText';
-import {GoalSectionProps} from './goal/types';
 import {GoalLine} from './goal/GoalLine';
 import {styles as localStyles} from './goal/styles';
 import {Theme} from '@/constants/Theme';
+import {useGoalStore} from '@/stores/goalStore';
+import {ToggleKey} from '@/hooks/useToggleExpand';
+
+interface GoalSectionProps {
+  isGoalExpanded: boolean;
+  onToggleGoal: (key: ToggleKey) => void;
+  styles: any;
+  linearTransitionAnimation: any;
+  fadeInAnimation: any;
+  fadeOutAnimation: any;
+  bottomSheetRef: React.RefObject<BottomSheet>;
+}
 
 export function GoalSection({
-  title,
-  icon,
   isGoalExpanded,
   onToggleGoal,
   styles,
@@ -19,6 +29,9 @@ export function GoalSection({
   bottomSheetRef,
 }: GoalSectionProps) {
   const [lines, setLines] = useState<string[] | null>(null);
+
+  const title = useGoalStore(state => state.goalData.title);
+  const icon = useGoalStore(state => state.goalData.icon);
 
   return (
     <View style={styles.lineContainer}>

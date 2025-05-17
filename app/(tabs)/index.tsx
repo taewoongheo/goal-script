@@ -7,7 +7,6 @@ import Animated, {
 import {useMemo} from 'react';
 import {ScaledSheet} from 'react-native-size-matters';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
-import {useGoalData} from '@/hooks/useGoalData';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
 import {AchievedSection} from '@/components/mainScreen/AchievedSection';
@@ -21,18 +20,6 @@ import {Theme} from '@/constants/Theme';
 
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
-  const {
-    title,
-    icon,
-    dDay,
-    rDay,
-    achieved,
-    todos,
-    toggleAchievedTask,
-    toggleTodoTask,
-    editAchievedTask,
-    editTodoTask,
-  } = useGoalData();
 
   const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
     useBottomSheet();
@@ -66,8 +53,6 @@ export default function MainScreen() {
         style={styles.textContainer}
         layout={linearTransitionAnimation}>
         <GoalSection
-          title={title}
-          icon={icon}
           isGoalExpanded={expandStates.goal[0]}
           onToggleGoal={handleToggle}
           styles={componentStyles}
@@ -78,8 +63,6 @@ export default function MainScreen() {
         />
 
         <DdaySection
-          dDay={dDay}
-          rDay={rDay}
           isDdayExpanded={expandStates.dday[0]}
           onToggleDday={handleToggle}
           styles={componentStyles}
@@ -90,25 +73,18 @@ export default function MainScreen() {
         />
 
         <AchievedSection
-          achievedItems={achieved}
           isAchievedExpanded={expandStates.achieved[0]}
           onToggle={handleToggle}
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
-          hasTodoItems={todos.length > 0}
-          onUpdateItem={toggleAchievedTask}
-          onEditItem={editAchievedTask}
           listItemBottomSheetRef={listItemBottomSheetRef}
         />
 
         <TodoSection
-          todoItems={todos}
           isTodosExpanded={expandStates.todos[0]}
           onToggle={handleToggle}
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
-          onUpdateItem={toggleTodoTask}
-          onEditItem={editTodoTask}
           listItemBottomSheetRef={listItemBottomSheetRef}
         />
       </Animated.View>

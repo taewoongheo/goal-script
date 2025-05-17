@@ -3,12 +3,22 @@ import {View, Text, StyleSheet} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {FontAwesome} from '@expo/vector-icons';
-import {DdaySectionProps} from './dday/types';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {Theme} from '@/constants/Theme';
+import {useGoalStore} from '@/stores/goalStore';
+import {ToggleKey} from '@/hooks/useToggleExpand';
+
+interface DdaySectionProps {
+  isDdayExpanded: boolean;
+  onToggleDday: (key: ToggleKey) => void;
+  styles: any;
+  linearTransitionAnimation: any;
+  fadeInAnimation: any;
+  fadeOutAnimation: any;
+  bottomSheetRef: React.RefObject<BottomSheet>;
+}
 
 export function DdaySection({
-  dDay,
-  rDay,
   isDdayExpanded,
   onToggleDday,
   styles,
@@ -17,6 +27,9 @@ export function DdaySection({
   fadeOutAnimation,
   bottomSheetRef,
 }: DdaySectionProps) {
+  const dDay = useGoalStore(state => state.goalData.dDay.remainingDays);
+  const rDay = useGoalStore(state => state.goalData.dDay.date);
+
   return (
     <View style={styles.lineContainer}>
       <View style={localStyles.row}>

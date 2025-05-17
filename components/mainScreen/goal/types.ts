@@ -23,15 +23,3 @@ export interface GoalLineProps {
   fadeOutAnimation: FadeOut;
   bottomSheetRef: React.RefObject<BottomSheet>;
 }
-
-export interface GoalSectionProps {
-  title: string;
-  icon: string;
-  isGoalExpanded: boolean;
-  onToggleGoal: (key: ToggleKey) => void;
-  styles: GoalSectionStyles;
-  linearTransitionAnimation: LinearTransition;
-  fadeInAnimation: FadeIn;
-  fadeOutAnimation: FadeOut;
-  bottomSheetRef: React.RefObject<BottomSheet>;
-}

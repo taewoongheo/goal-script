@@ -18,7 +18,6 @@ type PendingMoveTask = {
 type TaskSource = 'achieved' | 'todos';
 
 export function useGoalData() {
-  const goalData = useGoalStore(state => state.goalData);
   const updateGoalData = useGoalStore(state => state.updateGoalData);
 
   const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
@@ -174,19 +173,19 @@ export function useGoalData() {
   };
 
   return {
-    title: goalData.title,
-    icon: goalData.icon,
-    dDay: goalData.dDay.remainingDays,
-    rDay: goalData.dDay.date,
-    achieved: goalData.achieved,
-    todos: goalData.todos,
-    toggleAchievedTask,
-    toggleTodoTask,
-    addTodoTask,
-    addAchievedTask,
-    removeAchievedTask,
-    removeTodoTask,
-    editAchievedTask,
-    editTodoTask,
+    actions: {
+      todo: {
+        toggle: toggleTodoTask,
+        add: addTodoTask,
+        remove: removeTodoTask,
+        edit: editTodoTask,
+      },
+      achieved: {
+        toggle: toggleAchievedTask,
+        add: addAchievedTask,
+        remove: removeAchievedTask,
+        edit: editAchievedTask,
+      },
+    },
   };
 }

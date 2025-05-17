@@ -3,9 +3,8 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
-import React, {useEffect, useMemo, useCallback, useState, useRef} from 'react';
-import Animated from 'react-native-reanimated';
-import {StyleSheet, View, Text, Keyboard} from 'react-native';
+import React, {useEffect, useMemo, useCallback, useState} from 'react';
+import {StyleSheet, Keyboard} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetView,
@@ -22,7 +21,8 @@ import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
 import {ListItemBottomSheet} from '@/components/mainScreen/task/ListItemBottomSheet';
 import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
 import {Colors} from '@/constants/Colors';
-import {Theme, updateThemeColors} from '@/constants/Theme';
+import {updateThemeColors} from '@/constants/Theme';
+import {useGoalStore} from '@/stores/goalStore';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -52,17 +52,14 @@ function RootLayoutContent() {
   const snapPoints = useMemo(() => ['50%'], []);
   const listItemSnapPoints = useMemo(() => ['35%'], []);
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
-  const {
-    title,
-    icon,
-    achieved,
-    dDay,
-    rDay,
-    editAchievedTask,
-    editTodoTask,
-    removeAchievedTask,
-    removeTodoTask,
-  } = useGoalData();
+
+  const {actions} = useGoalData();
+
+  const title = useGoalStore(state => state.goalData.title);
+  const icon = useGoalStore(state => state.goalData.icon);
+  const achieved = useGoalStore(state => state.goalData.achieved);
+  const dDay = useGoalStore(state => state.goalData.dDay.remainingDays);
+  const rDay = useGoalStore(state => state.goalData.dDay.date);
 
   const selectedTaskValue = useMemo(
     () => ({selectedTask, setSelectedTask}),
@@ -106,15 +103,15 @@ function RootLayoutContent() {
       if (!selectedTask) return;
 
       if (selectedTask.completed) {
-        editAchievedTask(taskId, newText);
+        actions.achieved.edit(taskId, newText);
       } else {
-        editTodoTask(taskId, newText);
+        actions.todo.edit(taskId, newText);
       }
 
       // 편집 후 바텀시트 닫기
       listItemBottomSheetRef.current?.close();
     },
-    [selectedTask, editAchievedTask, editTodoTask, listItemBottomSheetRef],
+    [selectedTask, actions, listItemBottomSheetRef],
   );
 
   // 선택된 작업 삭제 처리
@@ -123,15 +120,15 @@ function RootLayoutContent() {
       if (!selectedTask) return;
 
       if (selectedTask.completed) {
-        removeAchievedTask(taskId);
+        actions.achieved.remove(taskId);
       } else {
-        removeTodoTask(taskId);
+        actions.todo.remove(taskId);
       }
 
       // 삭제 후 바텀시트 닫기
       listItemBottomSheetRef.current?.close();
     },
-    [selectedTask, removeAchievedTask, removeTodoTask, listItemBottomSheetRef],
+    [selectedTask, actions, listItemBottomSheetRef],
   );
 
   return (

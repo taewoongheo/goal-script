@@ -1,10 +1,5 @@
-import {useState, useRef} from 'react';
-import {
-  marathonPreparation,
-  GoalData,
-  websiteProject,
-  academicPaper,
-} from '@/constants/SampleData';
+import {useRef} from 'react';
+import {useGoalStore} from '@/stores/goalStore';
 import {generateUUID} from '@/utils/uuid';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 
@@ -20,95 +15,86 @@ type PendingMoveTask = {
   sourceList: 'achieved' | 'todos';
 };
 
+type TaskSource = 'achieved' | 'todos';
+
 export function useGoalData() {
-  const [goalData, setGoalData] = useState<GoalData>(marathonPreparation);
+  const goalData = useGoalStore(state => state.goalData);
+  const updateGoalData = useGoalStore(state => state.updateGoalData);
 
   const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
 
-  const toggleTaskCompletion = (
-    taskId: string,
-    source: 'achieved' | 'todos',
-  ) => {
-    // 이미 지연 처리 중인 작업이 있으면 취소
+  const clearPendingMove = (taskId: string) => {
     if (pendingMoves.current[taskId]) {
       clearTimeout(pendingMoves.current[taskId].timeoutId);
-
-      if (pendingMoves.current[taskId].sourceList === source) {
-        setGoalData(prev => {
-          const sourceList = [...prev[source]];
-          const taskIndex = sourceList.findIndex(task => task.id === taskId);
-
-          if (taskIndex === -1) return prev;
-
-          const originalCompleted = source === 'achieved';
-          const updatedTask = {
-            ...sourceList[taskIndex],
-            completed: originalCompleted,
-          };
-          sourceList[taskIndex] = updatedTask;
-
-          return {
-            ...prev,
-            [source]: sourceList,
-          };
-        });
-
-        delete pendingMoves.current[taskId];
-        return;
-      }
-
       delete pendingMoves.current[taskId];
     }
+  };
 
-    // 즉시 UI 업데이트 (completed 상태만 변경)
-    setGoalData(prev => {
-      const sourceList = [...prev[source]];
-      const taskIndex = sourceList.findIndex(task => task.id === taskId);
+  const handlePendingMove = (taskId: string, source: TaskSource): boolean => {
+    if (!pendingMoves.current[taskId]) return false;
 
-      if (taskIndex === -1) return prev;
+    clearTimeout(pendingMoves.current[taskId].timeoutId);
 
-      const newCompleted = source === 'todos';
-      const updatedTask = {...sourceList[taskIndex], completed: newCompleted};
-      const updatedSourceList = [...sourceList];
-      updatedSourceList[taskIndex] = updatedTask;
+    if (pendingMoves.current[taskId].sourceList === source) {
+      updateGoalData(draft => {
+        const taskIndex = draft[source].findIndex(task => task.id === taskId);
+        if (taskIndex !== -1) {
+          const originalCompleted = source === 'achieved';
+          draft[source][taskIndex].completed = originalCompleted;
+        }
+      });
 
-      return {
-        ...prev,
-        [source]: updatedSourceList,
-      };
+      delete pendingMoves.current[taskId];
+      return true;
+    }
+
+    delete pendingMoves.current[taskId];
+    return false;
+  };
+
+  const updateTaskCompletion = (taskId: string, source: TaskSource) => {
+    updateGoalData(draft => {
+      const taskIndex = draft[source].findIndex(task => task.id === taskId);
+      if (taskIndex !== -1) {
+        const newCompleted = source === 'todos';
+        draft[source][taskIndex].completed = newCompleted;
+      }
     });
+  };
 
-    // 지연된 이동 처리 설정
+  const scheduleTaskMove = (taskId: string, source: TaskSource) => {
     const timeoutId = setTimeout(() => {
       delete pendingMoves.current[taskId];
 
-      setGoalData(prev => {
-        const sourceList = [...prev[source]];
+      updateGoalData(draft => {
+        const sourceList = draft[source];
         const taskIndex = sourceList.findIndex(task => task.id === taskId);
 
-        if (taskIndex === -1) return prev;
+        if (taskIndex === -1) return;
 
-        const taskToMove = sourceList[taskIndex];
-
+        const taskToMove = {...sourceList[taskIndex]};
         const targetListName = source === 'achieved' ? 'todos' : 'achieved';
 
+        // Remove task from source list
         const updatedSourceList = sourceList.filter((_, i) => i !== taskIndex);
-        const updatedTargetList = [...prev[targetListName], taskToMove];
+        draft[source] = updatedSourceList;
 
-        return {
-          ...prev,
-          [source]: updatedSourceList,
-          [targetListName]: updatedTargetList,
-        };
+        // Add task to target list
+        draft[targetListName] = [...draft[targetListName], taskToMove];
       });
     }, ANIMATION_DURATION.TASK_STATUS.TASK_MOVE_DELAY);
 
-    // 보류 중인 작업 추적
     pendingMoves.current[taskId] = {
       id: taskId,
       timeoutId,
       sourceList: source,
     };
+  };
+
+  const toggleTaskCompletion = (taskId: string, source: TaskSource) => {
+    if (handlePendingMove(taskId, source)) return;
+    updateTaskCompletion(taskId, source);
+    scheduleTaskMove(taskId, source);
   };
 
   const toggleAchievedTask = (taskId: string) => {
@@ -119,42 +105,35 @@ export function useGoalData() {
     toggleTaskCompletion(taskId, 'todos');
   };
 
-  const addTodoTask = (text: string) => {
+  // Generalized add task function
+  const addTask = (text: string, source: TaskSource) => {
+    const completed = source === 'achieved';
     const newTask: TaskItem = {
       id: generateUUID(),
       text,
-      completed: false,
+      completed,
     };
 
-    setGoalData(prev => ({
-      ...prev,
-      todos: [...prev.todos, newTask],
-    }));
+    updateGoalData(draft => {
+      draft[source] = [...draft[source], newTask];
+    });
+  };
+
+  const addTodoTask = (text: string) => {
+    addTask(text, 'todos');
   };
 
   const addAchievedTask = (text: string) => {
-    const newTask: TaskItem = {
-      id: generateUUID(),
-      text,
-      completed: true,
-    };
-
-    setGoalData(prev => ({
-      ...prev,
-      achieved: [...prev.achieved, newTask],
-    }));
+    addTask(text, 'achieved');
   };
 
-  const removeTask = (taskId: string, source: 'achieved' | 'todos') => {
-    if (pendingMoves.current[taskId]) {
-      clearTimeout(pendingMoves.current[taskId].timeoutId);
-      delete pendingMoves.current[taskId];
-    }
+  // Generalized remove task function
+  const removeTask = (taskId: string, source: TaskSource) => {
+    clearPendingMove(taskId);
 
-    setGoalData(prev => ({
-      ...prev,
-      [source]: prev[source].filter(task => task.id !== taskId),
-    }));
+    updateGoalData(draft => {
+      draft[source] = draft[source].filter(task => task.id !== taskId);
+    });
   };
 
   const removeAchievedTask = (taskId: string) => {
@@ -165,26 +144,24 @@ export function useGoalData() {
     removeTask(taskId, 'todos');
   };
 
+  // Generalized edit task function
   const editTaskText = (
     taskId: string,
     newText: string,
-    source: 'achieved' | 'todos',
+    source: TaskSource,
   ) => {
-    if (!newText.trim()) return; // 빈 텍스트는 무시
+    if (!newText.trim()) return;
 
-    setGoalData(prev => {
-      const sourceList = [...prev[source]];
-      const taskIndex = sourceList.findIndex(task => task.id === taskId);
-
-      if (taskIndex === -1) return prev;
-
-      const updatedTask = {...sourceList[taskIndex], text: newText};
-      sourceList[taskIndex] = updatedTask;
-
-      return {
-        ...prev,
-        [source]: sourceList,
-      };
+    updateGoalData(draft => {
+      const taskIndex = draft[source].findIndex(task => task.id === taskId);
+      if (taskIndex !== -1) {
+        const updatedTasks = [...draft[source]];
+        updatedTasks[taskIndex] = {
+          ...updatedTasks[taskIndex],
+          text: newText,
+        };
+        draft[source] = updatedTasks;
+      }
     });
   };
 

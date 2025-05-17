@@ -42,6 +42,13 @@ module.exports = {
     'react/no-unstable-nested-components': ['warn', {allowAsProps: true}],
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['draft'],
+      },
+    ],
     // [
     //   'error',
     //   'ignorePackages',

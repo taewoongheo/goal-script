@@ -50,6 +50,13 @@
             "./assets/fonts/Pretendard-Bold.otf"
           ]
         }
+      ],
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true
+        }
       ]
     ],
     "experiments": {

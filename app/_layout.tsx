@@ -4,7 +4,7 @@ import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
 import React, {useEffect, useMemo, useCallback, useState} from 'react';
-import {StyleSheet, Keyboard} from 'react-native';
+import {StyleSheet, Keyboard, ActivityIndicator, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetView,
@@ -23,6 +23,7 @@ import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
 import {Colors} from '@/constants/Colors';
 import {updateThemeColors} from '@/constants/Theme';
 import {useGoalStore} from '@/stores/goalStore';
+import {seedSampleGoalData} from '@/scripts/seedSampleData';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,33 +49,24 @@ export const useSelectedTask = () => {
 function RootLayoutContent() {
   const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
     useBottomSheet();
-  const colorScheme = useColorScheme();
   const snapPoints = useMemo(() => ['50%'], []);
   const listItemSnapPoints = useMemo(() => ['35%'], []);
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
-
   const {actions} = useGoalData();
+  const loadGoalDataFromDB = useGoalStore(state => state.loadGoalDataFromDB);
+  const goalData = useGoalStore(state => state.goalData);
 
-  const title = useGoalStore(state => state.goalData.title);
-  const icon = useGoalStore(state => state.goalData.icon);
-  const achieved = useGoalStore(state => state.goalData.achieved);
-  const dDay = useGoalStore(state => state.goalData.dDay.remainingDays);
-  const rDay = useGoalStore(state => state.goalData.dDay.date);
+  useEffect(() => {
+    (async function () {
+      await seedSampleGoalData();
+      await loadGoalDataFromDB();
+    })();
+  }, []);
 
   const selectedTaskValue = useMemo(
     () => ({selectedTask, setSelectedTask}),
     [selectedTask],
   );
-
-  // Update Theme colors when colorScheme changes
-  useEffect(() => {
-    if (colorScheme === 'light' || colorScheme === 'dark') {
-      updateThemeColors(colorScheme);
-    } else {
-      // Default to light if undefined or null
-      updateThemeColors('light');
-    }
-  }, [colorScheme]);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -92,12 +84,10 @@ function RootLayoutContent() {
   const handleSheetChanges = useCallback((index: number) => {
     if (index === -1) {
       Keyboard.dismiss();
-      // 바텀시트가 닫힐 때 선택된 작업 초기화
       setSelectedTask(null);
     }
   }, []);
 
-  // 선택된 작업 편집 처리
   const handleEditTask = useCallback(
     (taskId: string, newText: string) => {
       if (!selectedTask) return;
@@ -108,13 +98,11 @@ function RootLayoutContent() {
         actions.todo.edit(taskId, newText);
       }
 
-      // 편집 후 바텀시트 닫기
       listItemBottomSheetRef.current?.close();
     },
     [selectedTask, actions, listItemBottomSheetRef],
   );
 
-  // 선택된 작업 삭제 처리
   const handleDeleteTask = useCallback(
     (taskId: string) => {
       if (!selectedTask) return;
@@ -125,99 +113,110 @@ function RootLayoutContent() {
         actions.todo.remove(taskId);
       }
 
-      // 삭제 후 바텀시트 닫기
       listItemBottomSheetRef.current?.close();
     },
     [selectedTask, actions, listItemBottomSheetRef],
   );
 
+  // 아래는 goalData가 없을 때만 렌더링 분기
+  if (!goalData) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  const {title} = goalData;
+  const {icon} = goalData;
+  const {achieved} = goalData;
+  const dDay = goalData.dDay.remainingDays;
+  const rDay = goalData.dDay.date;
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SelectedTaskContext.Provider value={selectedTaskValue}>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
 
-          {/* Goal BottomSheet */}
-          <BottomSheet
-            ref={goalBottomSheetRef}
-            snapPoints={snapPoints}
-            index={-1}
-            backdropComponent={renderBackdrop}
-            backgroundStyle={{backgroundColor: Colors.light.white}}
-            style={styles.bottomSheet}
-            onChange={handleSheetChanges}
-            handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
-            enablePanDownToClose
-            keyboardBehavior="interactive"
-            keyboardBlurBehavior="restore"
-            android_keyboardInputMode="adjustResize"
-            enableDynamicSizing>
-            <BottomSheetView style={styles.contentContainer}>
-              <GoalBottomSheet
-                icon={icon}
-                title={title}
-                achieved={achieved}
-                dDay={dDay}
-                rDay={rDay}
-                onTitleChange={newTitle => console.log('제목 변경:', newTitle)}
-                onAchieveGoal={() => console.log('목표 달성 클릭')}
-                onDeleteGoal={() => console.log('목표 삭제 클릭')}
-              />
-            </BottomSheetView>
-          </BottomSheet>
+        {/* Goal BottomSheet */}
+        <BottomSheet
+          ref={goalBottomSheetRef}
+          snapPoints={snapPoints}
+          index={-1}
+          backdropComponent={renderBackdrop}
+          backgroundStyle={{backgroundColor: Colors.light.white}}
+          style={styles.bottomSheet}
+          onChange={handleSheetChanges}
+          handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
+          enablePanDownToClose
+          keyboardBehavior="interactive"
+          keyboardBlurBehavior="restore"
+          android_keyboardInputMode="adjustResize"
+          enableDynamicSizing>
+          <BottomSheetView style={styles.contentContainer}>
+            <GoalBottomSheet
+              icon={icon}
+              title={title}
+              achieved={achieved}
+              dDay={dDay}
+              rDay={rDay}
+              onTitleChange={newTitle => console.log('제목 변경:', newTitle)}
+              onAchieveGoal={() => console.log('목표 달성 클릭')}
+              onDeleteGoal={() => console.log('목표 삭제 클릭')}
+            />
+          </BottomSheetView>
+        </BottomSheet>
 
-          {/* D-day BottomSheet */}
-          <BottomSheet
-            ref={ddayBottomSheetRef}
-            snapPoints={snapPoints}
-            index={-1}
-            enablePanDownToClose
-            backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
-            backgroundStyle={{backgroundColor: Colors.light.white}}
-            style={styles.bottomSheet}
-            onChange={handleSheetChanges}
-            keyboardBehavior="interactive"
-            keyboardBlurBehavior="restore"
-            android_keyboardInputMode="adjustResize"
-            enableDynamicSizing>
-            <BottomSheetView style={styles.contentContainer}>
-              <DDayBottomSheet
-                initialDate={rDay}
-                dDay={dDay}
-                onSaveDate={date => console.log('선택된 날짜:', date)}
-                onCancel={() => ddayBottomSheetRef.current?.close()}
-              />
-            </BottomSheetView>
-          </BottomSheet>
+        {/* D-day BottomSheet */}
+        <BottomSheet
+          ref={ddayBottomSheetRef}
+          snapPoints={snapPoints}
+          index={-1}
+          enablePanDownToClose
+          backdropComponent={renderBackdrop}
+          handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
+          backgroundStyle={{backgroundColor: Colors.light.white}}
+          style={styles.bottomSheet}
+          onChange={handleSheetChanges}
+          keyboardBehavior="interactive"
+          keyboardBlurBehavior="restore"
+          android_keyboardInputMode="adjustResize"
+          enableDynamicSizing>
+          <BottomSheetView style={styles.contentContainer}>
+            <DDayBottomSheet
+              initialDate={rDay}
+              dDay={dDay}
+              onSaveDate={date => console.log('선택된 날짜:', date)}
+              onCancel={() => ddayBottomSheetRef.current?.close()}
+            />
+          </BottomSheetView>
+        </BottomSheet>
 
-          {/* List Item BottomSheet */}
-          <BottomSheet
-            ref={listItemBottomSheetRef}
-            snapPoints={listItemSnapPoints}
-            index={-1}
-            enablePanDownToClose
-            backdropComponent={renderBackdrop}
-            handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
-            backgroundStyle={{backgroundColor: Colors.light.white}}
-            style={styles.bottomSheet}
-            onChange={handleSheetChanges}
-            keyboardBehavior="interactive"
-            keyboardBlurBehavior="restore"
-            android_keyboardInputMode="adjustResize">
-            <BottomSheetView style={styles.contentContainer}>
-              <ListItemBottomSheet
-                onEditItem={handleEditTask}
-                onDeleteItem={handleDeleteTask}
-              />
-            </BottomSheetView>
-          </BottomSheet>
-        </ThemeProvider>
+        {/* List Item BottomSheet */}
+        <BottomSheet
+          ref={listItemBottomSheetRef}
+          snapPoints={listItemSnapPoints}
+          index={-1}
+          enablePanDownToClose
+          backdropComponent={renderBackdrop}
+          handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
+          backgroundStyle={{backgroundColor: Colors.light.white}}
+          style={styles.bottomSheet}
+          onChange={handleSheetChanges}
+          keyboardBehavior="interactive"
+          keyboardBlurBehavior="restore"
+          android_keyboardInputMode="adjustResize">
+          <BottomSheetView style={styles.contentContainer}>
+            <ListItemBottomSheet
+              onEditItem={handleEditTask}
+              onDeleteItem={handleDeleteTask}
+            />
+          </BottomSheetView>
+        </BottomSheet>
       </SelectedTaskContext.Provider>
     </GestureHandlerRootView>
   );

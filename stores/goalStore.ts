@@ -1,13 +1,10 @@
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
-import {
-  marathonPreparation,
-  GoalData,
-  websiteProject,
-  academicPaper,
-} from '@/constants/SampleData';
+import {differenceInCalendarDays} from 'date-fns';
+import {GoalData} from '@/constants/SampleData';
 import {prepareSelectAllGoals} from '@/models/goal.queries';
 import {prepareSelectTaskItemsByGoal} from '@/models/taskitem.queries';
+import dateUtils from '@/utils/dateUtils';
 
 async function loadGoalDataFromDB(): Promise<GoalData | null> {
   const selectGoalsStmt = await prepareSelectAllGoals();
@@ -21,23 +18,28 @@ async function loadGoalDataFromDB(): Promise<GoalData | null> {
     const selectTasksStmt = await prepareSelectTaskItemsByGoal();
     try {
       const tasksResult = await selectTasksStmt.executeAsync({
-        goal_id: goal.id,
+        $goal_id: goal.id,
       });
+
       const tasks = (await tasksResult.getAllAsync()) as any[];
 
       const achieved = tasks
-        .filter((t: any) => t.type === 'achieved')
-        .map((t: any) => ({id: t.id, text: t.text, completed: !!t.completed}));
+        .filter((t: any) => !!t.completed)
+        .map((t: any) => ({id: t.id, text: t.text, completed: true}));
       const todos = tasks
-        .filter((t: any) => t.type === 'todo')
-        .map((t: any) => ({id: t.id, text: t.text, completed: !!t.completed}));
+        .filter((t: any) => !t.completed)
+        .map((t: any) => ({id: t.id, text: t.text, completed: false}));
+
+      const today = new Date();
+      const dDayDate = dateUtils.parseDate(goal.dDay_date);
+      const remainingDays = differenceInCalendarDays(dDayDate, today);
 
       return {
         title: goal.title,
         icon: goal.icon,
         dDay: {
           date: goal.dDay_date,
-          remainingDays: goal.dDay_remainingDays,
+          remainingDays,
         },
         achieved,
         todos,
@@ -51,7 +53,7 @@ async function loadGoalDataFromDB(): Promise<GoalData | null> {
 }
 
 type GoalStore = {
-  goalData: GoalData;
+  goalData: GoalData | null;
   setGoalData: (goalData: GoalData) => void;
   updateGoalData: (updater: (goalData: GoalData) => void) => void;
   loadGoalDataFromDB: () => Promise<void>;
@@ -59,13 +61,13 @@ type GoalStore = {
 
 export const useGoalStore = create<GoalStore>()(
   immer(set => ({
-    goalData: marathonPreparation,
+    goalData: null,
 
     setGoalData: goalData => set({goalData}),
 
     updateGoalData: updater =>
       set(state => {
-        updater(state.goalData);
+        if (state.goalData) updater(state.goalData);
       }),
 
     loadGoalDataFromDB: async () => {

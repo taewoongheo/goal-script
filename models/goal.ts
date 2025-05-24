@@ -9,15 +9,13 @@ export async function initGoalTables(): Promise<void> {
       id TEXT PRIMARY KEY NOT NULL,
       title TEXT NOT NULL,
       icon TEXT NOT NULL,
-      dDay_date TEXT NOT NULL,
-      dDay_remainingDays INTEGER NOT NULL
+      dDay_date TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS TaskItem (
       id TEXT PRIMARY KEY NOT NULL,
       goal_id TEXT NOT NULL,
       text TEXT NOT NULL,
       completed INTEGER NOT NULL,
-      type TEXT NOT NULL,
       FOREIGN KEY(goal_id) REFERENCES Goal(id)
     );
   `);

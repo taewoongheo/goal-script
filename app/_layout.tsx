@@ -1,4 +1,3 @@
-import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -21,9 +20,8 @@ import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
 import {ListItemBottomSheet} from '@/components/mainScreen/task/ListItemBottomSheet';
 import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
 import {Colors} from '@/constants/Colors';
-import {updateThemeColors} from '@/constants/Theme';
 import {useGoalStore} from '@/stores/goalStore';
-import {seedSampleGoalData} from '@/scripts/seedSampleData';
+import {setupDatabase} from '@/scripts/setup';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -58,7 +56,7 @@ function RootLayoutContent() {
 
   useEffect(() => {
     (async function () {
-      await seedSampleGoalData();
+      await setupDatabase();
       await loadGoalDataFromDB();
     })();
   }, []);
@@ -118,7 +116,6 @@ function RootLayoutContent() {
     [selectedTask, actions, listItemBottomSheetRef],
   );
 
-  // 아래는 goalData가 없을 때만 렌더링 분기
   if (!goalData) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

@@ -35,6 +35,7 @@ async function loadGoalDataFromDB(): Promise<GoalData | null> {
       const remainingDays = differenceInCalendarDays(dDayDate, today);
 
       return {
+        id: goal.id,
         title: goal.title,
         icon: goal.icon,
         dDay: {

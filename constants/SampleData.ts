@@ -7,6 +7,7 @@ type TaskItem = {
 };
 
 export type GoalData = {
+  id: string;
   title: string;
   icon: string;
   dDay: {
@@ -18,6 +19,7 @@ export type GoalData = {
 };
 
 export const websiteProject: GoalData = {
+  id: generateUUID(),
   title: '웹사이트 리뉴얼',
   icon: 'code',
   dDay: {
@@ -38,6 +40,7 @@ export const websiteProject: GoalData = {
 };
 
 export const marathonPreparation: GoalData = {
+  id: generateUUID(),
   title: '마라톤봄 마라톤',
   icon: 'flag-checkered',
   dDay: {
@@ -74,6 +77,7 @@ export const marathonPreparation: GoalData = {
 };
 
 export const academicPaper: GoalData = {
+  id: generateUUID(),
   title: '인공지능 윤리에 관한 학술 논문 게재',
   icon: 'docs',
   dDay: {

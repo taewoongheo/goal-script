@@ -15,12 +15,17 @@ export async function prepareSelectTaskItemsByGoal() {
 
 export async function prepareUpdateTaskItem() {
   const db = await dbPromise;
-  return db.prepareAsync(
-    `UPDATE TaskItem SET text = $text, completed = $completed WHERE id = $id`,
-  );
+  return db.prepareAsync(`UPDATE TaskItem SET text = $text WHERE id = $id`);
 }
 
 export async function prepareDeleteTaskItem() {
   const db = await dbPromise;
   return db.prepareAsync(`DELETE FROM TaskItem WHERE id = $id`);
+}
+
+export async function prepareUpdateTaskCompletion() {
+  const db = await dbPromise;
+  return db.prepareAsync(
+    `UPDATE TaskItem SET completed = $completed WHERE id = $id`,
+  );
 }

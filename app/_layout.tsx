@@ -125,6 +125,8 @@ function RootLayoutContent() {
     [selectedTask, actions, listItemBottomSheetRef],
   );
 
+  console.log('goalData', goalData);
+
   if (!goalData) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -143,7 +145,7 @@ function RootLayoutContent() {
     <GestureHandlerRootView style={{flex: 1}}>
       <SelectedTaskContext.Provider value={selectedTaskValue}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+          <Stack.Screen name="index" options={{headerShown: false}} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

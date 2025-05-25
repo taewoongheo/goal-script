@@ -22,7 +22,7 @@ export function TodoSection({
   linearTransitionAnimation,
   listItemBottomSheetRef,
 }: TodoSectionProps) {
-  const todoItems = useGoalStore(state => state.goalData.todos);
+  const todoItems = useGoalStore(state => state.goalData?.todos) ?? [];
   const {actions} = useGoalData();
 
   const renderTaskItem = (props: TaskItemProps) => (

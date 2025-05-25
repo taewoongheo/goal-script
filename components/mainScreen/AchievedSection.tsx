@@ -22,8 +22,8 @@ export function AchievedSection({
   linearTransitionAnimation,
   listItemBottomSheetRef,
 }: AchievedSectionProps) {
-  const achievedItems = useGoalStore(state => state.goalData.achieved);
-  const hasTodoItems = useGoalStore(state => state.goalData.todos.length > 0);
+  const achievedItems = useGoalStore(state => state.goalData?.achieved) ?? [];
+  const hasTodoItems = useGoalStore(state => state.goalData?.todos.length) ?? 0;
 
   const {actions} = useGoalData();
 

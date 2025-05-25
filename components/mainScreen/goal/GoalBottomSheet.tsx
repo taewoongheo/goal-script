@@ -1,6 +1,11 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, Pressable, StyleSheet, Keyboard} from 'react-native';
-import {SimpleLineIcons, FontAwesome6, AntDesign} from '@expo/vector-icons';
+import {
+  SimpleLineIcons,
+  FontAwesome6,
+  AntDesign,
+  FontAwesome5,
+} from '@expo/vector-icons';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {TextInput} from 'react-native-gesture-handler';
 import {moderateScale, scale} from 'react-native-size-matters';
@@ -32,14 +37,12 @@ export function GoalBottomSheet({
   const titleInputRef = useRef<TextInput>(null);
 
   const handleEditGoal = (text: string) => {
-    console.log('목표 이름 수정 버튼 클릭');
     if (onTitleChange) {
       onTitleChange(text);
     }
   };
 
   const handleDeleteGoal = () => {
-    console.log('목표 삭제 버튼 클릭');
     if (onDeleteGoal) {
       onDeleteGoal();
     }
@@ -49,7 +52,7 @@ export function GoalBottomSheet({
     <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
       <View style={styles.headerRow}>
         <View style={styles.iconContainer}>
-          <SimpleLineIcons
+          <FontAwesome5
             name={icon as any}
             size={Theme.iconSize.medium}
             color={Theme.colors.highlight}

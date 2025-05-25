@@ -50,6 +50,7 @@ function RootLayoutContent() {
   const snapPoints = useMemo(() => ['50%'], []);
   const listItemSnapPoints = useMemo(() => ['35%'], []);
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
+  const [goalSheetKey, setGoalSheetKey] = useState(0); // GoalBottomSheet 리렌더링용
   const {actions} = useGoalData();
   const loadGoalDataFromDB = useGoalStore(state => state.loadGoalDataFromDB);
   const goalData = useGoalStore(state => state.goalData);
@@ -83,6 +84,14 @@ function RootLayoutContent() {
     if (index === -1) {
       Keyboard.dismiss();
       setSelectedTask(null);
+    }
+  }, []);
+
+  const handleGoalSheetChanges = useCallback((index: number) => {
+    if (index === -1) {
+      Keyboard.dismiss();
+      // BottomSheet가 닫힐 때 GoalBottomSheet 컴포넌트를 리렌더링하기 위해 key 변경
+      setGoalSheetKey(prev => prev + 1);
     }
   }, []);
 
@@ -147,7 +156,7 @@ function RootLayoutContent() {
           backdropComponent={renderBackdrop}
           backgroundStyle={{backgroundColor: Colors.light.white}}
           style={styles.bottomSheet}
-          onChange={handleSheetChanges}
+          onChange={handleGoalSheetChanges}
           handleIndicatorStyle={{backgroundColor: Colors.light.gray}}
           enablePanDownToClose
           keyboardBehavior="interactive"
@@ -156,6 +165,7 @@ function RootLayoutContent() {
           enableDynamicSizing>
           <BottomSheetView style={styles.contentContainer}>
             <GoalBottomSheet
+              key={goalSheetKey} // key가 변경되면 컴포넌트가 새로 마운트됨
               icon={icon}
               title={title}
               achieved={achieved}

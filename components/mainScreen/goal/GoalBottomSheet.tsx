@@ -15,8 +15,7 @@ interface GoalBottomSheetProps {
   achieved: TaskItem[];
   dDay: number;
   rDay: string;
-  onTitleChange?: (newTitle: string) => void;
-  onAchieveGoal?: () => void;
+  onTitleChange?: (text: string) => void;
   onDeleteGoal?: () => void;
 }
 
@@ -27,23 +26,15 @@ export function GoalBottomSheet({
   dDay,
   rDay,
   onTitleChange,
-  onAchieveGoal,
   onDeleteGoal,
 }: GoalBottomSheetProps) {
   const [editableTitle, setEditableTitle] = useState(title);
   const titleInputRef = useRef<TextInput>(null);
 
-  const handleTitleChange = (text: string) => {
-    setEditableTitle(text);
+  const handleEditGoal = (text: string) => {
+    console.log('목표 이름 수정 버튼 클릭');
     if (onTitleChange) {
       onTitleChange(text);
-    }
-  };
-
-  const handleAchieveGoal = () => {
-    console.log('목표 달성 버튼 클릭');
-    if (onAchieveGoal) {
-      onAchieveGoal();
     }
   };
 
@@ -74,7 +65,7 @@ export function GoalBottomSheet({
           <BottomSheetTextInput
             ref={titleInputRef}
             value={editableTitle}
-            onChangeText={handleTitleChange}
+            onChangeText={setEditableTitle}
             style={styles.goalTitleInput}
             placeholder="목표 이름을 입력해주세요"
             placeholderTextColor={Colors.light.textSecondary}
@@ -116,8 +107,8 @@ export function GoalBottomSheet({
       <View style={styles.footerSection}>
         {/* 완료 버튼 */}
         <BottomSheetButton
-          label="목표달성 완료"
-          onPress={handleAchieveGoal}
+          label="목표 이름 수정하기"
+          onPress={() => handleEditGoal(editableTitle)}
           type="primary"
         />
 

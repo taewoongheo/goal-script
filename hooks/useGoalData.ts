@@ -12,6 +12,7 @@ import {
 import {
   prepareUpdateTitleGoal,
   prepareUpdateDateGoal,
+  prepareDeleteGoal,
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
 
@@ -97,7 +98,7 @@ export function useGoalData() {
         const updateQuery = await prepareUpdateTaskCompletion();
         await updateQuery.executeAsync({
           $id: taskId,
-          $completed: source !== 'todos' ? 1 : 0,
+          $completed: source !== 'todos' ? 0 : 1,
         });
       } catch (e) {
         console.error('DB updateTaskCompletion error:', e);
@@ -270,6 +271,20 @@ export function useGoalData() {
     }
   };
 
+  const deleteGoal = async () => {
+    if (!goalData?.id) {
+      console.error('No goal ID found in goalData');
+      return;
+    }
+
+    try {
+      const deleteQuery = await prepareDeleteGoal();
+      await deleteQuery.executeAsync({$id: goalData.id});
+    } catch (e) {
+      console.error('DB deleteGoal error:', e);
+    }
+  };
+
   return {
     actions: {
       todo: {
@@ -287,6 +302,7 @@ export function useGoalData() {
       goal: {
         updateTitle: updateGoalTitle,
         updateDate: updateGoalDate,
+        deleteGoal,
       },
     },
   };

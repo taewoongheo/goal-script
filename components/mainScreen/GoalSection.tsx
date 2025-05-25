@@ -30,8 +30,8 @@ export function GoalSection({
 }: GoalSectionProps) {
   const [lines, setLines] = useState<string[] | null>(null);
 
-  const title = useGoalStore(state => state.goalData.title);
-  const icon = useGoalStore(state => state.goalData.icon);
+  const title = useGoalStore(state => state.goalData?.title) ?? '?';
+  const icon = useGoalStore(state => state.goalData?.icon) ?? '?';
 
   return (
     <View style={styles.lineContainer}>

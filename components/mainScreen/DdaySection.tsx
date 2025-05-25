@@ -7,6 +7,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import {Theme} from '@/constants/Theme';
 import {useGoalStore} from '@/stores/goalStore';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {dateUtils} from '@/utils/dateUtils';
 
 interface DdaySectionProps {
   isDdayExpanded: boolean;
@@ -27,8 +28,8 @@ export function DdaySection({
   fadeOutAnimation,
   bottomSheetRef,
 }: DdaySectionProps) {
-  const dDay = useGoalStore(state => state.goalData.dDay.remainingDays);
-  const rDay = useGoalStore(state => state.goalData.dDay.date);
+  const dDay = useGoalStore(state => state.goalData?.dDay.remainingDays) ?? 0;
+  const rDay = useGoalStore(state => state.goalData?.dDay.date) ?? '??';
 
   return (
     <View style={styles.lineContainer}>
@@ -57,7 +58,7 @@ export function DdaySection({
                   entering={fadeInAnimation}
                   exiting={fadeOutAnimation}
                   style={[styles.text, styles.highlight]}>
-                  {rDay}
+                  {dateUtils.formatToAppDate(dateUtils.parseDate(rDay))}
                 </Animated.Text>
               </Pressable>
             </View>

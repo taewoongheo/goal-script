@@ -83,8 +83,9 @@ export function DDayBottomSheet({
       setSelectedDate(date.dateString);
       const newDDay = calculateDDay(date.dateString);
       setCalculatedDDay(newDDay);
+      onSaveDate?.(date.dateString);
     },
-    [calculateDDay],
+    [calculateDDay, onSaveDate],
   );
 
   const markedDates = useMemo(() => {

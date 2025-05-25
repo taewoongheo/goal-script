@@ -161,9 +161,8 @@ function RootLayoutContent() {
               achieved={achieved}
               dDay={dDay}
               rDay={rDay}
-              onTitleChange={newTitle => console.log('제목 변경:', newTitle)}
-              onAchieveGoal={() => console.log('목표 달성 클릭')}
-              onDeleteGoal={() => console.log('목표 삭제 클릭')}
+              onTitleChange={actions.goal.updateTitle}
+              onDeleteGoal={actions.goal.deleteGoal}
             />
           </BottomSheetView>
         </BottomSheet>
@@ -187,7 +186,7 @@ function RootLayoutContent() {
             <DDayBottomSheet
               initialDate={rDay}
               dDay={dDay}
-              onSaveDate={date => console.log('선택된 날짜:', date)}
+              onSaveDate={actions.goal.updateDate}
               onCancel={() => ddayBottomSheetRef.current?.close()}
             />
           </BottomSheetView>

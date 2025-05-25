@@ -21,11 +21,11 @@ export function BottomSheetButton({
 }: BottomSheetButtonProps) {
   if (type === 'text') {
     return (
-      <Text
-        style={[styles.textButton, disabled && styles.disabledText]}
-        onPress={disabled ? undefined : onPress}>
-        {label}
-      </Text>
+      <Pressable onPress={disabled ? undefined : onPress}>
+        <Text style={[styles.textButton, disabled && styles.disabledText]}>
+          {label}
+        </Text>
+      </Pressable>
     );
   }
 

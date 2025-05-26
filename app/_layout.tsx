@@ -125,8 +125,6 @@ function RootLayoutContent() {
     [selectedTask, actions, listItemBottomSheetRef],
   );
 
-  console.log('goalData', goalData);
-
   if (!goalData) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

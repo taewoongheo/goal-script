@@ -9,13 +9,13 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import {useColorScheme} from '@/hooks/useColorScheme';
 import {
   BottomSheetProvider,
   useBottomSheet,
 } from '@/contexts/BottomSheetContext';
 import {Typography} from '@/constants/Typography';
-import {TaskItem, useGoalData} from '@/hooks/useGoalData';
+import {useGoalData} from '@/hooks/useGoalData';
+import {TaskItem} from '@/types/goal';
 import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
 import {ListItemBottomSheet} from '@/components/mainScreen/task/ListItemBottomSheet';
 import {DDayBottomSheet} from '@/components/mainScreen/dday/DDayBottomSheet';
@@ -231,9 +231,7 @@ function RootLayoutContent() {
 }
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     'Pretendard-Regular': require('../assets/fonts/Pretendard-Regular.otf'),
     'Pretendard-SemiBold': require('../assets/fonts/Pretendard-SemiBold.otf'),
     'Pretendard-Bold': require('../assets/fonts/Pretendard-Bold.otf'),

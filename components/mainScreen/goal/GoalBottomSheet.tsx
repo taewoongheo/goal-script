@@ -1,18 +1,13 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import {View, Text, Pressable, StyleSheet, Keyboard} from 'react-native';
-import {
-  SimpleLineIcons,
-  FontAwesome6,
-  AntDesign,
-  FontAwesome5,
-} from '@expo/vector-icons';
+import {FontAwesome6, AntDesign, FontAwesome5} from '@expo/vector-icons';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {TextInput} from 'react-native-gesture-handler';
 import {moderateScale, scale} from 'react-native-size-matters';
-import {TaskItem} from '@/hooks/useGoalData';
 import {Theme} from '@/constants/Theme';
 import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
 import {Colors} from '@/constants/Colors';
+import {TaskItem} from '@/types/goal';
 
 interface GoalBottomSheetProps {
   icon: string;

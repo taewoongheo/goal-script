@@ -15,12 +15,7 @@ import {
   prepareDeleteGoal,
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
-
-export type TaskItem = {
-  id: string;
-  text: string;
-  completed: boolean;
-};
+import {TaskItem} from '@/types/goal';
 
 type PendingMoveTask = {
   id: string;

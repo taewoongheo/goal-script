@@ -51,7 +51,6 @@ export function DDayBottomSheetContainer({
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleSheetChanges}
-      enableDynamicSizing
       {...commonBottomSheetProps}>
       <BottomSheetView style={commonStyles.contentContainer}>
         <DDayBottomSheet

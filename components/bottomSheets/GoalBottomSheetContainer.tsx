@@ -55,7 +55,6 @@ export function GoalBottomSheetContainer({
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleGoalSheetChanges}
-      enableDynamicSizing
       {...commonBottomSheetProps}>
       <BottomSheetView style={commonStyles.contentContainer}>
         <GoalBottomSheet

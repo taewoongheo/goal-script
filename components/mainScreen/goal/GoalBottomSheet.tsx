@@ -67,6 +67,8 @@ export function GoalBottomSheet({
             style={styles.goalTitleInput}
             placeholder="목표 이름을 입력해주세요"
             placeholderTextColor={Colors.light.textSecondary}
+            autoCorrect={false}
+            spellCheck={false}
           />
           <View style={styles.underline} />
         </View>

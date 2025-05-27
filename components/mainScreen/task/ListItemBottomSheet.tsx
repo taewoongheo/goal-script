@@ -58,7 +58,9 @@ export function ListItemBottomSheet({
           placeholder="작업 내용을 입력하세요"
           multiline={false}
           returnKeyType="done"
-          autoFocus
+          autoCorrect={false}
+          spellCheck={false}
+          // autoFocus
         />
       </View>
 

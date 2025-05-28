@@ -11,6 +11,7 @@ type BottomSheetRefs = {
   goalBottomSheetRef: React.RefObject<BottomSheet>;
   ddayBottomSheetRef: React.RefObject<BottomSheet>;
   listItemBottomSheetRef: React.RefObject<BottomSheet>;
+  addTaskBottomSheetRef: React.RefObject<BottomSheet>;
 };
 
 type BottomSheetContextType = BottomSheetRefs;
@@ -23,12 +24,14 @@ export function BottomSheetProvider({children}: {children: ReactNode}) {
   const goalBottomSheetRef = useRef<BottomSheet>(null);
   const ddayBottomSheetRef = useRef<BottomSheet>(null);
   const listItemBottomSheetRef = useRef<BottomSheet>(null);
+  const addTaskBottomSheetRef = useRef<BottomSheet>(null);
 
   const value = useMemo(
     () => ({
       goalBottomSheetRef,
       ddayBottomSheetRef,
       listItemBottomSheetRef,
+      addTaskBottomSheetRef,
     }),
     [],
   );

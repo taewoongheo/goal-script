@@ -18,8 +18,12 @@ import {Theme} from '@/constants/Theme';
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
 
-  const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
-    useBottomSheet();
+  const {
+    goalBottomSheetRef,
+    ddayBottomSheetRef,
+    listItemBottomSheetRef,
+    addTaskBottomSheetRef,
+  } = useBottomSheet();
 
   const linearTransitionAnimation = useMemo(
     () => LinearTransition.duration(ANIMATION_DURATION.LINEAR_TRANSIION),
@@ -83,6 +87,7 @@ export default function MainScreen() {
           styles={componentStyles}
           linearTransitionAnimation={linearTransitionAnimation}
           listItemBottomSheetRef={listItemBottomSheetRef}
+          addTaskBottomSheetRef={addTaskBottomSheetRef}
         />
       </Animated.View>
     </View>

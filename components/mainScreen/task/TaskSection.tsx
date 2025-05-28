@@ -34,6 +34,7 @@ export function TaskSection({
   emptyMessage,
   renderItem,
   listItemBottomSheetRef,
+  addTaskBottomSheetRef,
 }: TaskSectionProps) {
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -82,7 +83,7 @@ export function TaskSection({
   if (items.length === 0) {
     if (emptyMessage) {
       return (
-        <Pressable onPress={() => console.log('add task')}>
+        <Pressable onPress={() => addTaskBottomSheetRef?.current?.expand()}>
           <Animated.Text
             layout={linearTransitionAnimation}
             style={[styles.text, styles.highlight]}>
@@ -155,7 +156,8 @@ export function TaskSection({
                 </React.Fragment>
               ))}
               {title === 'todos' && (
-                <Pressable onPress={() => console.log('add task')}>
+                <Pressable
+                  onPress={() => addTaskBottomSheetRef?.current?.expand()}>
                   <Animated.View
                     layout={linearTransitionAnimation}
                     entering={addTaskFadeInAnimation}
@@ -212,6 +214,6 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     padding: Theme.spacing.small,
     borderRadius: Theme.borderRadius.small,
-    marginVertical: Theme.spacing.small,
+    marginVertical: Theme.spacing.medium,
   },
 });

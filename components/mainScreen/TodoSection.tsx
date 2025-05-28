@@ -13,6 +13,7 @@ interface TodoSectionProps {
   styles: TaskStyles;
   linearTransitionAnimation: any;
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
+  addTaskBottomSheetRef?: React.RefObject<BottomSheet>;
 }
 
 export function TodoSection({
@@ -21,6 +22,7 @@ export function TodoSection({
   styles,
   linearTransitionAnimation,
   listItemBottomSheetRef,
+  addTaskBottomSheetRef,
 }: TodoSectionProps) {
   const todoItems = useGoalStore(state => state.goalData?.todos) ?? [];
   const {actions} = useGoalData();
@@ -44,6 +46,7 @@ export function TodoSection({
       emptyMessage="앞으로 할 일은 무엇인가요?"
       renderItem={renderTaskItem}
       listItemBottomSheetRef={listItemBottomSheetRef}
+      addTaskBottomSheetRef={addTaskBottomSheetRef}
     />
   );
 }

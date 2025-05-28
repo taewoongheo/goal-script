@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleProp, TextStyle, ViewStyle} from 'react-native';
 import {LinearTransition} from 'react-native-reanimated';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {TaskItem} from '@/hooks/useGoalData';
-import BottomSheet from '@gorhom/bottom-sheet';
 
 export interface TaskStyles {
   lineContainer: StyleProp<ViewStyle>;
@@ -39,4 +39,5 @@ export interface TaskSectionProps {
   emptyMessage?: string;
   renderItem: (props: TaskItemProps) => React.ReactElement;
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
+  addTaskBottomSheetRef?: React.RefObject<BottomSheet>;
 }

@@ -14,6 +14,7 @@ import {TaskItem} from '@/types/goal';
 import {GoalBottomSheetContainer} from '@/components/bottomSheets/GoalBottomSheetContainer';
 import {DDayBottomSheetContainer} from '@/components/bottomSheets/DDayBottomSheetContainer';
 import {ListItemBottomSheetContainer} from '@/components/bottomSheets/ListItemBottomSheetContainer';
+import {AddTaskBottomSheetContainer} from '@/components/bottomSheets/AddTaskBottomSheetContainer';
 import {useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
 
@@ -39,8 +40,12 @@ export const useSelectedTask = () => {
 };
 
 function RootLayoutContent() {
-  const {goalBottomSheetRef, ddayBottomSheetRef, listItemBottomSheetRef} =
-    useBottomSheet();
+  const {
+    goalBottomSheetRef,
+    ddayBottomSheetRef,
+    listItemBottomSheetRef,
+    addTaskBottomSheetRef,
+  } = useBottomSheet();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const loadGoalDataFromDB = useGoalStore(state => state.loadGoalDataFromDB);
   const goalData = useGoalStore(state => state.goalData);
@@ -81,6 +86,7 @@ function RootLayoutContent() {
           selectedTask={selectedTask}
           setSelectedTask={setSelectedTask}
         />
+        <AddTaskBottomSheetContainer bottomSheetRef={addTaskBottomSheetRef} />
       </SelectedTaskContext.Provider>
     </GestureHandlerRootView>
   );

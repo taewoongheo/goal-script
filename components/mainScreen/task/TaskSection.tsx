@@ -16,7 +16,7 @@ import {Pressable} from 'react-native-gesture-handler';
 import {getViewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {Colors, HighlightColor} from '@/constants/Colors';
+import {HighlightColor} from '@/constants/Colors';
 import {TaskSectionProps} from './types';
 import {Theme} from '@/constants/Theme';
 
@@ -27,7 +27,6 @@ export function TaskSection({
   styles,
   linearTransitionAnimation,
   onUpdateItem,
-  onEditItem,
   icon,
   title,
   suffix = '',

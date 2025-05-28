@@ -39,7 +39,6 @@ export function TodoSection({
       styles={styles}
       linearTransitionAnimation={linearTransitionAnimation}
       onUpdateItem={actions.todo.toggle}
-      onEditItem={actions.todo.edit}
       icon="list"
       title="todos"
       suffix="들이 남았어요."

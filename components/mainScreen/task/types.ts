@@ -32,7 +32,6 @@ export interface TaskSectionProps {
   styles: TaskStyles;
   linearTransitionAnimation: LinearTransition;
   onUpdateItem: (taskId: string) => void;
-  onEditItem?: (taskId: string, newText: string) => void;
   icon: string;
   title: string;
   suffix?: string;

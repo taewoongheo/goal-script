@@ -60,7 +60,6 @@ export function ListItemBottomSheet({
           returnKeyType="done"
           autoCorrect={false}
           spellCheck={false}
-          // autoFocus
         />
       </View>
 

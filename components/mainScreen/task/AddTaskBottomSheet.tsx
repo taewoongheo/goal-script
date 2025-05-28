@@ -9,7 +9,6 @@ import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
 
 interface AddTaskBottomSheetProps {
   onAddTask?: (taskText: string) => void;
-  inputRef?: React.RefObject<TextInput>;
 }
 
 export function AddTaskBottomSheet({onAddTask}: AddTaskBottomSheetProps) {

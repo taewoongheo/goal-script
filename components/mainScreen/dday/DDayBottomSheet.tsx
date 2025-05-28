@@ -5,8 +5,7 @@ import {FontAwesome} from '@expo/vector-icons';
 import {scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
 import {dateUtils} from '@/utils/dateUtils';
-import '@/constants/CalendarLocale'; // 한국어 로케일 설정 자동 적용
-import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
+import '@/constants/CalendarLocale';
 import {Colors} from '@/constants/Colors';
 
 // 달력에서 사용하는 날짜 형식을 위한 인터페이스 정의

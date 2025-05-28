@@ -39,7 +39,6 @@ export function AchievedSection({
       styles={styles}
       linearTransitionAnimation={linearTransitionAnimation}
       onUpdateItem={actions.achieved.toggle}
-      onEditItem={actions.achieved.edit}
       icon="list-check"
       title="achieved"
       suffix={hasTodoItems ? '들을 완료했고,' : '들을 완료했어요.'}

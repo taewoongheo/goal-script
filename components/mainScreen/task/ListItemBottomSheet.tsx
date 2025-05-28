@@ -21,7 +21,6 @@ export function ListItemBottomSheet({
   const [editText, setEditText] = useState('');
   const inputRef = useRef<TextInput>(null);
 
-  // Update text when selected task changes
   useEffect(() => {
     if (selectedTask) {
       setEditText(selectedTask.text);

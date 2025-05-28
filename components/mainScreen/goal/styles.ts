@@ -1,7 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {viewportWidth} from '@/utils/viewport';
+
 import {Layout as LayoutConstants} from '@/constants/Layout';
 import {Theme} from '@/constants/Theme';
+import {viewportWidth} from '@/utils/viewport';
 
 export const styles = StyleSheet.create({
   container: {

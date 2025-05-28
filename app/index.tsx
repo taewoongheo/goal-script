@@ -15,7 +15,7 @@ import {TodoSection} from '@/components/mainScreen/TodoSection';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
-import {viewportHeight} from '@/utils/viewport';
+import {viewportHeight, viewportWidth} from '@/utils/viewport';
 
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
@@ -145,6 +145,7 @@ const styles = ScaledSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: viewportWidth,
   },
   debugInfo: {
     position: 'absolute',

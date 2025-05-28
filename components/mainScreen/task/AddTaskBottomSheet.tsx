@@ -34,9 +34,9 @@ export function AddTaskBottomSheet({onAddTask}: AddTaskBottomSheetProps) {
           placeholder="새로운 할 일을 입력하세요"
           multiline={false}
           returnKeyType="done"
+          onSubmitEditing={handleAddTask}
           autoCorrect={false}
           spellCheck={false}
-          onSubmitEditing={handleAddTask}
         />
       </View>
 

@@ -31,6 +31,8 @@ export function DdaySection({
   const dDay = useGoalStore(state => state.goalData?.dDay.remainingDays) ?? 0;
   const rDay = useGoalStore(state => state.goalData?.dDay.date) ?? '??';
 
+  const dDayText = dDay > 0 ? `D-${dDay}` : 'D-Day';
+
   return (
     <View style={styles.lineContainer}>
       <View style={localStyles.row}>
@@ -43,7 +45,7 @@ export function DdaySection({
             color={Theme.colors.highlight}
             style={localStyles.iconContainer}
           />
-          <Text style={[styles.text, styles.highlight]}>D-{dDay} </Text>
+          <Text style={[styles.text, styles.highlight]}>{dDayText} </Text>
         </Pressable>
         <Animated.View
           style={localStyles.overflowContainer}
@@ -64,9 +66,11 @@ export function DdaySection({
             </View>
           )}
         </Animated.View>
-        <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
-          남았어요
-        </Animated.Text>
+        {dDay > 0 && (
+          <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
+            남았어요
+          </Animated.Text>
+        )}
       </View>
     </View>
   );

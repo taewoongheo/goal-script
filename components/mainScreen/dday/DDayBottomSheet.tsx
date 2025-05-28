@@ -125,16 +125,6 @@ export function DDayBottomSheet({
   return (
     <View style={styles.container}>
       {/* Header with D-day */}
-      <View style={styles.header}>
-        <FontAwesome
-          name="calendar"
-          size={Theme.iconSize.medium}
-          color={Theme.colors.highlight}
-        />
-        <Text style={styles.headerText}>
-          {calculatedDDay > 0 ? `D-${calculatedDDay}` : '디데이'}
-        </Text>
-      </View>
 
       {/* Calendar */}
       <Calendar
@@ -169,6 +159,43 @@ export function DDayBottomSheet({
           dayShape: 'square', // 날짜 셀 모양
         }}
       />
+
+      <View style={styles.divider} />
+
+      <View style={styles.header}>
+        <FontAwesome
+          name="calendar"
+          size={Theme.iconSize.medium}
+          color={Theme.colors.highlight}
+        />
+        <Text style={styles.headerText}>
+          {calculatedDDay > 0 ? `D-${calculatedDDay}` : 'D-Day'}
+        </Text>
+        <Text
+          style={{
+            marginLeft: Theme.spacing.small,
+            fontSize: Theme.fontSize.medium,
+            fontFamily: Theme.fontFamily.bold,
+            color: Theme.colors.highlight,
+            marginRight: Theme.iconSpace.small,
+            backgroundColor: Theme.colors.lineHighlight,
+            borderRadius: Theme.borderRadius.small,
+            paddingHorizontal: Theme.iconSpace.medium,
+            paddingVertical: Theme.iconSpace.small,
+          }}>
+          {dateUtils.formatToAppDate(dateUtils.parseDate(selectedDate))}
+        </Text>
+        {calculatedDDay > 0 && (
+          <Text
+            style={{
+              fontSize: Theme.fontSize.medium,
+              fontFamily: Theme.fontFamily.regular,
+              color: Theme.colors.textSecondary,
+            }}>
+            남았어요
+          </Text>
+        )}
+      </View>
     </View>
   );
 }
@@ -188,7 +215,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: Theme.fontSize.medium,
-    fontFamily: Theme.fontFamily.semiBold,
+    fontFamily: Theme.fontFamily.bold,
     color: Theme.colors.highlight,
     marginLeft: Theme.spacing.small,
   },
@@ -224,5 +251,10 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSize.small,
     fontFamily: Theme.fontFamily.semiBold,
     color: '#FF4D4F',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Colors.light.lightGray,
+    marginVertical: Theme.spacing.medium,
   },
 });

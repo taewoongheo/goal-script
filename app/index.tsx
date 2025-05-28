@@ -1,11 +1,12 @@
-import {View} from 'react-native';
+import {View, Dimensions} from 'react-native';
 import Animated, {
   LinearTransition,
   FadeIn,
   FadeOut,
 } from 'react-native-reanimated';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import {ScaledSheet} from 'react-native-size-matters';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
@@ -17,6 +18,7 @@ import {Theme} from '@/constants/Theme';
 
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
+  const [isScrollable, setIsScrollable] = useState(false);
 
   const {
     goalBottomSheetRef,
@@ -50,46 +52,56 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={styles.textContainer}
-        layout={linearTransitionAnimation}>
-        <GoalSection
-          isGoalExpanded={expandStates.goal[0]}
-          onToggleGoal={handleToggle}
-          styles={componentStyles}
-          linearTransitionAnimation={linearTransitionAnimation}
-          fadeInAnimation={fadeInAnimation}
-          fadeOutAnimation={fadeOutAnimation}
-          bottomSheetRef={goalBottomSheetRef}
-        />
+      <ScrollView
+        contentContainerStyle={styles.scrollContentContainer}
+        scrollEnabled={isScrollable}
+        showsVerticalScrollIndicator={false}>
+        <Animated.View
+          style={styles.textContainer}
+          layout={linearTransitionAnimation}
+          onLayout={e => {
+            setIsScrollable(
+              e.nativeEvent.layout.height > Dimensions.get('window').height,
+            );
+          }}>
+          <GoalSection
+            isGoalExpanded={expandStates.goal[0]}
+            onToggleGoal={handleToggle}
+            styles={componentStyles}
+            linearTransitionAnimation={linearTransitionAnimation}
+            fadeInAnimation={fadeInAnimation}
+            fadeOutAnimation={fadeOutAnimation}
+            bottomSheetRef={goalBottomSheetRef}
+          />
 
-        <DdaySection
-          isDdayExpanded={expandStates.dday[0]}
-          onToggleDday={handleToggle}
-          styles={componentStyles}
-          linearTransitionAnimation={linearTransitionAnimation}
-          fadeInAnimation={fadeInAnimation}
-          fadeOutAnimation={fadeOutAnimation}
-          bottomSheetRef={ddayBottomSheetRef}
-        />
+          <DdaySection
+            isDdayExpanded={expandStates.dday[0]}
+            onToggleDday={handleToggle}
+            styles={componentStyles}
+            linearTransitionAnimation={linearTransitionAnimation}
+            fadeInAnimation={fadeInAnimation}
+            fadeOutAnimation={fadeOutAnimation}
+            bottomSheetRef={ddayBottomSheetRef}
+          />
 
-        <AchievedSection
-          isAchievedExpanded={expandStates.achieved[0]}
-          onToggle={handleToggle}
-          styles={componentStyles}
-          linearTransitionAnimation={linearTransitionAnimation}
-          listItemBottomSheetRef={listItemBottomSheetRef}
-        />
+          <AchievedSection
+            isAchievedExpanded={expandStates.achieved[0]}
+            onToggle={handleToggle}
+            styles={componentStyles}
+            linearTransitionAnimation={linearTransitionAnimation}
+            listItemBottomSheetRef={listItemBottomSheetRef}
+          />
 
-        <TodoSection
-          isTodosExpanded={expandStates.todos[0]}
-          onToggle={handleToggle}
-          styles={componentStyles}
-          linearTransitionAnimation={linearTransitionAnimation}
-          listItemBottomSheetRef={listItemBottomSheetRef}
-          addTaskBottomSheetRef={addTaskBottomSheetRef}
-        />
-      </Animated.View>
+          <TodoSection
+            isTodosExpanded={expandStates.todos[0]}
+            onToggle={handleToggle}
+            styles={componentStyles}
+            linearTransitionAnimation={linearTransitionAnimation}
+            listItemBottomSheetRef={listItemBottomSheetRef}
+            addTaskBottomSheetRef={addTaskBottomSheetRef}
+          />
+        </Animated.View>
+      </ScrollView>
     </View>
   );
 }
@@ -129,5 +141,24 @@ const styles = ScaledSheet.create({
     fontSize: '20@ms',
     fontFamily: Theme.fontFamily.regular,
     paddingVertical: '4@vs',
+  },
+  scrollContentContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  debugInfo: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 5,
+    borderRadius: 5,
+    zIndex: 1000,
+  },
+  debugText: {
+    fontSize: '12@ms',
+    fontFamily: Theme.fontFamily.regular,
+    color: Theme.colors.textSecondary,
   },
 });

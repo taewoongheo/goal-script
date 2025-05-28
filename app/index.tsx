@@ -1,4 +1,4 @@
-import {View, Dimensions} from 'react-native';
+import {View} from 'react-native';
 import Animated, {
   LinearTransition,
   FadeIn,
@@ -15,6 +15,7 @@ import {TodoSection} from '@/components/mainScreen/TodoSection';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
+import {viewportHeight} from '@/utils/viewport';
 
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
@@ -60,9 +61,7 @@ export default function MainScreen() {
           style={styles.textContainer}
           layout={linearTransitionAnimation}
           onLayout={e => {
-            setIsScrollable(
-              e.nativeEvent.layout.height > Dimensions.get('window').height,
-            );
+            setIsScrollable(e.nativeEvent.layout.height > viewportHeight);
           }}>
           <GoalSection
             isGoalExpanded={expandStates.goal[0]}

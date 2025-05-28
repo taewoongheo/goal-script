@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Feather, FontAwesome6} from '@expo/vector-icons';
 import {Pressable} from 'react-native-gesture-handler';
-import {getViewportWidth} from '@/utils/viewport';
+import {viewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
@@ -40,7 +40,7 @@ export function TaskSection({
   const heightMeasured = useRef(false);
 
   const containerPadding = useMemo(
-    () => ((1 - Layout.padding.horizontal) * getViewportWidth()) / 2,
+    () => ((1 - Layout.padding.horizontal) * viewportWidth) / 2,
     [],
   );
 
@@ -126,7 +126,7 @@ export function TaskSection({
               {
                 backgroundColor: HighlightColor.light,
                 height,
-                width: getViewportWidth(),
+                width: viewportWidth,
                 left: -containerPadding,
                 top: selectedIdx * height,
               },

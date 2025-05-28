@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {getViewportWidth} from '@/utils/viewport';
+import {viewportWidth} from '@/utils/viewport';
 import {Layout as LayoutConstants} from '@/constants/Layout';
 import {Theme} from '@/constants/Theme';
 
@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   hiddenText: {
     position: 'absolute',
-    width: getViewportWidth() * LayoutConstants.padding.horizontal,
+    width: viewportWidth * LayoutConstants.padding.horizontal,
     top: 1000,
     left: 0,
     right: 0,

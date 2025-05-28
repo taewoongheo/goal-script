@@ -23,7 +23,7 @@ export const Colors = {
     formBackground: '#F9F9F9',
     calendarBackground: '#ffffff',
     white: 'white',
-    lightGray: '#eeeeee',
+    lightGray: 'rgb(234, 234, 234)',
     gray: '#999',
     primary: '#4A6FFF',
     lineHighlight: 'rgb(217, 255, 0)',
@@ -47,6 +47,7 @@ export const Colors = {
     lightGray: '#333333',
     gray: '#777',
     primary: '#6A8FFF',
+    lineHighlight: 'rgb(255, 255, 100)',
   },
 };
 

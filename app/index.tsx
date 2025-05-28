@@ -15,9 +15,6 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
 
-// TODO: \u200B 제로 너비 공백 처리 -> 한글영문이 붙어있을 때 바로 줄바꿈되는 문제
-//  title: 웹사이트 리뉴얼리qwwqqwqqqwqw뉴qq
-
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
 

@@ -11,12 +11,12 @@ import Animated, {
   FadeOut,
   LinearTransition,
 } from 'react-native-reanimated';
-import {FontAwesome6} from '@expo/vector-icons';
+import {Feather, FontAwesome6} from '@expo/vector-icons';
 import {Pressable} from 'react-native-gesture-handler';
 import {getViewportWidth} from '@/utils/viewport';
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
-import {HighlightColor} from '@/constants/Colors';
+import {Colors, HighlightColor} from '@/constants/Colors';
 import {TaskSectionProps} from './types';
 import {Theme} from '@/constants/Theme';
 
@@ -59,6 +59,17 @@ export function TaskSection({
   );
 
   const highlightFadeOut = useMemo(() => FadeOut, []);
+
+  const addTaskFadeInAnimation = useMemo(
+    () =>
+      FadeIn.duration(ANIMATION_DURATION.LIST_ITEM_ANIMATION.FADE_IN).delay(
+        ANIMATION_DURATION.LIST_ITEM_ANIMATION.ITEM_ANIMATION_DELAY *
+          (items.length + 1),
+      ),
+    [items.length],
+  );
+
+  const addTaskFadeOutAnimation = useMemo(() => FadeOut, []);
 
   const getHeight = useCallback((event: LayoutChangeEvent) => {
     if (!heightMeasured.current) {
@@ -143,6 +154,21 @@ export function TaskSection({
                   })}
                 </React.Fragment>
               ))}
+              {title === 'todos' && (
+                <Pressable onPress={() => console.log('add task')}>
+                  <Animated.View
+                    layout={linearTransitionAnimation}
+                    entering={addTaskFadeInAnimation}
+                    exiting={addTaskFadeOutAnimation}
+                    style={localStyles.addTaskButton}>
+                    <Feather
+                      name="plus"
+                      size={Theme.iconSize.medium}
+                      color={Theme.colors.text}
+                    />
+                  </Animated.View>
+                </Pressable>
+              )}
             </View>
           )}
         </Animated.View>
@@ -177,5 +203,15 @@ const localStyles = StyleSheet.create({
   },
   headerTextContainer: {
     flex: 1,
+  },
+  addTaskButton: {
+    width: '100%',
+    backgroundColor: Theme.colors.lightGray,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Theme.spacing.small,
+    borderRadius: Theme.borderRadius.small,
+    marginVertical: Theme.spacing.small,
   },
 });

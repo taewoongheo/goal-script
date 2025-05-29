@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef, useMemo} from 'react';
+import React, {useState, useCallback, useRef, useMemo, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,12 +13,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Feather, FontAwesome6} from '@expo/vector-icons';
 import {Pressable} from 'react-native-gesture-handler';
-import {viewportWidth} from '@/utils/viewport';
+
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
 import {TaskSectionProps} from './types';
 import {Theme} from '@/constants/Theme';
+import {viewportWidth} from '@/utils/viewport';
 
 export function TaskSection({
   items,
@@ -38,6 +39,10 @@ export function TaskSection({
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const heightMeasured = useRef(false);
+
+  useEffect(() => {
+    setSelectedIdx(prev => (prev === 0 ? 0 : prev - 1));
+  }, [items.length]);
 
   const containerPadding = useMemo(
     () => ((1 - Layout.padding.horizontal) * viewportWidth) / 2,
@@ -71,6 +76,7 @@ export function TaskSection({
 
   const addTaskFadeOutAnimation = useMemo(() => FadeOut, []);
 
+  // TODO: useMemo 로 변경
   const getHeight = useCallback((event: LayoutChangeEvent) => {
     if (!heightMeasured.current) {
       setHeight(event.nativeEvent.layout.height);
@@ -196,7 +202,7 @@ const localStyles = StyleSheet.create({
   },
   dropdownOverride: {
     position: 'relative',
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -213,6 +219,6 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     padding: Theme.spacing.small,
     borderRadius: Theme.borderRadius.small,
-    marginVertical: Theme.spacing.medium,
+    marginVertical: Theme.spacing.small,
   },
 });

@@ -9,7 +9,7 @@ export const commonBottomSheetProps = {
   keyboardBehavior: 'interactive' as const,
   keyboardBlurBehavior: 'restore' as const,
   android_keyboardInputMode: 'adjustResize' as const,
-  enableDynamicSizing: false,
+  enableDynamicSizing: true,
 };
 
 export const commonStyles = {

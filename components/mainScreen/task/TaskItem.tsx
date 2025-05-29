@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -69,9 +69,7 @@ export function TaskItem({
   };
 
   const handleOpenBottomSheet = () => {
-    // 선택된 작업 설정
     setSelectedTask(item);
-    // 바텀시트 열기
     listItemBottomSheetRef?.current?.expand();
   };
 

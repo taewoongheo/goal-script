@@ -43,8 +43,6 @@ export function ListItemBottomSheet({
     }
   };
 
-  if (!selectedTask) return null;
-
   return (
     <View style={styles.container}>
       {/* Input field */}
@@ -65,12 +63,12 @@ export function ListItemBottomSheet({
       {/* Action buttons */}
       <View style={styles.footerSection}>
         <BottomSheetButton
-          label={selectedTask.completed ? '수정하기' : '수정하기'}
+          label={selectedTask?.completed ? '수정하기' : '수정하기'}
           onPress={handleEditTask}
           type="primary"
         />
         <BottomSheetButton
-          label={selectedTask.completed ? '기록 삭제' : '할 일 삭제'}
+          label={selectedTask?.completed ? '기록 삭제' : '할 일 삭제'}
           onPress={handleDeleteTask}
           type="text"
         />
@@ -84,6 +82,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.large,
     paddingVertical: Theme.spacing.medium,
     backgroundColor: Colors.light.white,
+    marginBottom: Theme.spacing.xl,
   },
   inputContainer: {
     marginBottom: Theme.spacing.medium,

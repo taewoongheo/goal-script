@@ -16,7 +16,7 @@ interface DDayBottomSheetContainerProps {
 export function DDayBottomSheetContainer({
   bottomSheetRef,
 }: DDayBottomSheetContainerProps) {
-  const snapPoints = useMemo(() => ['65%'], []);
+  // const snapPoints = useMemo(() => ['65%'], []);
   const {actions} = useGoalData();
   const goalData = useGoalStore(state => state.goalData);
 
@@ -47,7 +47,7 @@ export function DDayBottomSheetContainer({
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={snapPoints}
+      // snapPoints={snapPoints}
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleSheetChanges}

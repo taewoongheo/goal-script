@@ -16,7 +16,7 @@ interface GoalBottomSheetContainerProps {
 export function GoalBottomSheetContainer({
   bottomSheetRef,
 }: GoalBottomSheetContainerProps) {
-  const snapPoints = useMemo(() => ['50%'], []);
+  // const snapPoints = useMemo(() => ['70%'], []);
   const [goalSheetKey, setGoalSheetKey] = useState(0);
   const {actions} = useGoalData();
   const goalData = useGoalStore(state => state.goalData);
@@ -51,7 +51,6 @@ export function GoalBottomSheetContainer({
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={snapPoints}
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleGoalSheetChanges}

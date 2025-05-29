@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
+import {Pressable} from 'react-native-gesture-handler';
 import {View, Text, StyleSheet} from 'react-native';
 import {Calendar, DateData} from 'react-native-calendars';
 import {FontAwesome} from '@expo/vector-icons';
@@ -171,20 +172,25 @@ export function DDayBottomSheet({
         <Text style={styles.headerText}>
           {calculatedDDay > 0 ? `D-${calculatedDDay}` : 'D-Day'}
         </Text>
-        <Text
-          style={{
-            marginLeft: Theme.spacing.small,
-            fontSize: Theme.fontSize.medium,
-            fontFamily: Theme.fontFamily.bold,
-            color: Theme.colors.highlight,
-            marginRight: Theme.iconSpace.small,
-            backgroundColor: Theme.colors.lineHighlight,
-            borderRadius: Theme.borderRadius.small,
-            paddingHorizontal: Theme.iconSpace.medium,
-            paddingVertical: Theme.iconSpace.small,
+        <Pressable
+          onPress={() => {
+            console.log('LOG: selectedDate', selectedDate);
           }}>
-          {dateUtils.formatToAppDate(dateUtils.parseDate(selectedDate))}
-        </Text>
+          <Text
+            style={{
+              marginLeft: Theme.spacing.small,
+              fontSize: Theme.fontSize.medium,
+              fontFamily: Theme.fontFamily.bold,
+              color: Theme.colors.highlight,
+              marginRight: Theme.iconSpace.small,
+              backgroundColor: Theme.colors.lineHighlight,
+              borderRadius: Theme.borderRadius.small,
+              paddingHorizontal: Theme.iconSpace.medium,
+              paddingVertical: Theme.iconSpace.small,
+            }}>
+            {dateUtils.formatToAppDate(dateUtils.parseDate(selectedDate))}
+          </Text>
+        </Pressable>
         {calculatedDDay > 0 && (
           <Text
             style={{

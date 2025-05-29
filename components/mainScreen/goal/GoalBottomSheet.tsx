@@ -128,8 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.large,
     paddingVertical: Theme.spacing.medium,
     backgroundColor: Theme.colors.dropdownBackground,
-    borderTopLeftRadius: Theme.borderRadius.large + 8, // 20
-    borderTopRightRadius: Theme.borderRadius.large + 8, // 20
+    marginBottom: Theme.spacing.xl,
   },
   headerRow: {
     flexDirection: 'row',

@@ -76,7 +76,6 @@ export function TaskSection({
 
   const addTaskFadeOutAnimation = useMemo(() => FadeOut, []);
 
-  // TODO: useMemo 로 변경
   const getHeight = useCallback((event: LayoutChangeEvent) => {
     if (!heightMeasured.current) {
       setHeight(event.nativeEvent.layout.height);

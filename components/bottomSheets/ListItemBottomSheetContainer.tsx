@@ -20,7 +20,7 @@ export function ListItemBottomSheetContainer({
   selectedTask,
   setSelectedTask,
 }: ListItemBottomSheetContainerProps) {
-  const listItemSnapPoints = useMemo(() => ['35%'], []);
+  // const listItemSnapPoints = useMemo(() => ['35%'], []);
   const {actions} = useGoalData();
 
   const renderBackdrop = useCallback(
@@ -79,7 +79,7 @@ export function ListItemBottomSheetContainer({
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={listItemSnapPoints}
+      // snapPoints={listItemSnapPoints}
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleSheetChanges}

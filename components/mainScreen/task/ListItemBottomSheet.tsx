@@ -1,8 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Keyboard} from 'react-native';
 import {scale} from 'react-native-size-matters';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
-import {TextInput} from 'react-native-gesture-handler';
+import {Pressable, TextInput} from 'react-native-gesture-handler';
 import {useSelectedTask} from '@/app/_layout';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
@@ -44,7 +44,7 @@ export function ListItemBottomSheet({
   };
 
   return (
-    <View style={styles.container}>
+    <Pressable onPress={() => Keyboard.dismiss()} style={styles.container}>
       {/* Input field */}
       <View style={styles.inputContainer}>
         <BottomSheetTextInput
@@ -73,7 +73,7 @@ export function ListItemBottomSheet({
           type="text"
         />
       </View>
-    </View>
+    </Pressable>
   );
 }
 

@@ -1,6 +1,8 @@
 import {differenceInCalendarDays} from 'date-fns';
 import {useGoalStore} from '@/stores/goalStore';
 import {
+  prepareInsertGoal,
+  prepareSelectAllGoals,
   prepareUpdateTitleGoal,
   prepareUpdateDateGoal,
   prepareDeleteGoal,
@@ -10,6 +12,37 @@ import {dateUtils} from '@/utils/dateUtils';
 export function useGoalOperations() {
   const updateGoalData = useGoalStore(state => state.updateGoalData);
   const goalData = useGoalStore(state => state.goalData);
+
+  const insertGoal = async (newGoal: {
+    id: string;
+    title: string;
+    icon: string;
+    dDay_date: string;
+  }) => {
+    try {
+      const insertQuery = await prepareInsertGoal();
+      await insertQuery.executeAsync({
+        $id: newGoal.id,
+        $title: newGoal.title,
+        $icon: newGoal.icon,
+        $dDay_date: newGoal.dDay_date,
+      });
+    } catch (e) {
+      console.error('DB insertGoal error:', e);
+      throw e;
+    }
+  };
+
+  const getAllGoals = async () => {
+    try {
+      const selectQuery = await prepareSelectAllGoals();
+      const result = await selectQuery.executeAsync();
+      return await result.getAllAsync();
+    } catch (e) {
+      console.error('DB getAllGoals error:', e);
+      throw e;
+    }
+  };
 
   const updateTitle = async (newTitle: string) => {
     if (!newTitle.trim()) return;
@@ -76,6 +109,8 @@ export function useGoalOperations() {
   };
 
   return {
+    insertGoal,
+    getAllGoals,
     updateTitle,
     updateDate,
     deleteGoal,

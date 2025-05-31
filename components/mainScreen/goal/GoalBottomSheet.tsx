@@ -9,6 +9,7 @@ import {TaskItem} from '@/types/goal';
 import {viewportWidth} from '@/utils/viewport';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {Colors} from '@/constants/Colors';
+import {useGoalData} from '@/hooks/useGoalData';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -32,6 +33,8 @@ export function GoalBottomSheet({
   bottomSheetRef,
   setEditModeHeight,
 }: GoalBottomSheetProps) {
+  const {actions} = useGoalData();
+
   const [editableTitle, setEditableTitle] = useState(title);
   const [tempEditableTitle, setTempEditableTitle] = useState(title);
   const titleInputRef = useRef<TextInput>(null);
@@ -67,7 +70,6 @@ export function GoalBottomSheet({
     if (onTitleChange) {
       onTitleChange(tempEditableTitle);
     }
-    handleSwitchToMain();
   };
 
   return (

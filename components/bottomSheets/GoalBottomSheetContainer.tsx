@@ -5,7 +5,6 @@ import BottomSheet, {
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
-import {useGoalData} from '@/hooks/useGoalData';
 import {useGoalStore} from '@/stores/goalStore';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
 
@@ -44,7 +43,6 @@ export function GoalBottomSheetContainer({
   }, []);
 
   const [goalSheetKey, setGoalSheetKey] = useState(0);
-  const {actions} = useGoalData();
   const goalData = useGoalStore(state => state.goalData);
 
   const renderBackdrop = useCallback(
@@ -94,8 +92,6 @@ export function GoalBottomSheetContainer({
           achieved={achieved}
           dDay={dDay}
           rDay={rDay}
-          onTitleChange={actions.goal.updateTitle}
-          onDeleteGoal={actions.goal.deleteGoal}
           bottomSheetRef={bottomSheetRef}
           setEditModeHeight={setEditModeHeight}
         />

@@ -23,7 +23,18 @@ export function useGoalData() {
         edit: (taskId: string, newText: string) =>
           taskOps.editTask(taskId, newText, 'achieved'),
       },
-      goal: goalOps,
+      goal: {
+        updateTitle: (newTitle: string) => goalOps.updateTitle(newTitle),
+        updateDate: (newDate: string) => goalOps.updateDate(newDate),
+        deleteGoal: () => goalOps.deleteGoal(),
+        insertGoal: (newGoal: {
+          id: string;
+          title: string;
+          icon: string;
+          dDay_date: string;
+        }) => goalOps.insertGoal(newGoal),
+        getAllGoals: () => goalOps.getAllGoals(),
+      },
     },
   };
 }

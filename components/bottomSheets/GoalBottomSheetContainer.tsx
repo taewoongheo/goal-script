@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Keyboard, Platform} from 'react-native';
 import BottomSheet, {
   BottomSheetView,
@@ -15,24 +15,21 @@ interface GoalBottomSheetContainerProps {
 
 // TODO:
 //  - 변경된 텍스트가 두 줄 이상 넘어가면 바텀시트 크기 변경시켜야됨
+
 export function GoalBottomSheetContainer({
   bottomSheetRef,
 }: GoalBottomSheetContainerProps) {
   const [editModeHeight, setEditModeHeight] = useState(1);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  // snapPoint = [두번째 화면, 첫번째 화면, 두번째 화면 + 키보드 크기]
-
   const snapPoints = useMemo(() => {
-    if (Platform.OS === 'ios') {
-      // iOS에서만 키보드 높이 수동 추가
-      if (keyboardHeight > 0) {
-        return [editModeHeight, editModeHeight + keyboardHeight];
-      }
-      return [editModeHeight]; // 키보드 없을 때는 하나만
+    const baseSnapPoints = [editModeHeight];
+
+    if (Platform.OS === 'ios' && keyboardHeight > 0) {
+      baseSnapPoints.push(editModeHeight + keyboardHeight);
     }
-    // 안드로이드는 라이브러리의 자동 처리에 맡김
-    return [editModeHeight];
+
+    return baseSnapPoints;
   }, [editModeHeight, keyboardHeight]);
 
   useEffect(() => {
@@ -69,7 +66,7 @@ export function GoalBottomSheetContainer({
   const handleGoalSheetChanges = useCallback((index: number) => {
     if (index === -1) {
       Keyboard.dismiss();
-      // BottomSheet가 닫힐 때 GoalBottomSheet 컴포넌트를 리렌더링하기 위해 key 변경
+      setKeyboardHeight(0);
       setGoalSheetKey(prev => prev + 1);
     }
   }, []);

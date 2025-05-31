@@ -3,8 +3,8 @@ import {View, Text, StyleSheet} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {Pressable} from 'react-native-gesture-handler';
 import {Ionicons} from '@expo/vector-icons';
-import {GoalLineProps} from './types';
 import {Theme} from '@/constants/Theme';
+import {GoalLineProps} from './types';
 
 export function GoalLine({
   line,

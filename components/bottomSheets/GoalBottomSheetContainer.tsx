@@ -1,5 +1,5 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {Keyboard} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Keyboard, Platform} from 'react-native';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -13,10 +13,42 @@ interface GoalBottomSheetContainerProps {
   bottomSheetRef: React.RefObject<BottomSheet>;
 }
 
+// TODO:
+//  - 변경된 텍스트가 두 줄 이상 넘어가면 바텀시트 크기 변경시켜야됨
 export function GoalBottomSheetContainer({
   bottomSheetRef,
 }: GoalBottomSheetContainerProps) {
-  // const snapPoints = useMemo(() => ['70%'], []);
+  const [editModeHeight, setEditModeHeight] = useState(1);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  // snapPoint = [두번째 화면, 첫번째 화면, 두번째 화면 + 키보드 크기]
+
+  const snapPoints = useMemo(() => {
+    if (Platform.OS === 'ios') {
+      // iOS에서만 키보드 높이 수동 추가
+      if (keyboardHeight > 0) {
+        return [editModeHeight, editModeHeight + keyboardHeight];
+      }
+      return [editModeHeight]; // 키보드 없을 때는 하나만
+    }
+    // 안드로이드는 라이브러리의 자동 처리에 맡김
+    return [editModeHeight];
+  }, [editModeHeight, keyboardHeight]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      event => {
+        const {height} = event.endCoordinates;
+        setKeyboardHeight(height);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const [goalSheetKey, setGoalSheetKey] = useState(0);
   const {actions} = useGoalData();
   const goalData = useGoalStore(state => state.goalData);
@@ -51,10 +83,15 @@ export function GoalBottomSheetContainer({
   return (
     <BottomSheet
       ref={bottomSheetRef}
+      snapPoints={snapPoints}
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleGoalSheetChanges}
-      {...commonBottomSheetProps}>
+      {...commonBottomSheetProps}
+      keyboardBehavior={Platform.OS === 'ios' ? 'extend' : 'interactive'}
+      keyboardBlurBehavior="none"
+      enablePanDownToClose={false}
+      enableHandlePanningGesture={false}>
       <BottomSheetView style={commonStyles.contentContainer}>
         <GoalBottomSheet
           key={goalSheetKey}
@@ -65,6 +102,8 @@ export function GoalBottomSheetContainer({
           rDay={rDay}
           onTitleChange={actions.goal.updateTitle}
           onDeleteGoal={actions.goal.deleteGoal}
+          bottomSheetRef={bottomSheetRef}
+          setEditModeHeight={setEditModeHeight}
         />
       </BottomSheetView>
     </BottomSheet>

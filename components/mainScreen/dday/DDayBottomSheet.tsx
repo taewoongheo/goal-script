@@ -4,6 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {Calendar, DateData} from 'react-native-calendars';
 import {FontAwesome} from '@expo/vector-icons';
 import {scale} from 'react-native-size-matters';
+import Animated, {LinearTransition} from 'react-native-reanimated';
 import {Theme} from '@/constants/Theme';
 import {dateUtils} from '@/utils/dateUtils';
 import '@/constants/CalendarLocale';
@@ -176,6 +177,11 @@ export function DDayBottomSheet({
           onPress={() => {
             console.log('LOG: selectedDate', selectedDate);
           }}>
+          {/* <Animated.View
+            layout={LinearTransition.springify()}
+            style={{
+              backgroundColor: 'red',
+            }}> */}
           <Text
             style={{
               marginLeft: Theme.spacing.small,
@@ -190,6 +196,7 @@ export function DDayBottomSheet({
             }}>
             {dateUtils.formatToAppDate(dateUtils.parseDate(selectedDate))}
           </Text>
+          {/* </Animated.View> */}
         </Pressable>
         {calculatedDDay > 0 && (
           <Text

@@ -1,13 +1,14 @@
 import React, {useState, useRef} from 'react';
 import {View, Text, Pressable, StyleSheet, Keyboard} from 'react-native';
-import {FontAwesome6, AntDesign, FontAwesome5} from '@expo/vector-icons';
-import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
+import {FontAwesome6, AntDesign} from '@expo/vector-icons';
 import {TextInput} from 'react-native-gesture-handler';
 import {moderateScale, scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
 import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
-import {Colors} from '@/constants/Colors';
 import {TaskItem} from '@/types/goal';
+import {viewportWidth} from '@/utils/viewport';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
+import {Colors} from '@/constants/Colors';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -17,19 +18,36 @@ interface GoalBottomSheetProps {
   rDay: string;
   onTitleChange?: (text: string) => void;
   onDeleteGoal?: () => void;
+  bottomSheetRef?: React.RefObject<any>;
+  setEditModeHeight: (height: number) => void;
 }
 
 export function GoalBottomSheet({
-  icon,
   title,
   achieved,
   dDay,
   rDay,
   onTitleChange,
   onDeleteGoal,
+  bottomSheetRef,
+  setEditModeHeight,
 }: GoalBottomSheetProps) {
   const [editableTitle, setEditableTitle] = useState(title);
   const titleInputRef = useRef<TextInput>(null);
+
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleSwitchToEdit = () => {
+    setIsEditMode(true);
+    console.log('snapToIndex 1');
+    bottomSheetRef?.current.snapToIndex(0);
+  };
+
+  const handleSwitchToMain = () => {
+    setIsEditMode(false);
+    console.log('snapToIndex 0');
+    bottomSheetRef?.current.snapToIndex(1);
+  };
 
   const handleEditGoal = (text: string) => {
     if (onTitleChange) {
@@ -44,80 +62,129 @@ export function GoalBottomSheet({
   };
 
   return (
-    <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
-      <View style={styles.headerRow}>
-        <View style={styles.iconContainer}>
-          <FontAwesome5
-            name={icon as any}
-            size={Theme.iconSize.medium}
-            color={Theme.colors.highlight}
-          />
-        </View>
-        {/* <Ionicons
-          name="chevron-down"
-          size={Theme.iconSize.small}
-          color={Theme.colors.highlight}
-          style={styles.dropdownIcon}
-        /> */}
-        <View style={styles.inputContainer}>
-          <BottomSheetTextInput
-            ref={titleInputRef}
-            value={editableTitle}
-            onChangeText={setEditableTitle}
-            style={styles.goalTitleInput}
-            placeholder="목표 이름을 입력해주세요"
-            placeholderTextColor={Colors.light.textSecondary}
-            autoCorrect={false}
-            spellCheck={false}
-          />
-          <View style={styles.underline} />
-        </View>
-      </View>
+    <Pressable
+      style={styles.container}
+      onPress={() => {
+        if (isEditMode) {
+          bottomSheetRef?.current.snapToIndex(0);
+          Keyboard.dismiss();
+          return;
+        }
+        Keyboard.dismiss();
+      }}>
+      <View style={styles.slideContainer}>
+        {!isEditMode ? (
+          // 첫 번째 뷰 - 메인
+          <View style={styles.slideView}>
+            <Pressable onPress={handleSwitchToEdit} style={styles.headerRow}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.goalTitleInput}>{editableTitle}</Text>
+              </View>
+              <AntDesign
+                name="right"
+                size={Theme.iconSize.medium}
+                color={Theme.colors.highlight}
+              />
+            </Pressable>
 
-      {/* 상단 통계 섹션 */}
-      <View style={styles.statsContainer}>
-        {/* 달성한 할 일들 achieved.length */}
-        <View style={styles.statItem}>
-          <View style={styles.statIconContainer}>
-            <FontAwesome6
-              name="fire"
-              size={Theme.iconSize.large}
-              color={Theme.colors.highlight}
-            />
+            {/* 상단 통계 섹션 */}
+            <View style={styles.statsContainer}>
+              {/* 달성한 할 일들 achieved.length */}
+              <View style={styles.statItem}>
+                <View style={styles.statIconContainer}>
+                  <FontAwesome6
+                    name="fire"
+                    size={Theme.iconSize.large}
+                    color={Theme.colors.highlight}
+                  />
+                </View>
+                <Text style={styles.statValue}>{achieved.length}</Text>
+                <Text style={styles.statLabel}>완료한 일들</Text>
+              </View>
+
+              {/* 남은 날짜들 rDay */}
+              <View style={styles.statItem}>
+                <View style={styles.statIconContainer}>
+                  <AntDesign
+                    name="clockcircle"
+                    size={Theme.iconSize.large}
+                    color={Theme.colors.highlight}
+                  />
+                </View>
+                <Text style={styles.statValue}>D-{dDay}</Text>
+                <Text style={styles.statLabel}>{rDay}</Text>
+              </View>
+            </View>
+
+            {/* 완료 및 삭제 */}
+            <View style={styles.footerSection}>
+              {/* 완료 버튼 */}
+              <BottomSheetButton
+                label="목표 완료하기"
+                onPress={() => handleEditGoal(editableTitle)}
+                type="primary"
+              />
+
+              {/* 삭제 버튼 */}
+              <BottomSheetButton
+                label="목표 삭제"
+                onPress={handleDeleteGoal}
+                type="text"
+              />
+            </View>
           </View>
-          <Text style={styles.statValue}>{achieved.length}</Text>
-          <Text style={styles.statLabel}>완료한 일들</Text>
-        </View>
+        ) : (
+          // 두 번째 뷰 - 편집
+          <View
+            style={[styles.slideView]}
+            onLayout={e => {
+              console.log('두번째 뷰 크기: ', e.nativeEvent.layout.height);
+              setEditModeHeight(e.nativeEvent.layout.height);
+            }}>
+            <Pressable
+              onPress={() => {
+                Keyboard.dismiss();
+                handleSwitchToMain();
+              }}
+              style={[{width: scale(30)}]}>
+              <AntDesign
+                name="arrowleft"
+                size={Theme.iconSize.medium}
+                color={Theme.colors.highlight}
+              />
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                bottomSheetRef?.current.snapToIndex(0);
+                Keyboard.dismiss();
+              }}
+              style={[styles.container]}>
+              {/* Input field */}
+              <View style={styles.editTextInputContainer}>
+                <BottomSheetTextInput
+                  ref={titleInputRef}
+                  value={editableTitle}
+                  onChangeText={setEditableTitle}
+                  style={styles.editTextInput}
+                  placeholder="작업 내용을 입력하세요"
+                  multiline={false}
+                  returnKeyType="done"
+                  autoCorrect={false}
+                  spellCheck={false}
+                />
+              </View>
 
-        {/* 남은 날짜들 rDay */}
-        <View style={styles.statItem}>
-          <View style={styles.statIconContainer}>
-            <AntDesign
-              name="clockcircle"
-              size={Theme.iconSize.large}
-              color={Theme.colors.highlight}
-            />
+              {/* Action buttons */}
+              <View style={styles.editActionsContainer}>
+                <BottomSheetButton
+                  label="수정하기"
+                  onPress={() => console.log('수정하기')}
+                  type="primary"
+                />
+              </View>
+            </Pressable>
           </View>
-          <Text style={styles.statValue}>D-{dDay}</Text>
-          <Text style={styles.statLabel}>{rDay}</Text>
-        </View>
-      </View>
-
-      {/* 완료 및 삭제 */}
-      <View style={styles.footerSection}>
-        {/* 완료 버튼 */}
-        <BottomSheetButton
-          label="목표 이름 수정하기"
-          onPress={() => handleEditGoal(editableTitle)}
-          type="primary"
-        />
-
-        {/* 삭제 버튼 */}
-        <BottomSheetButton
-          label="목표 삭제"
-          onPress={handleDeleteGoal}
-          type="text"
-        />
+        )}
       </View>
     </Pressable>
   );
@@ -125,41 +192,35 @@ export function GoalBottomSheet({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: Theme.spacing.large,
     paddingVertical: Theme.spacing.medium,
     backgroundColor: Theme.colors.dropdownBackground,
-    marginBottom: Theme.spacing.xl,
+    paddingBottom: Theme.spacing.xl,
+  },
+  slideContainer: {
+    // flexDirection: 'row' 제거됨
+  },
+  slideView: {
+    width: viewportWidth,
+    paddingHorizontal: Theme.spacing.large,
+    // paddingBottom: Theme.spacing.large,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Theme.spacing.large - scale(2),
-  },
-  iconContainer: {
-    width: Theme.iconSize.large + scale(18),
-    height: Theme.iconSize.large + scale(18),
-    backgroundColor: Colors.light.inputBackground,
+    marginBottom: Theme.spacing.large,
+    backgroundColor: 'rgb(245, 245, 245)',
+    paddingVertical: Theme.spacing.small,
+    paddingHorizontal: Theme.spacing.medium,
     borderRadius: Theme.borderRadius.medium,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: Theme.iconSpace.medium,
   },
   inputContainer: {
     flex: 1,
   },
   goalTitleInput: {
-    fontSize: Theme.fontSize.large - scale(5),
-    fontFamily: Theme.fontFamily.regular,
+    fontSize: moderateScale(18),
+    fontFamily: Theme.fontFamily.semiBold,
     color: Theme.colors.highlight,
     paddingVertical: Theme.spacing.xs * scale(1.5),
-  },
-  underline: {
-    height: scale(1),
-    backgroundColor: Colors.light.buttonDisabled,
-  },
-  dropdownIcon: {
-    marginHorizontal: Theme.spacing.xs,
-    marginRight: Theme.spacing.medium - scale(4),
   },
   footerSection: {
     flexDirection: 'column',
@@ -171,6 +232,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: Theme.spacing.medium,
+    gap: 10,
   },
   statItem: {
     alignItems: 'center',
@@ -195,5 +257,26 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.regular,
     color: Theme.colors.textSecondary,
     flex: 0.3,
+  },
+  editTextInputContainer: {
+    marginBottom: Theme.spacing.medium,
+  },
+  editTextInput: {
+    fontSize: Theme.fontSize.small,
+    fontFamily: Theme.fontFamily.regular,
+    paddingVertical: Theme.spacing.medium - scale(2),
+    paddingHorizontal: Theme.spacing.small,
+    borderWidth: 1,
+    borderColor: Colors.light.buttonDisabled,
+    borderRadius: Theme.borderRadius.medium,
+    backgroundColor: Colors.light.formBackground,
+    color: Theme.colors.highlight,
+  },
+  editActionsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    gap: Theme.spacing.medium,
+    alignItems: 'center',
+    paddingBottom: Theme.spacing.xxl,
   },
 });

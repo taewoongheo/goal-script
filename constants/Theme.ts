@@ -39,6 +39,7 @@ export const Theme = {
     medium: scale(16),
     large: scale(24),
     xl: scale(32),
+    xxl: scale(42),
   },
 
   padding: {

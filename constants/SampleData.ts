@@ -41,7 +41,7 @@ export const websiteProject: GoalData = {
 
 export const marathonPreparation: GoalData = {
   id: generateUUID(),
-  title: '마라톤봄 마라톤',
+  title: '봄 마라톤',
   icon: 'flag-checkered',
   dDay: {
     date: '25.10.15',

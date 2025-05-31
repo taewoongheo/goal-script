@@ -33,19 +33,20 @@ export function GoalBottomSheet({
   setEditModeHeight,
 }: GoalBottomSheetProps) {
   const [editableTitle, setEditableTitle] = useState(title);
+  const [tempEditableTitle, setTempEditableTitle] = useState(title);
   const titleInputRef = useRef<TextInput>(null);
 
   const [isEditMode, setIsEditMode] = useState(false);
 
   const handleSwitchToEdit = () => {
     setIsEditMode(true);
-    console.log('snapToIndex 1');
+    setTempEditableTitle(editableTitle);
     bottomSheetRef?.current.snapToIndex(0);
   };
 
   const handleSwitchToMain = () => {
     setIsEditMode(false);
-    console.log('snapToIndex 0');
+    setTempEditableTitle(editableTitle);
     bottomSheetRef?.current.snapToIndex(1);
   };
 
@@ -61,6 +62,14 @@ export function GoalBottomSheet({
     }
   };
 
+  const handleConfirmEdit = () => {
+    setEditableTitle(tempEditableTitle);
+    if (onTitleChange) {
+      onTitleChange(tempEditableTitle);
+    }
+    handleSwitchToMain();
+  };
+
   return (
     <Pressable
       style={styles.container}
@@ -72,7 +81,7 @@ export function GoalBottomSheet({
         }
         Keyboard.dismiss();
       }}>
-      <View style={styles.slideContainer}>
+      <View>
         {!isEditMode ? (
           // 첫 번째 뷰 - 메인
           <View style={styles.slideView}>
@@ -138,7 +147,6 @@ export function GoalBottomSheet({
           <View
             style={[styles.slideView]}
             onLayout={e => {
-              console.log('두번째 뷰 크기: ', e.nativeEvent.layout.height);
               setEditModeHeight(e.nativeEvent.layout.height);
             }}>
             <Pressable
@@ -163,8 +171,8 @@ export function GoalBottomSheet({
               <View style={styles.editTextInputContainer}>
                 <BottomSheetTextInput
                   ref={titleInputRef}
-                  value={editableTitle}
-                  onChangeText={setEditableTitle}
+                  value={tempEditableTitle}
+                  onChangeText={setTempEditableTitle}
                   style={styles.editTextInput}
                   placeholder="작업 내용을 입력하세요"
                   multiline={false}
@@ -178,7 +186,7 @@ export function GoalBottomSheet({
               <View style={styles.editActionsContainer}>
                 <BottomSheetButton
                   label="수정하기"
-                  onPress={() => console.log('수정하기')}
+                  onPress={handleConfirmEdit}
                   type="primary"
                 />
               </View>
@@ -196,13 +204,9 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.dropdownBackground,
     paddingBottom: Theme.spacing.xl,
   },
-  slideContainer: {
-    // flexDirection: 'row' 제거됨
-  },
   slideView: {
     width: viewportWidth,
     paddingHorizontal: Theme.spacing.large,
-    // paddingBottom: Theme.spacing.large,
   },
   headerRow: {
     flexDirection: 'row',
@@ -277,6 +281,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: Theme.spacing.medium,
     alignItems: 'center',
-    paddingBottom: Theme.spacing.xxl,
+    paddingBottom: scale(57),
   },
 });

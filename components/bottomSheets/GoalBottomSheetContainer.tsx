@@ -13,9 +13,6 @@ interface GoalBottomSheetContainerProps {
   bottomSheetRef: React.RefObject<BottomSheet>;
 }
 
-// TODO:
-//  - 변경된 텍스트가 두 줄 이상 넘어가면 바텀시트 크기 변경시켜야됨
-
 export function GoalBottomSheetContainer({
   bottomSheetRef,
 }: GoalBottomSheetContainerProps) {

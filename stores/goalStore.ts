@@ -4,7 +4,8 @@ import {differenceInCalendarDays} from 'date-fns';
 import {GoalData} from '@/types/goal';
 import {prepareSelectAllGoals} from '@/models/goal.queries';
 import {prepareSelectTaskItemsByGoal} from '@/models/taskitem.queries';
-import dateUtils from '@/utils/dateUtils';
+import {dateUtils} from '@/utils/dateUtils';
+import {intToBool} from '@/models/goal';
 
 async function loadGoalDataFromDB(): Promise<GoalData | null> {
   const selectGoalsStmt = await prepareSelectAllGoals();
@@ -24,11 +25,11 @@ async function loadGoalDataFromDB(): Promise<GoalData | null> {
       const tasks = (await tasksResult.getAllAsync()) as any[];
 
       const achieved = tasks
-        .filter((t: any) => !!t.completed)
-        .map((t: any) => ({id: t.id, text: t.text, completed: true}));
+        .filter((t: any) => intToBool(t.isCompleted))
+        .map((t: any) => ({id: t.id, text: t.text, isCompleted: true}));
       const todos = tasks
-        .filter((t: any) => !t.completed)
-        .map((t: any) => ({id: t.id, text: t.text, completed: false}));
+        .filter((t: any) => !intToBool(t.isCompleted))
+        .map((t: any) => ({id: t.id, text: t.text, isCompleted: false}));
 
       const today = new Date();
       const dDayDate = dateUtils.parseDate(goal.dDay_date);

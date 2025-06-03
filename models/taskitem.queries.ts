@@ -3,8 +3,8 @@ import {dbPromise} from './goal';
 export async function prepareInsertTaskItem() {
   const db = await dbPromise;
   return db.prepareAsync(
-    `INSERT INTO TaskItem (id, goal_id, text, completed)
-     VALUES ($id, $goal_id, $text, $completed)`,
+    `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
+     VALUES ($id, $goal_id, $text, $isCompleted)`,
   );
 }
 
@@ -26,6 +26,6 @@ export async function prepareDeleteTaskItem() {
 export async function prepareUpdateTaskCompletion() {
   const db = await dbPromise;
   return db.prepareAsync(
-    `UPDATE TaskItem SET completed = $completed WHERE id = $id`,
+    `UPDATE TaskItem SET isCompleted = $isCompleted WHERE id = $id`,
   );
 }

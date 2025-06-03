@@ -15,7 +15,7 @@ export async function initGoalTables(): Promise<void> {
       id TEXT PRIMARY KEY NOT NULL,
       goal_id TEXT NOT NULL,
       text TEXT NOT NULL,
-      completed INTEGER NOT NULL,
+      isCompleted INTEGER NOT NULL,
       FOREIGN KEY(goal_id) REFERENCES Goal(id)
     );
   `);

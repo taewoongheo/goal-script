@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 import {Keyboard} from 'react-native';
 import BottomSheet, {
   BottomSheetView,
@@ -50,7 +50,7 @@ export function ListItemBottomSheetContainer({
     (taskId: string, newText: string) => {
       if (!selectedTask) return;
 
-      if (selectedTask.completed) {
+      if (selectedTask.isCompleted) {
         actions.achieved.edit(taskId, newText);
       } else {
         actions.todo.edit(taskId, newText);
@@ -65,7 +65,7 @@ export function ListItemBottomSheetContainer({
     (taskId: string) => {
       if (!selectedTask) return;
 
-      if (selectedTask.completed) {
+      if (selectedTask.isCompleted) {
         actions.achieved.remove(taskId);
       } else {
         actions.todo.remove(taskId);

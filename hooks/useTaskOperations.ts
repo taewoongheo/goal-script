@@ -40,8 +40,8 @@ export function useTaskOperations() {
       updateGoalData(draft => {
         const taskIndex = draft[source].findIndex(task => task.id === taskId);
         if (taskIndex !== -1) {
-          const originalCompleted = source === 'achieved';
-          draft[source][taskIndex].completed = originalCompleted;
+          const originalIsCompleted = source === 'achieved';
+          draft[source][taskIndex].isCompleted = originalIsCompleted;
         }
       });
 
@@ -57,8 +57,8 @@ export function useTaskOperations() {
     updateGoalData(draft => {
       const taskIndex = draft[source].findIndex(task => task.id === taskId);
       if (taskIndex !== -1) {
-        const newCompleted = source === 'todos';
-        draft[source][taskIndex].completed = newCompleted;
+        const newIsCompleted = source === 'todos';
+        draft[source][taskIndex].isCompleted = newIsCompleted;
       }
     });
   };
@@ -86,7 +86,7 @@ export function useTaskOperations() {
         const updateQuery = await prepareUpdateTaskCompletion();
         await updateQuery.executeAsync({
           $id: taskId,
-          $completed: source !== 'todos' ? 0 : 1,
+          $isCompleted: source !== 'todos' ? 0 : 1,
         });
       } catch (e) {
         console.error('DB updateTaskCompletion error:', e);
@@ -107,11 +107,11 @@ export function useTaskOperations() {
   };
 
   const addTask = async (text: string, source: TaskSource) => {
-    const completed = source === 'achieved';
+    const isCompleted = source === 'achieved';
     const newTask: TaskItem = {
       id: generateUUID(),
       text,
-      completed,
+      isCompleted,
     };
 
     // UI update
@@ -131,7 +131,7 @@ export function useTaskOperations() {
         $id: newTask.id,
         $goal_id: goalData.id,
         $text: newTask.text,
-        $completed: newTask.completed ? 1 : 0,
+        $isCompleted: newTask.isCompleted ? 1 : 0,
       });
     } catch (e) {
       console.error('DB insertTaskToDB error:', e);

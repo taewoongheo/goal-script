@@ -3,10 +3,10 @@ import {View, StyleSheet, Keyboard} from 'react-native';
 import {scale} from 'react-native-size-matters';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {Pressable, TextInput} from 'react-native-gesture-handler';
-import {useSelectedTask} from '@/app/_layout';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
 import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
+import {useSelectedTask} from '@/app/_layout';
 
 interface ListItemBottomSheetProps {
   onEditItem?: (taskId: string, newText: string) => void;
@@ -63,12 +63,12 @@ export function ListItemBottomSheet({
       {/* Action buttons */}
       <View style={styles.footerSection}>
         <BottomSheetButton
-          label={selectedTask?.completed ? '수정하기' : '수정하기'}
+          label={selectedTask?.isCompleted ? '수정하기' : '수정하기'}
           onPress={handleEditTask}
           type="primary"
         />
         <BottomSheetButton
-          label={selectedTask?.completed ? '기록 삭제' : '할 일 삭제'}
+          label={selectedTask?.isCompleted ? '기록 삭제' : '할 일 삭제'}
           onPress={handleDeleteTask}
           type="text"
         />

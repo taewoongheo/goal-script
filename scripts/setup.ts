@@ -21,7 +21,7 @@ export async function ensureTables(db: SQLite.SQLiteDatabase) {
       id TEXT PRIMARY KEY NOT NULL,
       goal_id TEXT NOT NULL,
       text TEXT NOT NULL,
-      completed INTEGER NOT NULL,
+      isCompleted INTEGER NOT NULL,
       FOREIGN KEY(goal_id) REFERENCES Goal(id)
     );
   `);
@@ -48,7 +48,7 @@ export async function insertSampleData(
   await Promise.all(
     sampleData.achieved.map(t =>
       db.runAsync(
-        `INSERT INTO TaskItem (id, goal_id, text, completed)
+        `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
          VALUES (?, ?, ?, ?)`,
         t.id,
         goalId,
@@ -60,7 +60,7 @@ export async function insertSampleData(
   await Promise.all(
     sampleData.todos.map(t =>
       db.runAsync(
-        `INSERT INTO TaskItem (id, goal_id, text, completed)
+        `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
          VALUES (?, ?, ?, ?)`,
         t.id,
         goalId,

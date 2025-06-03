@@ -11,8 +11,8 @@ import {Pressable} from 'react-native-gesture-handler';
 import {MaterialIcons, Entypo} from '@expo/vector-icons';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useSelectedTask} from '@/app/_layout';
-import {TaskItemProps} from './types';
 import {Theme} from '@/constants/Theme';
+import {TaskItemProps} from './types';
 
 export function TaskItem({
   item,
@@ -25,8 +25,8 @@ export function TaskItem({
   selectedIdx,
   listItemBottomSheetRef,
 }: TaskItemProps) {
-  const checkboxOpacity = useSharedValue(item.completed ? 1 : 0);
-  const textOpacity = useSharedValue(item.completed ? 0.6 : 1);
+  const checkboxOpacity = useSharedValue(item.isCompleted ? 1 : 0);
+  const textOpacity = useSharedValue(item.isCompleted ? 0.6 : 1);
   const {setSelectedTask} = useSelectedTask();
 
   const fadeInAnimation = useMemo(
@@ -52,11 +52,11 @@ export function TaskItem({
   const isSelected = index === selectedIdx;
 
   const toggleComplete = () => {
-    checkboxOpacity.value = withTiming(item.completed ? 0 : 1, {
+    checkboxOpacity.value = withTiming(item.isCompleted ? 0 : 1, {
       duration: ANIMATION_DURATION.TASK_STATUS.CHECKBOX_ANIMATION,
     });
 
-    textOpacity.value = withTiming(item.completed ? 1 : 0.6, {
+    textOpacity.value = withTiming(item.isCompleted ? 1 : 0.6, {
       duration: ANIMATION_DURATION.TASK_STATUS.CHECKBOX_ANIMATION,
     });
 

@@ -1,7 +1,7 @@
 export type TaskItem = {
   id: string;
   text: string;
-  completed: boolean;
+  isCompleted: boolean;
 };
 
 export type GoalData = {

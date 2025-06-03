@@ -20,8 +20,6 @@ export type TaskSource = 'achieved' | 'todos';
 
 export function useTaskOperations() {
   const updateGoalData = useGoalStore(state => state.updateGoalData);
-  const goalData = useGoalStore(state => state.goalData);
-
   const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
 
   const clearPendingMove = (taskId: string) => {
@@ -63,7 +61,11 @@ export function useTaskOperations() {
     });
   };
 
-  const scheduleTaskMove = (taskId: string, source: TaskSource) => {
+  const scheduleTaskMove = (
+    taskId: string,
+    source: TaskSource,
+    goalId: string,
+  ) => {
     const timeoutId = setTimeout(async () => {
       delete pendingMoves.current[taskId];
 
@@ -100,13 +102,13 @@ export function useTaskOperations() {
     };
   };
 
-  const toggleTask = (taskId: string, source: TaskSource) => {
+  const toggleTask = (taskId: string, source: TaskSource, goalId: string) => {
     if (handlePendingMove(taskId, source)) return;
     updateTaskCompletion(taskId, source);
-    scheduleTaskMove(taskId, source);
+    scheduleTaskMove(taskId, source, goalId);
   };
 
-  const addTask = async (text: string, source: TaskSource) => {
+  const addTask = async (text: string, source: TaskSource, goalId: string) => {
     const isCompleted = source === 'achieved';
     const newTask: TaskItem = {
       id: generateUUID(),
@@ -121,15 +123,15 @@ export function useTaskOperations() {
 
     // DB update
     try {
-      if (!goalData?.id) {
-        console.error('No goal ID found in goalData');
+      if (!goalId) {
+        console.error('No goal ID provided');
         return;
       }
 
       const insertQuery = await prepareInsertTaskItem();
       await insertQuery.executeAsync({
         $id: newTask.id,
-        $goal_id: goalData.id,
+        $goal_id: goalId,
         $text: newTask.text,
         $isCompleted: newTask.isCompleted ? 1 : 0,
       });
@@ -139,7 +141,6 @@ export function useTaskOperations() {
   };
 
   const removeTask = async (taskId: string, source: TaskSource) => {
-    console.log('removeTask called with taskId:', taskId, 'source:', source);
     clearPendingMove(taskId);
 
     // UI update
@@ -151,7 +152,6 @@ export function useTaskOperations() {
     try {
       const deleteQuery = await prepareDeleteTaskItem();
       await deleteQuery.executeAsync({$id: taskId});
-      console.log('DB deleteTaskFromDB success:', taskId);
     } catch (e) {
       console.error('DB deleteTaskFromDB error:', e);
     }

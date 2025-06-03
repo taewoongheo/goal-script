@@ -44,8 +44,8 @@ export function GoalBottomSheetContainer({
   }, []);
 
   const [goalSheetKey, setGoalSheetKey] = useState(0);
-  const {actions} = useGoalData();
   const goalData = useGoalStore(state => state.goalData);
+  const {actions} = useGoalData(goalData?.id ?? '');
 
   const renderBackdrop = useCallback(
     (props: any) => (

@@ -1,11 +1,11 @@
 import React from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {useGoalStore} from '@/stores/goalStore';
+import {useGoalData} from '@/hooks/useGoalData';
 import {TaskSection} from './task/TaskSection';
 import {TaskItemProps, TaskStyles} from './task/types';
 import {TaskItem as TaskItemComponent} from './task/TaskItem';
-import {useGoalStore} from '@/stores/goalStore';
-import {useGoalData} from '@/hooks/useGoalData';
 
 interface AchievedSectionProps {
   isAchievedExpanded: boolean;
@@ -22,10 +22,10 @@ export function AchievedSection({
   linearTransitionAnimation,
   listItemBottomSheetRef,
 }: AchievedSectionProps) {
+  const goalData = useGoalStore(state => state.goalData);
+  const {actions} = useGoalData(goalData?.id ?? '');
   const achievedItems = useGoalStore(state => state.goalData?.achieved) ?? [];
   const hasTodoItems = useGoalStore(state => state.goalData?.todos.length) ?? 0;
-
-  const {actions} = useGoalData();
 
   const renderTaskItem = (props: TaskItemProps) => (
     <TaskItemComponent {...props} />

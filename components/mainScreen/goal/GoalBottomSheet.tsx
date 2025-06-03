@@ -4,11 +4,14 @@ import {FontAwesome6, AntDesign} from '@expo/vector-icons';
 import {TextInput} from 'react-native-gesture-handler';
 import {moderateScale, scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
-import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
-import {TaskItem} from '@/types/goal';
-import {viewportWidth} from '@/utils/viewport';
 import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {Colors} from '@/constants/Colors';
+import {
+  PrimaryBottomSheetButton,
+  TextBottomSheetButton,
+} from '@/components/ui/BottomSheetButton';
+import {viewportWidth} from '@/utils/viewport';
+import {TaskItem} from '@/types/goal';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -128,17 +131,15 @@ export function GoalBottomSheet({
             {/* 완료 및 삭제 */}
             <View style={styles.footerSection}>
               {/* 완료 버튼 */}
-              <BottomSheetButton
+              <PrimaryBottomSheetButton
                 label="목표 완료하기"
                 onPress={() => handleEditGoal(editableTitle)}
-                type="primary"
               />
 
               {/* 삭제 버튼 */}
-              <BottomSheetButton
+              <TextBottomSheetButton
                 label="목표 삭제"
                 onPress={handleDeleteGoal}
-                type="text"
               />
             </View>
           </View>
@@ -184,10 +185,9 @@ export function GoalBottomSheet({
 
               {/* Action buttons */}
               <View style={styles.editActionsContainer}>
-                <BottomSheetButton
+                <PrimaryBottomSheetButton
                   label="수정하기"
                   onPress={handleConfirmEdit}
-                  type="primary"
                 />
               </View>
             </Pressable>

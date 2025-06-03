@@ -5,7 +5,7 @@ import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {TextInput} from 'react-native-gesture-handler';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
-import {BottomSheetButton} from '@/components/ui/BottomSheetButton';
+import {PrimaryBottomSheetButton} from '@/components/ui/BottomSheetButton';
 
 interface AddTaskBottomSheetProps {
   onAddTask?: (taskText: string) => void;
@@ -42,11 +42,7 @@ export function AddTaskBottomSheet({onAddTask}: AddTaskBottomSheetProps) {
 
       {/* Action button */}
       <View style={styles.footerSection}>
-        <BottomSheetButton
-          label="할 일 추가"
-          onPress={handleAddTask}
-          type="primary"
-        />
+        <PrimaryBottomSheetButton label="할 일 추가" onPress={handleAddTask} />
       </View>
     </View>
   );

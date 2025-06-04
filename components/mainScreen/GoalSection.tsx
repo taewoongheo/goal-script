@@ -3,11 +3,11 @@ import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {FontAwesome5} from '@expo/vector-icons';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {parseLines} from '@/utils/goalText';
-import {GoalLine} from './goal/GoalLine';
-import {styles as localStyles} from './goal/styles';
 import {Theme} from '@/constants/Theme';
 import {useGoalStore} from '@/stores/goalStore';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {styles as localStyles} from './goal/styles';
+import {GoalLine} from './goal/GoalLine';
 
 interface GoalSectionProps {
   isGoalExpanded: boolean;
@@ -30,8 +30,15 @@ export function GoalSection({
 }: GoalSectionProps) {
   const [lines, setLines] = useState<string[] | null>(null);
 
-  const title = useGoalStore(state => state.goalData?.title) ?? '?';
-  const icon = useGoalStore(state => state.goalData?.icon) ?? '?';
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const title =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.title,
+    ) ?? '?';
+  const icon =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.icon,
+    ) ?? '?';
 
   return (
     <View style={styles.lineContainer}>

@@ -22,10 +22,16 @@ export function AchievedSection({
   linearTransitionAnimation,
   listItemBottomSheetRef,
 }: AchievedSectionProps) {
-  const goalData = useGoalStore(state => state.goalData);
-  const {actions} = useGoalData(goalData?.id ?? '');
-  const achievedItems = useGoalStore(state => state.goalData?.achieved) ?? [];
-  const hasTodoItems = useGoalStore(state => state.goalData?.todos.length) ?? 0;
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const {actions} = useGoalData(selectedGoalId ?? '');
+  const achievedItems =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.achieved,
+    ) ?? [];
+  const hasTodoItems =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.todos.length,
+    ) ?? 0;
 
   const renderTaskItem = (props: TaskItemProps) => (
     <TaskItemComponent {...props} />

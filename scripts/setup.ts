@@ -7,7 +7,7 @@ import {
 import {generateUUID} from '../utils/uuid';
 
 export const SHOULD_SEED_SAMPLE_DATA = true;
-export const SAMPLE_DATA = marathonPreparation;
+export const SAMPLE_DATA = websiteProject;
 
 export async function ensureTables(db: SQLite.SQLiteDatabase) {
   await db.execAsync(`

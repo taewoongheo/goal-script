@@ -1,11 +1,11 @@
 import React from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {ToggleKey} from '@/hooks/useToggleExpand';
+import {useGoalStore} from '@/stores/goalStore';
+import {useGoalData} from '@/hooks/useGoalData';
 import {TaskSection} from './task/TaskSection';
 import {TaskItemProps, TaskStyles} from './task/types';
 import {TaskItem as TaskItemComponent} from './task/TaskItem';
-import {useGoalStore} from '@/stores/goalStore';
-import {useGoalData} from '@/hooks/useGoalData';
 
 interface TodoSectionProps {
   isTodosExpanded: boolean;
@@ -24,8 +24,12 @@ export function TodoSection({
   listItemBottomSheetRef,
   addTaskBottomSheetRef,
 }: TodoSectionProps) {
-  const todoItems = useGoalStore(state => state.goalData?.todos) ?? [];
-  const {actions} = useGoalData();
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const {actions} = useGoalData(selectedGoalId ?? '');
+  const todoItems =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.todos,
+    ) ?? [];
 
   const renderTaskItem = (props: TaskItemProps) => (
     <TaskItemComponent {...props} />

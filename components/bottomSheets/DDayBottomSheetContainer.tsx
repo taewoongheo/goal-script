@@ -17,8 +17,11 @@ export function DDayBottomSheetContainer({
   bottomSheetRef,
 }: DDayBottomSheetContainerProps) {
   // const snapPoints = useMemo(() => ['65%'], []);
-  const {actions} = useGoalData();
-  const goalData = useGoalStore(state => state.goalData);
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const {actions} = useGoalData(selectedGoalId ?? '');
+  const goalData = useGoalStore(state =>
+    state.goalData.find(g => g.id === selectedGoalId),
+  );
 
   const renderBackdrop = useCallback(
     (props: any) => (

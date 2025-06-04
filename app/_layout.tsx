@@ -3,7 +3,7 @@ import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {StatusBar} from 'expo-status-bar';
 import React, {useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   BottomSheetProvider,
@@ -15,7 +15,7 @@ import {GoalBottomSheetContainer} from '@/components/bottomSheets/GoalBottomShee
 import {DDayBottomSheetContainer} from '@/components/bottomSheets/DDayBottomSheetContainer';
 import {ListItemBottomSheetContainer} from '@/components/bottomSheets/ListItemBottomSheetContainer';
 import {AddTaskBottomSheetContainer} from '@/components/bottomSheets/AddTaskBottomSheetContainer';
-import {useGoalStore} from '@/stores/goalStore';
+import {initializeGoals, useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
 
 SplashScreen.preventAutoHideAsync();
@@ -47,25 +47,24 @@ function RootLayoutContent() {
     addTaskBottomSheetRef,
   } = useBottomSheet();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
-  const loadGoalDataFromDB = useGoalStore(state => state.loadGoalDataFromDB);
   const goalData = useGoalStore(state => state.goalData);
 
   useEffect(() => {
     (async function () {
       await setupDatabase();
-      await loadGoalDataFromDB();
+      initializeGoals();
     })();
-  }, [loadGoalDataFromDB]);
+  }, []);
 
   const selectedTaskValue = useMemo(
     () => ({selectedTask, setSelectedTask}),
     [selectedTask],
   );
 
-  if (!goalData) {
+  if (goalData.length === 0) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size="large" />
+        <Text>목표를 만들어보세요</Text>
       </View>
     );
   }

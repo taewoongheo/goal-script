@@ -1,80 +1,108 @@
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
-import {differenceInCalendarDays} from 'date-fns';
 import {GoalData} from '@/types/goal';
 import {prepareSelectAllGoals} from '@/models/goal.queries';
 import {prepareSelectTaskItemsByGoal} from '@/models/taskitem.queries';
 import {dateUtils} from '@/utils/dateUtils';
+import {differenceInCalendarDays} from 'date-fns';
 import {intToBool} from '@/models/goal';
 
-async function loadGoalDataFromDB(): Promise<GoalData | null> {
+async function loadAllGoalIdsFromDB(): Promise<string[]> {
   const selectGoalsStmt = await prepareSelectAllGoals();
+  const goalsResult = await selectGoalsStmt.executeAsync();
+  const goals = (await goalsResult.getAllAsync()) as any[];
+  await selectGoalsStmt.finalizeAsync();
+  return goals.map((goal: any) => goal.id);
+}
 
+async function fetchGoalDataById(goalId: string): Promise<GoalData | null> {
+  // goal 정보 쿼리
+  const selectGoalsStmt = await prepareSelectAllGoals();
+  const goalsResult = await selectGoalsStmt.executeAsync();
+  const goals = (await goalsResult.getAllAsync()) as any[];
+  await selectGoalsStmt.finalizeAsync();
+  const goal = goals.find((g: any) => g.id === goalId);
+  if (!goal) return null;
+
+  const selectTasksStmt = await prepareSelectTaskItemsByGoal();
   try {
-    const goalsResult = await selectGoalsStmt.executeAsync();
-    const goals = (await goalsResult.getAllAsync()) as any[];
-    if (!goals.length) return null;
-    const goal = goals[0] as any; // 현재는 단일 목표만 지원한다고 가정
-
-    const selectTasksStmt = await prepareSelectTaskItemsByGoal();
-    try {
-      const tasksResult = await selectTasksStmt.executeAsync({
-        $goal_id: goal.id,
-      });
-
-      const tasks = (await tasksResult.getAllAsync()) as any[];
-
-      const achieved = tasks
-        .filter((t: any) => intToBool(t.isCompleted))
-        .map((t: any) => ({id: t.id, text: t.text, isCompleted: true}));
-      const todos = tasks
-        .filter((t: any) => !intToBool(t.isCompleted))
-        .map((t: any) => ({id: t.id, text: t.text, isCompleted: false}));
-
-      const today = new Date();
-      const dDayDate = dateUtils.parseDate(goal.dDay_date);
-      const remainingDays = differenceInCalendarDays(dDayDate, today);
-
-      return {
-        id: goal.id,
-        title: goal.title,
-        icon: goal.icon,
-        dDay: {
-          date: goal.dDay_date,
-          remainingDays,
-        },
-        achieved,
-        todos,
-      };
-    } finally {
-      await selectTasksStmt.finalizeAsync();
-    }
+    const tasksResult = await selectTasksStmt.executeAsync({$goal_id: goalId});
+    const tasks = (await tasksResult.getAllAsync()) as any[];
+    const achieved = tasks
+      .filter((t: any) => intToBool(t.isCompleted))
+      .map((t: any) => ({id: t.id, text: t.text, isCompleted: true}));
+    const todos = tasks
+      .filter((t: any) => !intToBool(t.isCompleted))
+      .map((t: any) => ({id: t.id, text: t.text, isCompleted: false}));
+    const today = new Date();
+    const dDayDate = dateUtils.parseDate(goal.dDay_date);
+    const remainingDays = differenceInCalendarDays(dDayDate, today);
+    return {
+      id: goal.id,
+      title: goal.title,
+      icon: goal.icon,
+      dDay: {
+        date: goal.dDay_date,
+        remainingDays,
+      },
+      achieved,
+      todos,
+    };
   } finally {
-    await selectGoalsStmt.finalizeAsync();
+    await selectTasksStmt.finalizeAsync();
   }
 }
 
+export async function initializeGoals() {
+  const {initializeGoalDatas} = useGoalStore.getState();
+
+  const goalIds = await loadAllGoalIdsFromDB();
+  const goalDataArr = await Promise.all(
+    goalIds.map(id => fetchGoalDataById(id)),
+  );
+  const validGoalData = goalDataArr.filter(
+    (goal): goal is GoalData => goal !== null,
+  );
+
+  initializeGoalDatas(
+    validGoalData,
+    validGoalData.length > 0 ? validGoalData[0].id : null,
+  );
+}
+
 type GoalStore = {
-  goalData: GoalData | null;
-  setGoalData: (goalData: GoalData) => void;
+  goalData: GoalData[];
+  selectedGoalId: string | null;
+  initializeGoalDatas: (
+    goalData: GoalData[],
+    selectedGoalId: string | null,
+  ) => Promise<void>;
   updateGoalData: (updater: (goalData: GoalData) => void) => void;
-  loadGoalDataFromDB: () => Promise<void>;
+  setSelectedGoalId: (goalId: string | null) => void;
 };
 
 export const useGoalStore = create<GoalStore>()(
   immer(set => ({
-    goalData: null,
+    goalData: [],
+    selectedGoalId: null,
 
-    setGoalData: goalData => set({goalData}),
+    initializeGoalDatas: async (
+      goalData: GoalData[],
+      selectedGoalId: string | null,
+    ) => {
+      set({goalData, selectedGoalId});
+    },
+
+    setSelectedGoalId: (goalId: string | null) => set({selectedGoalId: goalId}),
 
     updateGoalData: updater =>
       set(state => {
-        if (state.goalData) updater(state.goalData);
+        const goalIndex = state.goalData.findIndex(
+          g => g.id === state.selectedGoalId,
+        );
+        if (goalIndex !== -1) {
+          updater(state.goalData[goalIndex]);
+        }
       }),
-
-    loadGoalDataFromDB: async () => {
-      const data = await loadGoalDataFromDB();
-      if (data) set({goalData: data});
-    },
   })),
 );

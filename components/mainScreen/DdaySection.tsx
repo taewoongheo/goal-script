@@ -28,8 +28,16 @@ export function DdaySection({
   fadeOutAnimation,
   bottomSheetRef,
 }: DdaySectionProps) {
-  const dDay = useGoalStore(state => state.goalData?.dDay.remainingDays) ?? 0;
-  const rDay = useGoalStore(state => state.goalData?.dDay.date) ?? '??';
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const dDay =
+    useGoalStore(
+      state =>
+        state.goalData.find(g => g.id === selectedGoalId)?.dDay.remainingDays,
+    ) ?? 0;
+  const rDay =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.dDay.date,
+    ) ?? '??';
 
   const dDayText = dDay > 0 ? `D-${dDay}` : 'D-Day';
 

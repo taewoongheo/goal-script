@@ -1,5 +1,10 @@
 import {dbPromise} from './goal';
 
+export async function prepareGetGoalById() {
+  const db = await dbPromise;
+  return db.prepareAsync(`SELECT * FROM Goal WHERE id = $id`);
+}
+
 export async function prepareInsertGoal() {
   const db = await dbPromise;
   return db.prepareAsync(
@@ -11,6 +16,11 @@ export async function prepareInsertGoal() {
 export async function prepareSelectAllGoals() {
   const db = await dbPromise;
   return db.prepareAsync(`SELECT * FROM Goal`);
+}
+
+export async function prepareAllGoalIds() {
+  const db = await dbPromise;
+  return db.prepareAsync(`SELECT id FROM Goal`);
 }
 
 export async function prepareUpdateTitleGoal() {

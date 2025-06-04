@@ -7,28 +7,28 @@ import {
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
 
-export function useGoalOperations() {
-  const updateGoalData = useGoalStore(state => state.updateGoalData);
-  const goalData = useGoalStore(state => state.goalData);
+export function useGoalOperations(goalId: string) {
+  const {updateGoalData} = useGoalStore();
 
   const updateTitle = async (newTitle: string) => {
     if (!newTitle.trim()) return;
 
     // UI update
     updateGoalData(draft => {
+      if (draft.id !== goalId) return;
       draft.title = newTitle;
     });
 
     // DB update
     try {
-      if (!goalData?.id) {
-        console.error('No goal ID found in goalData');
+      if (!goalId) {
+        console.error('No goal ID provided');
         return;
       }
 
       const updateQuery = await prepareUpdateTitleGoal();
       await updateQuery.executeAsync({
-        $id: goalData.id,
+        $id: goalId,
         $title: newTitle,
       });
     } catch (e) {
@@ -37,12 +37,13 @@ export function useGoalOperations() {
   };
 
   const updateDate = async (newDate: string) => {
-    if (!goalData?.id) {
-      console.error('No goal ID found in goalData');
+    if (!goalId) {
+      console.error('No goal ID provided');
       return;
     }
 
     updateGoalData(draft => {
+      if (draft.id !== goalId) return;
       draft.dDay.date = newDate;
       draft.dDay.remainingDays = differenceInCalendarDays(
         dateUtils.parseDate(newDate),
@@ -53,7 +54,7 @@ export function useGoalOperations() {
     try {
       const updateQuery = await prepareUpdateDateGoal();
       await updateQuery.executeAsync({
-        $id: goalData.id,
+        $id: goalId,
         $dDay_date: newDate,
       });
     } catch (e) {
@@ -62,14 +63,14 @@ export function useGoalOperations() {
   };
 
   const deleteGoal = async () => {
-    if (!goalData?.id) {
-      console.error('No goal ID found in goalData');
+    if (!goalId) {
+      console.error('No goal ID provided');
       return;
     }
 
     try {
       const deleteQuery = await prepareDeleteGoal();
-      await deleteQuery.executeAsync({$id: goalData.id});
+      await deleteQuery.executeAsync({$id: goalId});
     } catch (e) {
       console.error('DB deleteGoal error:', e);
     }

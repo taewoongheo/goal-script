@@ -18,7 +18,7 @@ type PendingMoveTask = {
 
 export type TaskSource = 'achieved' | 'todos';
 
-export function useTaskOperations() {
+export function useTaskOperations(goalId: string) {
   const updateGoalData = useGoalStore(state => state.updateGoalData);
   const pendingMoves = useRef<Record<string, PendingMoveTask>>({});
 
@@ -61,11 +61,7 @@ export function useTaskOperations() {
     });
   };
 
-  const scheduleTaskMove = (
-    taskId: string,
-    source: TaskSource,
-    goalId: string,
-  ) => {
+  const scheduleTaskMove = (taskId: string, source: TaskSource) => {
     const timeoutId = setTimeout(async () => {
       delete pendingMoves.current[taskId];
 
@@ -102,13 +98,13 @@ export function useTaskOperations() {
     };
   };
 
-  const toggleTask = (taskId: string, source: TaskSource, goalId: string) => {
+  const toggleTask = (taskId: string, source: TaskSource) => {
     if (handlePendingMove(taskId, source)) return;
     updateTaskCompletion(taskId, source);
-    scheduleTaskMove(taskId, source, goalId);
+    scheduleTaskMove(taskId, source);
   };
 
-  const addTask = async (text: string, source: TaskSource, goalId: string) => {
+  const addTask = async (text: string, source: TaskSource) => {
     const isCompleted = source === 'achieved';
     const newTask: TaskItem = {
       id: generateUUID(),

@@ -16,6 +16,7 @@ export type GoalData = {
   };
   achieved: TaskItem[];
   todos: TaskItem[];
+  isCompleted: boolean;
 };
 
 export const websiteProject: GoalData = {
@@ -41,6 +42,7 @@ export const websiteProject: GoalData = {
     {id: generateUUID(), text: 'API 연동', isCompleted: false},
     {id: generateUUID(), text: '크로스 브라우저 테스트', isCompleted: false},
   ],
+  isCompleted: false,
 };
 
 export const marathonPreparation: GoalData = {
@@ -82,6 +84,7 @@ export const marathonPreparation: GoalData = {
       isCompleted: false,
     },
   ],
+  isCompleted: false,
 };
 
 export const academicPaper: GoalData = {
@@ -145,6 +148,7 @@ export const academicPaper: GoalData = {
     },
     {id: generateUUID(), text: '최종 출판 승인 확인', isCompleted: false},
   ],
+  isCompleted: false,
 };
 
 // 기본 데이터 선택

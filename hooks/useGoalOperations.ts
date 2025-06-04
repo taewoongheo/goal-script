@@ -4,6 +4,7 @@ import {
   prepareUpdateTitleGoal,
   prepareUpdateDateGoal,
   prepareDeleteGoal,
+  prepareCompleteGoal,
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
 
@@ -62,6 +63,27 @@ export function useGoalOperations(goalId: string) {
     }
   };
 
+  const completeGoal = async () => {
+    if (!goalId) {
+      console.error('No goal ID provided');
+      return;
+    }
+
+    // UI update
+    updateGoalData(draft => {
+      if (draft.id !== goalId) return;
+      draft.isCompleted = true;
+    });
+
+    // DB update
+    try {
+      const completeQuery = await prepareCompleteGoal();
+      await completeQuery.executeAsync({$id: goalId});
+    } catch (e) {
+      console.error('DB completeGoal error:', e);
+    }
+  };
+
   const deleteGoal = async () => {
     if (!goalId) {
       console.error('No goal ID provided');
@@ -81,6 +103,7 @@ export function useGoalOperations(goalId: string) {
   return {
     updateTitle,
     updateDate,
+    completeGoal,
     deleteGoal,
   };
 }

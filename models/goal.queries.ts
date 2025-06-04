@@ -39,3 +39,8 @@ export async function prepareDeleteGoal() {
   const db = await dbPromise;
   return db.prepareAsync(`DELETE FROM Goal WHERE id = $id`);
 }
+
+export async function prepareCompleteGoal() {
+  const db = await dbPromise;
+  return db.prepareAsync(`UPDATE Goal SET isCompleted = 1 WHERE id = $id`);
+}

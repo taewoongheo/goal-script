@@ -47,6 +47,7 @@ async function fetchGoalDataById(goalId: string): Promise<GoalData | null> {
       },
       achieved,
       todos,
+      isCompleted: intToBool(goal.isCompleted),
     };
   } finally {
     await selectTasksStmt.finalizeAsync();

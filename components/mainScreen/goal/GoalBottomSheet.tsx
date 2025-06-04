@@ -20,6 +20,7 @@ interface GoalBottomSheetProps {
   dDay: number;
   rDay: string;
   onTitleChange?: (text: string) => void;
+  onCompleteGoal?: () => void;
   onDeleteGoal?: () => void;
   bottomSheetRef?: React.RefObject<any>;
   setEditModeHeight: (height: number) => void;
@@ -31,6 +32,7 @@ export function GoalBottomSheet({
   dDay,
   rDay,
   onTitleChange,
+  onCompleteGoal,
   onDeleteGoal,
   bottomSheetRef,
   setEditModeHeight,
@@ -53,10 +55,11 @@ export function GoalBottomSheet({
     bottomSheetRef?.current.snapToIndex(1);
   };
 
-  const handleEditGoal = (text: string) => {
-    if (onTitleChange) {
-      onTitleChange(text);
+  const handleCompleteGoal = () => {
+    if (onCompleteGoal) {
+      onCompleteGoal();
     }
+    bottomSheetRef?.current.close();
   };
 
   const handleDeleteGoal = () => {
@@ -134,7 +137,7 @@ export function GoalBottomSheet({
               {/* 완료 버튼 */}
               <PrimaryBottomSheetButton
                 label="목표 완료하기"
-                onPress={() => handleEditGoal(editableTitle)}
+                onPress={handleCompleteGoal}
               />
 
               {/* 삭제 버튼 */}

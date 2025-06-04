@@ -22,8 +22,8 @@ export function ListItemBottomSheetContainer({
   setSelectedTask,
 }: ListItemBottomSheetContainerProps) {
   // const listItemSnapPoints = useMemo(() => ['35%'], []);
-  const goalData = useGoalStore(state => state.goalData);
-  const {actions} = useGoalData(goalData?.id ?? '');
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const {actions} = useGoalData(selectedGoalId ?? '');
 
   const renderBackdrop = useCallback(
     (props: any) => (

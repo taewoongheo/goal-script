@@ -15,7 +15,8 @@ export async function ensureTables(db: SQLite.SQLiteDatabase) {
       id TEXT PRIMARY KEY NOT NULL,
       title TEXT NOT NULL,
       icon TEXT NOT NULL,
-      dDay_date TEXT NOT NULL
+      dDay_date TEXT NOT NULL,
+      isCompleted INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS TaskItem (
       id TEXT PRIMARY KEY NOT NULL,
@@ -37,12 +38,13 @@ export async function insertSampleData(
 
   const goalId = generateUUID();
   await db.runAsync(
-    `INSERT INTO Goal (id, title, icon, dDay_date)
-     VALUES (?, ?, ?, ?)`,
+    `INSERT INTO Goal (id, title, icon, dDay_date, isCompleted)
+     VALUES (?, ?, ?, ?, ?)`,
     goalId,
     sampleData.title,
     sampleData.icon,
     sampleData.dDay.date,
+    0,
   );
 
   await Promise.all(

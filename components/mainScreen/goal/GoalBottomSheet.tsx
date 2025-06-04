@@ -12,6 +12,9 @@ import {
 } from '@/components/ui/BottomSheetButton';
 import {viewportWidth} from '@/utils/viewport';
 import {TaskItem} from '@/types/goal';
+import {useGoalBottomSheetHandlers} from '@/hooks/useGoalBottomSheetHandlers';
+import {GoalBottomSheetMain} from './GoalBottomSheetMain';
+import {GoalBottomSheetEdit} from './GoalBottomSheetEdit';
 
 interface GoalBottomSheetProps {
   icon: string;
@@ -37,53 +40,28 @@ export function GoalBottomSheet({
   bottomSheetRef,
   setEditModeHeight,
 }: GoalBottomSheetProps) {
-  const [editableTitle, setEditableTitle] = useState(title);
-  const [tempEditableTitle, setTempEditableTitle] = useState(title);
-  const titleInputRef = useRef<TextInput>(null);
-
-  const [isEditMode, setIsEditMode] = useState(false);
-
-  const handleSwitchToEdit = () => {
-    setIsEditMode(true);
-    setTempEditableTitle(editableTitle);
-    bottomSheetRef?.current.snapToIndex(0);
-  };
-
-  const handleSwitchToMain = () => {
-    setIsEditMode(false);
-    setTempEditableTitle(editableTitle);
-    bottomSheetRef?.current.snapToIndex(1);
-  };
-
-  const handleCompleteGoal = () => {
-    if (onCompleteGoal) {
-      onCompleteGoal();
-    }
-    bottomSheetRef?.current.close();
-  };
-
-  const handleDeleteGoal = () => {
-    if (onDeleteGoal) {
-      onDeleteGoal();
-    }
-    bottomSheetRef?.current.close();
-  };
-
-  const handleConfirmEdit = () => {
-    setEditableTitle(tempEditableTitle);
-    if (onTitleChange) {
-      onTitleChange(tempEditableTitle);
-    }
-    handleSwitchToMain();
-  };
+  const {
+    editableTitle,
+    tempEditableTitle,
+    setTempEditableTitle,
+    isEditMode,
+    titleInputRef,
+    handlers,
+  } = useGoalBottomSheetHandlers({
+    title,
+    onTitleChange,
+    onCompleteGoal,
+    onDeleteGoal,
+    bottomSheetRef,
+  });
 
   return (
     <Pressable
       style={styles.container}
       onPress={() => {
         if (isEditMode) {
-          bottomSheetRef?.current.snapToIndex(0);
-          Keyboard.dismiss();
+          // bottomSheetRef?.current.snapToIndex(0);
+          // Keyboard.dismiss();
           return;
         }
         Keyboard.dismiss();
@@ -91,111 +69,26 @@ export function GoalBottomSheet({
       <View>
         {!isEditMode ? (
           // 첫 번째 뷰 - 메인
-          <View style={styles.slideView}>
-            <Pressable onPress={handleSwitchToEdit} style={styles.headerRow}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.goalTitleInput}>{editableTitle}</Text>
-              </View>
-              <AntDesign
-                name="right"
-                size={Theme.iconSize.medium}
-                color={Theme.colors.highlight}
-              />
-            </Pressable>
-
-            {/* 상단 통계 섹션 */}
-            <View style={styles.statsContainer}>
-              {/* 달성한 할 일들 achieved.length */}
-              <View style={styles.statItem}>
-                <View style={styles.statIconContainer}>
-                  <FontAwesome6
-                    name="fire"
-                    size={Theme.iconSize.large}
-                    color={Theme.colors.highlight}
-                  />
-                </View>
-                <Text style={styles.statValue}>{achieved.length}</Text>
-                <Text style={styles.statLabel}>완료한 일들</Text>
-              </View>
-
-              {/* 남은 날짜들 rDay */}
-              <View style={styles.statItem}>
-                <View style={styles.statIconContainer}>
-                  <AntDesign
-                    name="clockcircle"
-                    size={Theme.iconSize.large}
-                    color={Theme.colors.highlight}
-                  />
-                </View>
-                <Text style={styles.statValue}>D-{dDay}</Text>
-                <Text style={styles.statLabel}>{rDay}</Text>
-              </View>
-            </View>
-
-            {/* 완료 및 삭제 */}
-            <View style={styles.footerSection}>
-              {/* 완료 버튼 */}
-              <PrimaryBottomSheetButton
-                label="목표 완료하기"
-                onPress={handleCompleteGoal}
-              />
-
-              {/* 삭제 버튼 */}
-              <TextBottomSheetButton
-                label="목표 삭제"
-                onPress={handleDeleteGoal}
-              />
-            </View>
-          </View>
+          <GoalBottomSheetMain
+            editableTitle={editableTitle}
+            achieved={achieved}
+            dDay={dDay}
+            rDay={rDay}
+            onSwitchToEdit={handlers.handleSwitchToEdit}
+            onCompleteGoal={handlers.handleCompleteGoal}
+            onDeleteGoal={handlers.handleDeleteGoal}
+          />
         ) : (
           // 두 번째 뷰 - 편집
-          <View
-            style={[styles.slideView]}
-            onLayout={e => {
-              setEditModeHeight(e.nativeEvent.layout.height);
-            }}>
-            <Pressable
-              onPress={() => {
-                Keyboard.dismiss();
-                handleSwitchToMain();
-              }}
-              style={[{width: scale(30)}]}>
-              <AntDesign
-                name="arrowleft"
-                size={Theme.iconSize.medium}
-                color={Theme.colors.highlight}
-              />
-            </Pressable>
-            <Pressable
-              onPress={() => {
-                bottomSheetRef?.current.snapToIndex(0);
-                Keyboard.dismiss();
-              }}
-              style={[styles.container]}>
-              {/* Input field */}
-              <View style={styles.editTextInputContainer}>
-                <BottomSheetTextInput
-                  ref={titleInputRef}
-                  value={tempEditableTitle}
-                  onChangeText={setTempEditableTitle}
-                  style={styles.editTextInput}
-                  placeholder="작업 내용을 입력하세요"
-                  multiline={false}
-                  returnKeyType="done"
-                  autoCorrect={false}
-                  spellCheck={false}
-                />
-              </View>
-
-              {/* Action buttons */}
-              <View style={styles.editActionsContainer}>
-                <PrimaryBottomSheetButton
-                  label="수정하기"
-                  onPress={handleConfirmEdit}
-                />
-              </View>
-            </Pressable>
-          </View>
+          <GoalBottomSheetEdit
+            tempEditableTitle={tempEditableTitle}
+            setTempEditableTitle={setTempEditableTitle}
+            titleInputRef={titleInputRef}
+            onSwitchToMain={handlers.handleSwitchToMain}
+            onConfirmEdit={handlers.handleConfirmEdit}
+            bottomSheetRef={bottomSheetRef}
+            setEditModeHeight={setEditModeHeight}
+          />
         )}
       </View>
     </Pressable>

@@ -8,7 +8,7 @@ import {
 import {dateUtils} from '@/utils/dateUtils';
 
 export function useGoalOperations(goalId: string) {
-  const {updateGoalData} = useGoalStore();
+  const {updateGoalData, deleteGoalData} = useGoalStore();
 
   const updateTitle = async (newTitle: string) => {
     if (!newTitle.trim()) return;
@@ -67,6 +67,8 @@ export function useGoalOperations(goalId: string) {
       console.error('No goal ID provided');
       return;
     }
+
+    deleteGoalData(goalId);
 
     try {
       const deleteQuery = await prepareDeleteGoal();

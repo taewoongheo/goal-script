@@ -63,6 +63,7 @@ export function GoalBottomSheet({
     if (onDeleteGoal) {
       onDeleteGoal();
     }
+    bottomSheetRef?.current.close();
   };
 
   const handleConfirmEdit = () => {

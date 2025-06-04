@@ -79,6 +79,7 @@ type GoalStore = {
   ) => Promise<void>;
   updateGoalData: (updater: (goalData: GoalData) => void) => void;
   setSelectedGoalId: (goalId: string | null) => void;
+  deleteGoalData: (goalId: string) => void;
 };
 
 export const useGoalStore = create<GoalStore>()(
@@ -103,6 +104,11 @@ export const useGoalStore = create<GoalStore>()(
         if (goalIndex !== -1) {
           updater(state.goalData[goalIndex]);
         }
+      }),
+
+    deleteGoalData: (goalId: string) =>
+      set(state => {
+        state.goalData = state.goalData.filter(g => g.id !== goalId);
       }),
   })),
 );

@@ -84,7 +84,9 @@ export function DDayBottomSheet({
       setSelectedDate(date.dateString);
       const newDDay = calculateDDay(date.dateString);
       setCalculatedDDay(newDDay);
-      onSaveDate?.(date.dateString);
+      onSaveDate?.(
+        dateUtils.formatToAppDate(dateUtils.parseDate(date.dateString)),
+      );
     },
     [calculateDDay, onSaveDate],
   );

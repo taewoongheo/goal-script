@@ -13,13 +13,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Feather, FontAwesome6} from '@expo/vector-icons';
 import {Pressable} from 'react-native-gesture-handler';
-
 import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
-import {TaskSectionProps} from './types';
 import {Theme} from '@/constants/Theme';
 import {viewportWidth} from '@/utils/viewport';
+import {TaskSectionProps} from './types';
 
 export function TaskSection({
   items,

@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -7,8 +7,9 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {scale} from 'react-native-size-matters';
 import {Pressable} from 'react-native-gesture-handler';
-import {MaterialIcons, Entypo} from '@expo/vector-icons';
+import {MaterialIcons} from '@expo/vector-icons';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useSelectedTask} from '@/app/_layout';
 import {Theme} from '@/constants/Theme';
@@ -116,9 +117,9 @@ export function TaskItem({
             style={[styles.editButton]}
             onPress={handleOpenBottomSheet}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-            <Entypo
+            <MaterialIcons
               name="edit"
-              size={Theme.iconSize.small}
+              size={Theme.iconSize.small + scale(2)}
               color={Theme.colors.highlight}
             />
           </Pressable>

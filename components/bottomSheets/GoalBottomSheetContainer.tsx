@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Keyboard, Platform} from 'react-native';
 import BottomSheet, {
   BottomSheetView,
@@ -7,6 +7,7 @@ import BottomSheet, {
 import {GoalBottomSheet} from '@/components/mainScreen/goal/GoalBottomSheet';
 import {useGoalData} from '@/hooks/useGoalData';
 import {useGoalStore} from '@/stores/goalStore';
+import {useKeyboardHeight} from '@/hooks/useKeyboardHeight';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
 
 interface GoalBottomSheetContainerProps {
@@ -17,7 +18,7 @@ export function GoalBottomSheetContainer({
   bottomSheetRef,
 }: GoalBottomSheetContainerProps) {
   const [editModeHeight, setEditModeHeight] = useState(1);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const {keyboardHeight, setKeyboardHeight} = useKeyboardHeight();
 
   const snapPoints = useMemo(() => {
     const baseSnapPoints = [editModeHeight];
@@ -28,20 +29,6 @@ export function GoalBottomSheetContainer({
 
     return baseSnapPoints;
   }, [editModeHeight, keyboardHeight]);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      event => {
-        const {height} = event.endCoordinates;
-        setKeyboardHeight(height);
-      },
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-    };
-  }, []);
 
   const [goalSheetKey, setGoalSheetKey] = useState(0);
   const selectedGoalId = useGoalStore(state => state.selectedGoalId);

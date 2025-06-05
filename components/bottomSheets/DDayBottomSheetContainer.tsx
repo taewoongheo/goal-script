@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 import {Keyboard} from 'react-native';
 import BottomSheet, {
   BottomSheetView,

@@ -1,15 +1,8 @@
-import React, {useState, useRef} from 'react';
-import {View, Text, Pressable, StyleSheet, Keyboard} from 'react-native';
-import {FontAwesome6, AntDesign} from '@expo/vector-icons';
-import {TextInput} from 'react-native-gesture-handler';
+import React from 'react';
+import {View, Pressable, StyleSheet, Keyboard} from 'react-native';
 import {moderateScale, scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
-import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {Colors} from '@/constants/Colors';
-import {
-  PrimaryBottomSheetButton,
-  TextBottomSheetButton,
-} from '@/components/ui/BottomSheetButton';
 import {viewportWidth} from '@/utils/viewport';
 import {TaskItem} from '@/types/goal';
 import {useGoalBottomSheetHandlers} from '@/hooks/useGoalBottomSheetHandlers';

@@ -4,6 +4,7 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
+import {useGoalStore} from '@/stores/goalStore';
 import {AddTaskBottomSheet} from '@/components/mainScreen/task/AddTaskBottomSheet';
 import {useGoalData} from '@/hooks/useGoalData';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
@@ -16,7 +17,8 @@ export function AddTaskBottomSheetContainer({
   bottomSheetRef,
 }: AddTaskBottomSheetContainerProps) {
   const addTaskSnapPoints = useMemo(() => ['30%'], []);
-  const {actions} = useGoalData();
+  const selectedGoalId = useGoalStore(state => state.selectedGoalId);
+  const {actions} = useGoalData(selectedGoalId ?? '');
 
   const renderBackdrop = useCallback(
     (props: any) => (

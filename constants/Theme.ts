@@ -57,7 +57,7 @@ export const Theme = {
     small: moderateScale(22),
     medium: moderateScale(24),
     large: moderateScale(26),
-    tab: moderateScale(30),
+    tab: moderateScale(26),
   },
 
   iconSpace: {

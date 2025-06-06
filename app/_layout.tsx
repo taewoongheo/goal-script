@@ -23,7 +23,12 @@ import {BlurView} from 'expo-blur';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
 import {Theme} from '@/constants/Theme';
 import {scale} from 'react-native-size-matters';
-import {FontAwesome5, Fontisto, MaterialIcons} from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  Fontisto,
+  Ionicons,
+  MaterialIcons,
+} from '@expo/vector-icons';
 import {Colors} from '@/constants/Colors';
 
 SplashScreen.preventAutoHideAsync();
@@ -55,7 +60,7 @@ function RootLayoutContent() {
     addTaskBottomSheetRef,
   } = useBottomSheet();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
-  const goalData = useGoalStore(state => state.goalData);
+  const {goalData, setSelectedGoalId} = useGoalStore(state => state);
 
   useEffect(() => {
     (async function () {
@@ -91,7 +96,7 @@ function RootLayoutContent() {
             }}>
             <MaterialIcons
               name="library-add"
-              size={Theme.iconSize.tab}
+              size={Theme.iconSize.large}
               color="black"
             />
           </Pressable>
@@ -99,9 +104,9 @@ function RootLayoutContent() {
             onPress={() => {
               console.log('settings');
             }}>
-            <Fontisto
-              name="player-settings"
-              size={Theme.iconSize.tab}
+            <Ionicons
+              name="settings-sharp"
+              size={Theme.iconSize.large}
               color="black"
             />
           </Pressable>
@@ -134,7 +139,7 @@ function RootLayoutContent() {
                   flexGrow: 0, // 필요한 만큼만 크기 증가
                 }}
                 renderItem={({item}) => (
-                  <Pressable onPress={() => console.log(item.title)}>
+                  <Pressable onPress={() => setSelectedGoalId(item.id)}>
                     <FontAwesome5
                       name={item.icon}
                       size={Theme.iconSize.large}

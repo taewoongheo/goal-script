@@ -15,9 +15,9 @@ export const SHOULD_SEED_SAMPLE_DATA = true;
 export const SAMPLE_DATA: GoalData[] = [
   academicPaper,
   marathonPreparation,
-  websiteProject,
-  languageLearning,
-  readingChallenge,
+  // websiteProject,
+  // languageLearning,
+  // readingChallenge,
   photoExhibition,
   certificateExam,
 ];

@@ -91,8 +91,7 @@ function RootLayoutContent() {
             }}>
             <MaterialIcons
               name="library-add"
-              size={30}
-              // color={Platform.OS === 'ios' ? 'black' : 'white'}
+              size={Theme.iconSize.tab}
               color="black"
             />
           </Pressable>
@@ -102,8 +101,7 @@ function RootLayoutContent() {
             }}>
             <Fontisto
               name="player-settings"
-              size={30}
-              // color={Platform.OS === 'ios' ? 'black' : 'white'}
+              size={Theme.iconSize.tab}
               color="black"
             />
           </Pressable>
@@ -111,14 +109,14 @@ function RootLayoutContent() {
             <>
               <View
                 style={{
-                  width: 20,
+                  width: scale(15),
                   alignItems: 'center',
                 }}>
                 <View
                   style={{
                     backgroundColor: 'rgba(92, 92, 92, 0.3)',
-                    width: 1.5,
-                    height: 30,
+                    width: scale(1.5),
+                    height: Theme.spacing.large,
                   }}
                 />
               </View>
@@ -128,7 +126,7 @@ function RootLayoutContent() {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{
-                  gap: 20,
+                  gap: scale(20),
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
@@ -139,8 +137,7 @@ function RootLayoutContent() {
                   <Pressable onPress={() => console.log(item.title)}>
                     <FontAwesome5
                       name={item.icon}
-                      size={24}
-                      // color={Platform.OS === 'ios' ? 'black' : 'white'}
+                      size={Theme.iconSize.large}
                       color="black"
                     />
                   </Pressable>
@@ -168,25 +165,28 @@ function TabWrapper({children}: {children: React.ReactNode}) {
     <View
       style={{
         position: 'absolute',
-        bottom: viewportHeight * 0.04,
+        bottom: viewportHeight * 0.06,
         left: viewportWidth * 0.06,
         right: viewportWidth * 0.06,
         height: viewportHeight * 0.08,
       }}>
       <BlurView
-        intensity={60}
+        intensity={50}
         blurReductionFactor={0.2}
         experimentalBlurMethod="dimezisBlurView"
         tint="light"
         style={{
           alignSelf: 'center',
-          backgroundColor: 'rgba(161, 161, 161, 0.3)',
-          borderWidth: Platform.OS === 'ios' ? 0.4 : 1,
+          backgroundColor:
+            Platform.OS === 'ios'
+              ? 'rgba(190, 190, 190, 0.3)'
+              : 'rgba(230, 230, 230, 0.9)',
+          borderWidth: Platform.OS === 'ios' ? 0.4 : 0.5,
           borderColor: 'rgba(66, 66, 66, 0.3)',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingHorizontal: Theme.spacing.large,
-          paddingVertical: Theme.spacing.small + scale(2),
+          paddingHorizontal: Theme.spacing.large + scale(8),
+          paddingVertical: Theme.spacing.medium,
           borderRadius: Theme.borderRadius.medium,
           overflow: 'hidden',
         }}>
@@ -195,7 +195,7 @@ function TabWrapper({children}: {children: React.ReactNode}) {
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
-            gap: 20,
+            gap: scale(20),
           }}>
           {children}
         </View>

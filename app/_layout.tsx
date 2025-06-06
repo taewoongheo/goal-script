@@ -2,12 +2,8 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Platform, Text, View} from 'react-native';
-import {
-  FlatList,
-  GestureHandlerRootView,
-  Pressable,
-} from 'react-native-gesture-handler';
+import {Text, View} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   BottomSheetProvider,
   useBottomSheet,
@@ -17,19 +13,9 @@ import {GoalBottomSheetContainer} from '@/components/bottomSheets/GoalBottomShee
 import {DDayBottomSheetContainer} from '@/components/bottomSheets/DDayBottomSheetContainer';
 import {ListItemBottomSheetContainer} from '@/components/bottomSheets/ListItemBottomSheetContainer';
 import {AddTaskBottomSheetContainer} from '@/components/bottomSheets/AddTaskBottomSheetContainer';
+import {AddGoalBottomSheetContainer} from '@/components/bottomSheets/AddGoalBottomSheetContainer';
 import {initializeGoals, useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
-import {BlurView} from 'expo-blur';
-import {viewportHeight, viewportWidth} from '@/utils/viewport';
-import {Theme} from '@/constants/Theme';
-import {scale} from 'react-native-size-matters';
-import {
-  FontAwesome5,
-  Fontisto,
-  Ionicons,
-  MaterialIcons,
-} from '@expo/vector-icons';
-import {Colors} from '@/constants/Colors';
 import BottomTabBar from '@/components/ui/BottomTabBar';
 
 SplashScreen.preventAutoHideAsync();
@@ -59,6 +45,7 @@ function RootLayoutContent() {
     ddayBottomSheetRef,
     listItemBottomSheetRef,
     addTaskBottomSheetRef,
+    addGoalBottomSheetRef,
   } = useBottomSheet();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const {goalData, setSelectedGoalId} = useGoalStore(state => state);
@@ -94,7 +81,7 @@ function RootLayoutContent() {
           goalData={goalData}
           setSelectedGoalId={setSelectedGoalId}
           onAddGoal={() => {
-            console.log('add goal');
+            addGoalBottomSheetRef.current?.expand();
           }}
           onSettings={() => {
             console.log('settings');
@@ -109,6 +96,7 @@ function RootLayoutContent() {
           setSelectedTask={setSelectedTask}
         />
         <AddTaskBottomSheetContainer bottomSheetRef={addTaskBottomSheetRef} />
+        <AddGoalBottomSheetContainer bottomSheetRef={addGoalBottomSheetRef} />
       </SelectedTaskContext.Provider>
     </GestureHandlerRootView>
   );

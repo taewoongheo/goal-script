@@ -16,7 +16,7 @@ interface AddTaskBottomSheetContainerProps {
 export function AddTaskBottomSheetContainer({
   bottomSheetRef,
 }: AddTaskBottomSheetContainerProps) {
-  const addTaskSnapPoints = useMemo(() => ['30%'], []);
+  // const addTaskSnapPoints = useMemo(() => ['30%'], []);
   const selectedGoalId = useGoalStore(state => state.selectedGoalId);
   const {actions} = useGoalData(selectedGoalId ?? '');
 
@@ -50,7 +50,6 @@ export function AddTaskBottomSheetContainer({
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={addTaskSnapPoints}
       backdropComponent={renderBackdrop}
       style={commonStyles.bottomSheet}
       onChange={handleSheetChanges}

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Theme.spacing.large,
     paddingVertical: Theme.spacing.medium,
-    backgroundColor: Colors.light.white,
+    marginBottom: Theme.spacing.xl,
   },
   inputContainer: {
     marginBottom: Theme.spacing.medium,

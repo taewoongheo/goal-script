@@ -16,10 +16,10 @@ export const SAMPLE_DATA: GoalData[] = [
   academicPaper,
   marathonPreparation,
   websiteProject,
-  // languageLearning,
-  // readingChallenge,
-  // photoExhibition,
-  // certificateExam,
+  languageLearning,
+  readingChallenge,
+  photoExhibition,
+  certificateExam,
 ];
 
 export async function ensureTables(db: SQLite.SQLiteDatabase) {

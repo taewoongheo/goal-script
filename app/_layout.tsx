@@ -57,20 +57,6 @@ function RootLayoutContent() {
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const goalData = useGoalStore(state => state.goalData);
 
-  const [currentTabWidth, setCurrentTabWidth] = useState(0);
-  const [standardTabWidth, setStandardTabWidth] = useState(0);
-
-  const tabBarWidthCalculatedFlag = useRef(false);
-
-  useEffect(() => {
-    tabBarWidthCalculatedFlag.current = false;
-  }, [goalData.length]);
-
-  console.log('tabBarWidthCalculatedFlag: ', tabBarWidthCalculatedFlag.current);
-
-  console.log('currentTabWidth: ', currentTabWidth);
-  console.log('standardTabWidth: ', standardTabWidth);
-
   useEffect(() => {
     (async function () {
       await setupDatabase();
@@ -98,10 +84,7 @@ function RootLayoutContent() {
           <Stack.Screen name="+not-found" />
         </Stack>
 
-        <TabWrapper
-          setCurrentTabWidth={setCurrentTabWidth}
-          setStandardTabWidth={setStandardTabWidth}
-          tabBarWidthCalculatedFlag={tabBarWidthCalculatedFlag}>
+        <TabWrapper>
           <Pressable
             onPress={() => {
               console.log('add goal');
@@ -134,54 +117,35 @@ function RootLayoutContent() {
                 <View
                   style={{
                     backgroundColor: 'rgba(92, 92, 92, 0.3)',
-                    width: 2,
+                    width: 1.5,
                     height: 30,
                   }}
                 />
               </View>
-              {currentTabWidth <= standardTabWidth ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 20,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  {goalData.map(item => (
-                    <Pressable
-                      key={item.id}
-                      onPress={() => console.log(item.title)}>
-                      <FontAwesome5
-                        name={item.icon}
-                        size={24}
-                        // color={Platform.OS === 'ios' ? 'black' : 'white'}
-                        color="black"
-                      />
-                    </Pressable>
-                  ))}
-                </View>
-              ) : (
-                <FlatList
-                  data={goalData}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    gap: 20,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  renderItem={({item}) => (
-                    <Pressable onPress={() => console.log(item.title)}>
-                      <FontAwesome5
-                        name={item.icon}
-                        size={24}
-                        // color={Platform.OS === 'ios' ? 'black' : 'white'}
-                        color="black"
-                      />
-                    </Pressable>
-                  )}
-                />
-              )}
+
+              <FlatList
+                data={goalData}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  gap: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                style={{
+                  flexGrow: 0, // 필요한 만큼만 크기 증가
+                }}
+                renderItem={({item}) => (
+                  <Pressable onPress={() => console.log(item.title)}>
+                    <FontAwesome5
+                      name={item.icon}
+                      size={24}
+                      // color={Platform.OS === 'ios' ? 'black' : 'white'}
+                      color="black"
+                    />
+                  </Pressable>
+                )}
+              />
             </>
           )}
         </TabWrapper>
@@ -199,22 +163,9 @@ function RootLayoutContent() {
   );
 }
 
-function TabWrapper({
-  children,
-  setCurrentTabWidth,
-  setStandardTabWidth,
-  tabBarWidthCalculatedFlag,
-}: {
-  children: React.ReactNode;
-  setCurrentTabWidth: (width: number) => void;
-  setStandardTabWidth: (width: number) => void;
-  tabBarWidthCalculatedFlag: React.MutableRefObject<boolean>;
-}) {
+function TabWrapper({children}: {children: React.ReactNode}) {
   return (
     <View
-      onLayout={e => {
-        setStandardTabWidth(e.nativeEvent.layout.width);
-      }}
       style={{
         position: 'absolute',
         bottom: viewportHeight * 0.04,
@@ -223,13 +174,6 @@ function TabWrapper({
         height: viewportHeight * 0.08,
       }}>
       <BlurView
-        onLayout={e => {
-          if (!tabBarWidthCalculatedFlag.current) {
-            // eslint-disable-next-line no-param-reassign
-            tabBarWidthCalculatedFlag.current = true;
-            setCurrentTabWidth(e.nativeEvent.layout.width);
-          }
-        }}
         intensity={60}
         blurReductionFactor={0.2}
         experimentalBlurMethod="dimezisBlurView"

@@ -90,7 +90,7 @@ export const marathonPreparation: GoalData = {
 export const academicPaper: GoalData = {
   id: generateUUID(),
   title: '인공지능 윤리에 관한 학술 논문 게재',
-  icon: 'docs',
+  icon: 'book',
   dDay: {
     date: '25.12.20',
     remainingDays: 97,
@@ -147,6 +147,110 @@ export const academicPaper: GoalData = {
       isCompleted: false,
     },
     {id: generateUUID(), text: '최종 출판 승인 확인', isCompleted: false},
+  ],
+  isCompleted: false,
+};
+
+export const languageLearning: GoalData = {
+  id: generateUUID(),
+  title: '영어 회화 마스터',
+  icon: 'language',
+  dDay: {
+    date: '25.09.01',
+    remainingDays: 131,
+  },
+  achieved: [
+    {id: generateUUID(), text: '기초 문법 복습 완료', isCompleted: true},
+    {
+      id: generateUUID(),
+      text: '매일 30분 듣기 실천 30일 달성',
+      isCompleted: true,
+    },
+    {id: generateUUID(), text: '영어 일기 10편 작성', isCompleted: true},
+  ],
+  todos: [
+    {
+      id: generateUUID(),
+      text: '원어민 회화 수업 10회 수강',
+      isCompleted: false,
+    },
+    {id: generateUUID(), text: 'TED 강연 5편 청취 및 요약', isCompleted: false},
+    {id: generateUUID(), text: '영어 독서 2권 완독', isCompleted: false},
+    {id: generateUUID(), text: '영어 스터디 그룹 참여', isCompleted: false},
+  ],
+  isCompleted: false,
+};
+
+export const readingChallenge: GoalData = {
+  id: generateUUID(),
+  title: '2025 독서 챌린지',
+  icon: 'book',
+  dDay: {
+    date: '24.12.31',
+    remainingDays: 210,
+  },
+  achieved: [
+    {id: generateUUID(), text: '1월: "어린 왕자" 완독', isCompleted: true},
+    {id: generateUUID(), text: '2월: "데미안" 완독', isCompleted: true},
+    {id: generateUUID(), text: '3월: "총, 균, 쇠" 완독', isCompleted: true},
+  ],
+  todos: [
+    {
+      id: generateUUID(),
+      text: '4월: "미드나잇 라이브러리" 읽기',
+      isCompleted: false,
+    },
+    {id: generateUUID(), text: '5월: "자기 혁명" 읽기', isCompleted: false},
+    {
+      id: generateUUID(),
+      text: '6월: "호밀밭의 파수꾼" 읽기',
+      isCompleted: false,
+    },
+    {id: generateUUID(), text: '연말 독서 감상문 작성', isCompleted: false},
+  ],
+  isCompleted: false,
+};
+
+export const photoExhibition: GoalData = {
+  id: generateUUID(),
+  title: '사진전 개최',
+  icon: 'camera',
+  dDay: {
+    date: '25.07.15',
+    remainingDays: 404,
+  },
+  achieved: [
+    {id: generateUUID(), text: '출품작 컨셉 기획', isCompleted: true},
+    {id: generateUUID(), text: '촬영 장비 점검', isCompleted: true},
+    {id: generateUUID(), text: '촬영지 섭외', isCompleted: true},
+  ],
+  todos: [
+    {id: generateUUID(), text: '작품 10점 촬영', isCompleted: false},
+    {id: generateUUID(), text: '사진 후보 선정', isCompleted: false},
+    {id: generateUUID(), text: '전시회 장소 예약', isCompleted: false},
+    {id: generateUUID(), text: '홍보 포스터 제작', isCompleted: false},
+  ],
+  isCompleted: false,
+};
+
+export const certificateExam: GoalData = {
+  id: generateUUID(),
+  title: '정보처리기사 자격증 취득',
+  icon: 'award',
+  dDay: {
+    date: '25.10.10',
+    remainingDays: 491,
+  },
+  achieved: [
+    {id: generateUUID(), text: '필기 교재 구입', isCompleted: true},
+    {id: generateUUID(), text: '필기 1회독 완료', isCompleted: true},
+    {id: generateUUID(), text: '기출문제 3회분 풀이', isCompleted: true},
+  ],
+  todos: [
+    {id: generateUUID(), text: '실기 교재 정리', isCompleted: false},
+    {id: generateUUID(), text: '실기 모의고사 2회', isCompleted: false},
+    {id: generateUUID(), text: '시험 접수', isCompleted: false},
+    {id: generateUUID(), text: '최종 복습', isCompleted: false},
   ],
   isCompleted: false,
 };

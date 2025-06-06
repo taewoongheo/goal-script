@@ -1,5 +1,5 @@
 import {scale, moderateScale} from 'react-native-size-matters';
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions} from 'react-native';
 import {Colors} from './Colors';
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
@@ -57,6 +57,7 @@ export const Theme = {
     small: moderateScale(22),
     medium: moderateScale(24),
     large: moderateScale(26),
+    fab: moderateScale(60),
   },
 
   iconSpace: {

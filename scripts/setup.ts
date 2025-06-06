@@ -3,11 +3,24 @@ import {
   marathonPreparation,
   websiteProject,
   academicPaper,
+  languageLearning,
+  readingChallenge,
+  photoExhibition,
+  certificateExam,
 } from '../constants/SampleData';
 import {generateUUID} from '../utils/uuid';
+import {GoalData, TaskItem} from '@/types/goal';
 
 export const SHOULD_SEED_SAMPLE_DATA = true;
-export const SAMPLE_DATA = marathonPreparation;
+export const SAMPLE_DATA: GoalData[] = [
+  academicPaper,
+  marathonPreparation,
+  websiteProject,
+  // languageLearning,
+  // readingChallenge,
+  // photoExhibition,
+  // certificateExam,
+];
 
 export async function ensureTables(db: SQLite.SQLiteDatabase) {
   await db.execAsync(`
@@ -30,47 +43,49 @@ export async function ensureTables(db: SQLite.SQLiteDatabase) {
 
 export async function insertSampleData(
   db: SQLite.SQLiteDatabase,
-  sampleData = SAMPLE_DATA,
+  sampleDataArray: GoalData[] = SAMPLE_DATA,
 ) {
   // 기존 데이터 삭제 (원하면 옵션화 가능)
   await db.runAsync('DELETE FROM TaskItem');
   await db.runAsync('DELETE FROM Goal');
 
-  const goalId = generateUUID();
-  await db.runAsync(
-    `INSERT INTO Goal (id, title, icon, dDay_date, isCompleted)
-     VALUES (?, ?, ?, ?, ?)`,
-    goalId,
-    sampleData.title,
-    sampleData.icon,
-    sampleData.dDay.date,
-    0,
-  );
+  for (const sampleData of sampleDataArray) {
+    const goalId = generateUUID();
+    await db.runAsync(
+      `INSERT INTO Goal (id, title, icon, dDay_date, isCompleted)
+       VALUES (?, ?, ?, ?, ?)`,
+      goalId,
+      sampleData.title,
+      sampleData.icon,
+      sampleData.dDay.date,
+      0,
+    );
 
-  await Promise.all(
-    sampleData.achieved.map(t =>
-      db.runAsync(
-        `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
-         VALUES (?, ?, ?, ?)`,
-        t.id,
-        goalId,
-        t.text,
-        1,
+    await Promise.all(
+      sampleData.achieved.map((t: TaskItem) =>
+        db.runAsync(
+          `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
+           VALUES (?, ?, ?, ?)`,
+          t.id,
+          goalId,
+          t.text,
+          1,
+        ),
       ),
-    ),
-  );
-  await Promise.all(
-    sampleData.todos.map(t =>
-      db.runAsync(
-        `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
-         VALUES (?, ?, ?, ?)`,
-        t.id,
-        goalId,
-        t.text,
-        0,
+    );
+    await Promise.all(
+      sampleData.todos.map((t: TaskItem) =>
+        db.runAsync(
+          `INSERT INTO TaskItem (id, goal_id, text, isCompleted)
+           VALUES (?, ?, ?, ?)`,
+          t.id,
+          goalId,
+          t.text,
+          0,
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 export async function setupDatabase() {

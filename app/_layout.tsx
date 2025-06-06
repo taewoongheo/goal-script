@@ -1,15 +1,17 @@
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import {StatusBar} from 'expo-status-bar';
-import React, {useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Platform, Text, View} from 'react-native';
+import {
+  FlatList,
+  GestureHandlerRootView,
+  Pressable,
+} from 'react-native-gesture-handler';
 import {
   BottomSheetProvider,
   useBottomSheet,
 } from '@/contexts/BottomSheetContext';
-
 import {TaskItem} from '@/types/goal';
 import {GoalBottomSheetContainer} from '@/components/bottomSheets/GoalBottomSheetContainer';
 import {DDayBottomSheetContainer} from '@/components/bottomSheets/DDayBottomSheetContainer';
@@ -17,6 +19,12 @@ import {ListItemBottomSheetContainer} from '@/components/bottomSheets/ListItemBo
 import {AddTaskBottomSheetContainer} from '@/components/bottomSheets/AddTaskBottomSheetContainer';
 import {initializeGoals, useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
+import {BlurView} from 'expo-blur';
+import {viewportHeight, viewportWidth} from '@/utils/viewport';
+import {Theme} from '@/constants/Theme';
+import {scale} from 'react-native-size-matters';
+import {FontAwesome5, Fontisto, MaterialIcons} from '@expo/vector-icons';
+import {Colors} from '@/constants/Colors';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -49,6 +57,20 @@ function RootLayoutContent() {
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const goalData = useGoalStore(state => state.goalData);
 
+  const [currentTabWidth, setCurrentTabWidth] = useState(0);
+  const [standardTabWidth, setStandardTabWidth] = useState(0);
+
+  const tabBarWidthCalculatedFlag = useRef(false);
+
+  useEffect(() => {
+    tabBarWidthCalculatedFlag.current = false;
+  }, [goalData.length]);
+
+  console.log('tabBarWidthCalculatedFlag: ', tabBarWidthCalculatedFlag.current);
+
+  console.log('currentTabWidth: ', currentTabWidth);
+  console.log('standardTabWidth: ', standardTabWidth);
+
   useEffect(() => {
     (async function () {
       await setupDatabase();
@@ -61,22 +83,108 @@ function RootLayoutContent() {
     [selectedTask],
   );
 
-  if (goalData.length === 0) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>목표를 만들어보세요</Text>
-      </View>
-    );
-  }
-
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SelectedTaskContext.Provider value={selectedTaskValue}>
+        {goalData.length === 0 && (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text>목표를 만들어보세요</Text>
+          </View>
+        )}
+
         <Stack>
           <Stack.Screen name="index" options={{headerShown: false}} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style="auto" />
+
+        <TabWrapper
+          setCurrentTabWidth={setCurrentTabWidth}
+          setStandardTabWidth={setStandardTabWidth}
+          tabBarWidthCalculatedFlag={tabBarWidthCalculatedFlag}>
+          <Pressable
+            onPress={() => {
+              console.log('add goal');
+            }}>
+            <MaterialIcons
+              name="library-add"
+              size={30}
+              // color={Platform.OS === 'ios' ? 'black' : 'white'}
+              color="black"
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              console.log('settings');
+            }}>
+            <Fontisto
+              name="player-settings"
+              size={30}
+              // color={Platform.OS === 'ios' ? 'black' : 'white'}
+              color="black"
+            />
+          </Pressable>
+          {goalData.length > 0 && (
+            <>
+              <View
+                style={{
+                  width: 20,
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(92, 92, 92, 0.3)',
+                    width: 2,
+                    height: 30,
+                  }}
+                />
+              </View>
+              {currentTabWidth <= standardTabWidth ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  {goalData.map(item => (
+                    <Pressable
+                      key={item.id}
+                      onPress={() => console.log(item.title)}>
+                      <FontAwesome5
+                        name={item.icon}
+                        size={24}
+                        // color={Platform.OS === 'ios' ? 'black' : 'white'}
+                        color="black"
+                      />
+                    </Pressable>
+                  ))}
+                </View>
+              ) : (
+                <FlatList
+                  data={goalData}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    gap: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  renderItem={({item}) => (
+                    <Pressable onPress={() => console.log(item.title)}>
+                      <FontAwesome5
+                        name={item.icon}
+                        size={24}
+                        // color={Platform.OS === 'ios' ? 'black' : 'white'}
+                        color="black"
+                      />
+                    </Pressable>
+                  )}
+                />
+              )}
+            </>
+          )}
+        </TabWrapper>
 
         <GoalBottomSheetContainer bottomSheetRef={goalBottomSheetRef} />
         <DDayBottomSheetContainer bottomSheetRef={ddayBottomSheetRef} />
@@ -88,6 +196,67 @@ function RootLayoutContent() {
         <AddTaskBottomSheetContainer bottomSheetRef={addTaskBottomSheetRef} />
       </SelectedTaskContext.Provider>
     </GestureHandlerRootView>
+  );
+}
+
+function TabWrapper({
+  children,
+  setCurrentTabWidth,
+  setStandardTabWidth,
+  tabBarWidthCalculatedFlag,
+}: {
+  children: React.ReactNode;
+  setCurrentTabWidth: (width: number) => void;
+  setStandardTabWidth: (width: number) => void;
+  tabBarWidthCalculatedFlag: React.MutableRefObject<boolean>;
+}) {
+  return (
+    <View
+      onLayout={e => {
+        setStandardTabWidth(e.nativeEvent.layout.width);
+      }}
+      style={{
+        position: 'absolute',
+        bottom: viewportHeight * 0.04,
+        left: viewportWidth * 0.06,
+        right: viewportWidth * 0.06,
+        height: viewportHeight * 0.08,
+      }}>
+      <BlurView
+        onLayout={e => {
+          if (!tabBarWidthCalculatedFlag.current) {
+            // eslint-disable-next-line no-param-reassign
+            tabBarWidthCalculatedFlag.current = true;
+            setCurrentTabWidth(e.nativeEvent.layout.width);
+          }
+        }}
+        intensity={60}
+        blurReductionFactor={0.2}
+        experimentalBlurMethod="dimezisBlurView"
+        tint="light"
+        style={{
+          alignSelf: 'center',
+          backgroundColor: 'rgba(161, 161, 161, 0.3)',
+          borderWidth: Platform.OS === 'ios' ? 0.4 : 1,
+          borderColor: 'rgba(66, 66, 66, 0.3)',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: Theme.spacing.large,
+          paddingVertical: Theme.spacing.small + scale(2),
+          borderRadius: Theme.borderRadius.medium,
+          overflow: 'hidden',
+        }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap: 20,
+          }}>
+          {children}
+        </View>
+      </BlurView>
+    </View>
   );
 }
 

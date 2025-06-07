@@ -17,7 +17,8 @@ import {Layout} from '@/constants/Layout';
 import {ANIMATION_DURATION} from '@/constants/Animation';
 import {HighlightColor} from '@/constants/Colors';
 import {Theme} from '@/constants/Theme';
-import {viewportWidth} from '@/utils/viewport';
+import {viewportHeight, viewportWidth} from '@/utils/viewport';
+import {scale} from 'react-native-size-matters';
 import {TaskSectionProps} from './types';
 
 export function TaskSection({
@@ -34,6 +35,7 @@ export function TaskSection({
   renderItem,
   listItemBottomSheetRef,
   addTaskBottomSheetRef,
+  isScrollable,
 }: TaskSectionProps) {
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -169,7 +171,7 @@ export function TaskSection({
                     <Feather
                       name="plus"
                       size={Theme.iconSize.medium}
-                      color={Theme.colors.text}
+                      color="white"
                     />
                   </Animated.View>
                 </Pressable>
@@ -179,7 +181,17 @@ export function TaskSection({
         </Animated.View>
       </View>
 
-      <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
+      <Animated.Text
+        layout={linearTransitionAnimation}
+        style={[
+          styles.text,
+          {
+            paddingBottom:
+              isScrollable && title === 'todos'
+                ? viewportHeight * 0.14 + scale(20)
+                : 0,
+          },
+        ]}>
         {suffix}
       </Animated.Text>
     </Animated.View>
@@ -211,7 +223,7 @@ const localStyles = StyleSheet.create({
   },
   addTaskButton: {
     width: '100%',
-    backgroundColor: Theme.colors.lightGray,
+    backgroundColor: 'rgb(30, 30, 30)',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

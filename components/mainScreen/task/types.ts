@@ -39,4 +39,5 @@ export interface TaskSectionProps {
   renderItem: (props: TaskItemProps) => React.ReactElement;
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
   addTaskBottomSheetRef?: React.RefObject<BottomSheet>;
+  isScrollable: boolean;
 }

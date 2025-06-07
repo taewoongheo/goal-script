@@ -5,7 +5,7 @@ import Animated, {
   FadeOut,
 } from 'react-native-reanimated';
 import {useMemo, useState} from 'react';
-import {ScaledSheet} from 'react-native-size-matters';
+import {scale, ScaledSheet} from 'react-native-size-matters';
 import {Pressable, ScrollView} from 'react-native-gesture-handler';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
@@ -136,6 +136,7 @@ export default function MainScreen() {
             linearTransitionAnimation={linearTransitionAnimation}
             listItemBottomSheetRef={listItemBottomSheetRef}
             addTaskBottomSheetRef={addTaskBottomSheetRef}
+            isScrollable={isScrollable}
           />
         </Animated.View>
       </ScrollView>

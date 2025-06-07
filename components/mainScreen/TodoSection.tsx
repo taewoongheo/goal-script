@@ -14,6 +14,7 @@ interface TodoSectionProps {
   linearTransitionAnimation: any;
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
   addTaskBottomSheetRef?: React.RefObject<BottomSheet>;
+  isScrollable: boolean;
 }
 
 export function TodoSection({
@@ -23,6 +24,7 @@ export function TodoSection({
   linearTransitionAnimation,
   listItemBottomSheetRef,
   addTaskBottomSheetRef,
+  isScrollable,
 }: TodoSectionProps) {
   const selectedGoalId = useGoalStore(state => state.selectedGoalId);
   const {actions} = useGoalData(selectedGoalId ?? '');
@@ -50,6 +52,7 @@ export function TodoSection({
       renderItem={renderTaskItem}
       listItemBottomSheetRef={listItemBottomSheetRef}
       addTaskBottomSheetRef={addTaskBottomSheetRef}
+      isScrollable={isScrollable}
     />
   );
 }

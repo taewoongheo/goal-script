@@ -9,6 +9,7 @@ import {useGoalData} from '@/hooks/useGoalData';
 import {generateUUID} from '@/utils/uuid';
 import {AddGoalBottomSheet} from '@/components/mainScreen/goal/AddGoalBottomSheet';
 import {dateUtils} from '@/utils/dateUtils';
+import {useGoalStore} from '@/stores/goalStore';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
 
 interface AddGoalBottomSheetContainerProps {
@@ -22,6 +23,7 @@ export function AddGoalBottomSheetContainer({
   const [selectedIcon, setSelectedIcon] = useState<string>('archway');
   const titleInputRef = useRef<TextInput>(null);
 
+  const {setSelectedGoalId} = useGoalStore();
   const {actions} = useGoalData('');
 
   const icons = useMemo(
@@ -63,8 +65,9 @@ export function AddGoalBottomSheetContainer({
   }, []);
 
   const handleAddGoal = () => {
+    const goalId = generateUUID();
     actions.goal.add({
-      id: generateUUID(),
+      id: goalId,
       achieved: [],
       todos: [],
       title: tempEditableTitle,
@@ -78,6 +81,7 @@ export function AddGoalBottomSheetContainer({
     bottomSheetRef.current?.close();
     setTempEditableTitle('');
     setSelectedIcon('archway');
+    setSelectedGoalId(goalId);
   };
 
   return (

@@ -64,13 +64,6 @@ function RootLayoutContent() {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SelectedTaskContext.Provider value={selectedTaskValue}>
-        {goalData.length === 0 && (
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>목표를 만들어보세요</Text>
-          </View>
-        )}
-
         <Stack>
           <Stack.Screen name="index" options={{headerShown: false}} />
           <Stack.Screen name="settings" options={{headerShown: false}} />

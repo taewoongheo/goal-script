@@ -89,7 +89,7 @@ export const marathonPreparation: GoalData = {
 
 export const academicPaper: GoalData = {
   id: generateUUID(),
-  title: '인공지능 윤리에 관한 학술 논문 게재',
+  title: '인공지능 윤리에 관한 학술 논문sdds 게재sdsdsssss',
   icon: 'book',
   dDay: {
     date: '25.12.20',

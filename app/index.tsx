@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import Animated, {
   LinearTransition,
   FadeIn,
@@ -91,55 +91,65 @@ export default function MainScreen() {
         }}
       />
 
-      <ScrollView
-        contentContainerStyle={styles.scrollContentContainer}
-        scrollEnabled={isScrollable}
-        showsVerticalScrollIndicator={false}>
-        <Animated.View
-          style={styles.textContainer}
-          layout={linearTransitionAnimation}
-          onLayout={e => {
-            setIsScrollable(e.nativeEvent.layout.height > viewportHeight);
-          }}>
-          <GoalSection
-            isGoalExpanded={expandStates.goal[0]}
-            onToggleGoal={handleToggle}
-            styles={componentStyles}
-            linearTransitionAnimation={linearTransitionAnimation}
-            fadeInAnimation={fadeInAnimation}
-            fadeOutAnimation={fadeOutAnimation}
-            bottomSheetRef={goalBottomSheetRef}
-          />
+      {goalData.length === 0 ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Pressable onPress={() => addGoalBottomSheetRef.current?.expand()}>
+            <Text style={[componentStyles.text, componentStyles.highlight]}>
+              목표를 만들어보세요
+            </Text>
+          </Pressable>
+        </View>
+      ) : (
+        <ScrollView
+          contentContainerStyle={styles.scrollContentContainer}
+          scrollEnabled={isScrollable}
+          showsVerticalScrollIndicator={false}>
+          <Animated.View
+            style={styles.textContainer}
+            layout={linearTransitionAnimation}
+            onLayout={e => {
+              setIsScrollable(e.nativeEvent.layout.height > viewportHeight);
+            }}>
+            <GoalSection
+              isGoalExpanded={expandStates.goal[0]}
+              onToggleGoal={handleToggle}
+              styles={componentStyles}
+              linearTransitionAnimation={linearTransitionAnimation}
+              fadeInAnimation={fadeInAnimation}
+              fadeOutAnimation={fadeOutAnimation}
+              bottomSheetRef={goalBottomSheetRef}
+            />
 
-          <DdaySection
-            isDdayExpanded={expandStates.dday[0]}
-            onToggleDday={handleToggle}
-            styles={componentStyles}
-            linearTransitionAnimation={linearTransitionAnimation}
-            fadeInAnimation={fadeInAnimation}
-            fadeOutAnimation={fadeOutAnimation}
-            bottomSheetRef={ddayBottomSheetRef}
-          />
+            <DdaySection
+              isDdayExpanded={expandStates.dday[0]}
+              onToggleDday={handleToggle}
+              styles={componentStyles}
+              linearTransitionAnimation={linearTransitionAnimation}
+              fadeInAnimation={fadeInAnimation}
+              fadeOutAnimation={fadeOutAnimation}
+              bottomSheetRef={ddayBottomSheetRef}
+            />
 
-          <AchievedSection
-            isAchievedExpanded={expandStates.achieved[0]}
-            onToggle={handleToggle}
-            styles={componentStyles}
-            linearTransitionAnimation={linearTransitionAnimation}
-            listItemBottomSheetRef={listItemBottomSheetRef}
-          />
+            <AchievedSection
+              isAchievedExpanded={expandStates.achieved[0]}
+              onToggle={handleToggle}
+              styles={componentStyles}
+              linearTransitionAnimation={linearTransitionAnimation}
+              listItemBottomSheetRef={listItemBottomSheetRef}
+            />
 
-          <TodoSection
-            isTodosExpanded={expandStates.todos[0]}
-            onToggle={handleToggle}
-            styles={componentStyles}
-            linearTransitionAnimation={linearTransitionAnimation}
-            listItemBottomSheetRef={listItemBottomSheetRef}
-            addTaskBottomSheetRef={addTaskBottomSheetRef}
-            isScrollable={isScrollable}
-          />
-        </Animated.View>
-      </ScrollView>
+            <TodoSection
+              isTodosExpanded={expandStates.todos[0]}
+              onToggle={handleToggle}
+              styles={componentStyles}
+              linearTransitionAnimation={linearTransitionAnimation}
+              listItemBottomSheetRef={listItemBottomSheetRef}
+              addTaskBottomSheetRef={addTaskBottomSheetRef}
+              isScrollable={isScrollable}
+            />
+          </Animated.View>
+        </ScrollView>
+      )}
     </View>
   );
 }

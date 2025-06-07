@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Keyboard, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Keyboard, View, StyleSheet} from 'react-native';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -26,6 +26,7 @@ export function AddGoalBottomSheetContainer({
   const [tempEditableTitle, setTempEditableTitle] = useState('');
   const [selectedIcon, setSelectedIcon] = useState<string>('archway');
   const titleInputRef = useRef<TextInput>(null);
+
   const selectedGoalId = useGoalStore(state => state.selectedGoalId);
   const {actions} = useGoalData(selectedGoalId ?? '');
 
@@ -135,6 +136,7 @@ export function AddGoalBottomSheetContainer({
                 },
                 isCompleted: false,
               });
+              bottomSheetRef.current?.close();
             }}
           />
         </Pressable>
@@ -183,6 +185,6 @@ const styles = StyleSheet.create({
   iconButtonSelected: {
     backgroundColor: 'rgb(255, 255, 255)',
     borderColor: 'rgb(201, 201, 201)',
-    borderWidth: 2,
+    borderWidth: 1,8,
   },
 });

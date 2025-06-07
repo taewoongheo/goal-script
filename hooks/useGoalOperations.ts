@@ -5,8 +5,10 @@ import {
   prepareUpdateDateGoal,
   prepareDeleteGoal,
   prepareCompleteGoal,
+  prepareInsertGoal,
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
+import {GoalData} from '@/types/goal';
 
 export function useGoalOperations(goalId: string) {
   const {updateGoalData, deleteGoalData} = useGoalStore();
@@ -100,10 +102,31 @@ export function useGoalOperations(goalId: string) {
     }
   };
 
+  const addGoal = async (goal: GoalData) => {
+    if (!goalId) {
+      console.error('No goal ID provided');
+      return;
+    }
+
+    try {
+      const addQuery = await prepareInsertGoal();
+      await addQuery.executeAsync({
+        $id: goalId,
+        $title: goal.title,
+        $icon: goal.icon,
+        $dDay_date: goal.dDay.date,
+        $isCompleted: goal.isCompleted,
+      });
+    } catch (e) {
+      console.error('DB addGoal error:', e);
+    }
+  };
+
   return {
     updateTitle,
     updateDate,
     completeGoal,
     deleteGoal,
+    addGoal,
   };
 }

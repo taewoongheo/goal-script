@@ -1,3 +1,4 @@
+import {GoalData} from '@/types/goal';
 import {useTaskOperations} from './useTaskOperations';
 import {useGoalOperations} from './useGoalOperations';
 
@@ -23,7 +24,13 @@ export function useGoalData(goalId: string) {
         edit: (taskId: string, newText: string) =>
           taskOps.editTask(taskId, newText, 'achieved'),
       },
-      goal: goalOps,
+      goal: {
+        add: (goal: GoalData) => goalOps.addGoal(goal),
+        updateTitle: (newTitle: string) => goalOps.updateTitle(newTitle),
+        updateDate: (newDate: string) => goalOps.updateDate(newDate),
+        complete: () => goalOps.completeGoal(),
+        delete: () => goalOps.deleteGoal(),
+      },
     },
   };
 }

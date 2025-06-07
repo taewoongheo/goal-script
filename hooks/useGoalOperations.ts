@@ -103,15 +103,10 @@ export function useGoalOperations(goalId: string) {
   };
 
   const addGoal = async (goal: GoalData) => {
-    if (!goalId) {
-      console.error('No goal ID provided');
-      return;
-    }
-
     try {
       const addQuery = await prepareInsertGoal();
       await addQuery.executeAsync({
-        $id: goalId,
+        $id: goal.id,
         $title: goal.title,
         $icon: goal.icon,
         $dDay_date: goal.dDay.date,

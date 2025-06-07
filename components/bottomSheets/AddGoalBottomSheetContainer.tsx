@@ -13,6 +13,7 @@ import {Pressable, TextInput} from 'react-native-gesture-handler';
 import {useGoalStore} from '@/stores/goalStore';
 import {useGoalData} from '@/hooks/useGoalData';
 import {FontAwesome5} from '@expo/vector-icons';
+import {generateUUID} from '@/utils/uuid';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
 import {PrimaryBottomSheetButton} from '../ui/BottomSheetButton';
 
@@ -128,6 +129,9 @@ export function AddGoalBottomSheetContainer({
             label="목표 추가"
             onPress={() => {
               actions.goal.add({
+                id: generateUUID(),
+                achieved: [],
+                todos: [],
                 title: tempEditableTitle,
                 icon: selectedIcon,
                 dDay: {
@@ -185,6 +189,6 @@ const styles = StyleSheet.create({
   iconButtonSelected: {
     backgroundColor: 'rgb(255, 255, 255)',
     borderColor: 'rgb(201, 201, 201)',
-    borderWidth: 1,8,
+    borderWidth: 1.8,
   },
 });

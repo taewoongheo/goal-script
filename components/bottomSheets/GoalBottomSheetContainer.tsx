@@ -85,8 +85,8 @@ export function GoalBottomSheetContainer({
           dDay={dDay}
           rDay={rDay}
           onTitleChange={actions.goal.updateTitle}
-          onCompleteGoal={actions.goal.completeGoal}
-          onDeleteGoal={actions.goal.deleteGoal}
+          onCompleteGoal={actions.goal.complete}
+          onDeleteGoal={actions.goal.delete}
           bottomSheetRef={bottomSheetRef}
           setEditModeHeight={setEditModeHeight}
         />

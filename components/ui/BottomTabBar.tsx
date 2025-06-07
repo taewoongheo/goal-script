@@ -3,7 +3,7 @@ import {View, Platform, FlatList} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import {BlurView} from 'expo-blur';
 import {scale} from 'react-native-size-matters';
-import {FontAwesome5, Ionicons, MaterialIcons} from '@expo/vector-icons';
+import {AntDesign, FontAwesome5, MaterialIcons} from '@expo/vector-icons';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
 import {Theme} from '@/constants/Theme';
 
@@ -16,14 +16,12 @@ interface BottomTabBarProps {
   goalData: Goal[];
   setSelectedGoalId: (id: string) => void;
   onAddGoal: () => void;
-  onSettings: () => void;
 }
 
 function BottomTabBar({
   goalData,
   setSelectedGoalId,
   onAddGoal,
-  onSettings,
 }: BottomTabBarProps) {
   return (
     <View
@@ -33,6 +31,8 @@ function BottomTabBar({
         left: viewportWidth * 0.06,
         right: viewportWidth * 0.06,
         height: viewportHeight * 0.08,
+        zIndex: 1000,
+        elevation: 1000,
       }}>
       <BlurView
         intensity={50}
@@ -49,8 +49,8 @@ function BottomTabBar({
           borderColor: 'rgba(66, 66, 66, 0.3)',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingHorizontal: Theme.spacing.large + scale(8),
-          paddingVertical: Theme.spacing.medium,
+          paddingHorizontal: Theme.spacing.large,
+          paddingVertical: Theme.spacing.medium - scale(5),
           borderRadius: Theme.borderRadius.medium,
           overflow: 'hidden',
         }}>
@@ -62,19 +62,19 @@ function BottomTabBar({
             gap: scale(20),
           }}>
           <Pressable onPress={onAddGoal}>
-            <MaterialIcons
-              name="library-add"
-              size={Theme.iconSize.large}
+            <AntDesign
+              name="plussquare"
+              size={Theme.iconSize.large + scale(2)}
               color="black"
             />
           </Pressable>
-          <Pressable onPress={onSettings}>
+          {/* <Pressable onPress={onSettings}>
             <Ionicons
               name="settings-sharp"
               size={Theme.iconSize.large}
               color="black"
             />
-          </Pressable>
+          </Pressable> */}
           {goalData.length > 0 && (
             <>
               <View
@@ -107,7 +107,7 @@ function BottomTabBar({
                   <Pressable onPress={() => setSelectedGoalId(item.id)}>
                     <FontAwesome5
                       name={item.icon}
-                      size={Theme.iconSize.large}
+                      size={Theme.iconSize.medium}
                       color="black"
                     />
                   </Pressable>

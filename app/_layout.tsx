@@ -1,7 +1,7 @@
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
@@ -16,7 +16,6 @@ import {AddTaskBottomSheetContainer} from '@/components/bottomSheets/AddTaskBott
 import {AddGoalBottomSheetContainer} from '@/components/bottomSheets/AddGoalBottomSheetContainer';
 import {initializeGoals, useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
-import BottomTabBar from '@/components/ui/BottomTabBar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,7 +47,7 @@ function RootLayoutContent() {
     addGoalBottomSheetRef,
   } = useBottomSheet();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
-  const {goalData, setSelectedGoalId} = useGoalStore(state => state);
+  const {goalData} = useGoalStore(state => state);
 
   useEffect(() => {
     (async function () {
@@ -74,19 +73,15 @@ function RootLayoutContent() {
 
         <Stack>
           <Stack.Screen name="index" options={{headerShown: false}} />
+          <Stack.Screen name="settings" options={{headerShown: false}} />
+          <Stack.Screen name="privacy-policy" options={{headerShown: false}} />
+          <Stack.Screen
+            name="terms-of-service"
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="license-info" options={{headerShown: false}} />
           <Stack.Screen name="+not-found" />
         </Stack>
-
-        <BottomTabBar
-          goalData={goalData}
-          setSelectedGoalId={setSelectedGoalId}
-          onAddGoal={() => {
-            addGoalBottomSheetRef.current?.expand();
-          }}
-          onSettings={() => {
-            console.log('settings');
-          }}
-        />
 
         <GoalBottomSheetContainer bottomSheetRef={goalBottomSheetRef} />
         <DDayBottomSheetContainer bottomSheetRef={ddayBottomSheetRef} />

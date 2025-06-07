@@ -6,7 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useMemo, useState} from 'react';
 import {ScaledSheet} from 'react-native-size-matters';
-import {ScrollView} from 'react-native-gesture-handler';
+import {Pressable, ScrollView} from 'react-native-gesture-handler';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
@@ -16,16 +16,23 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
+import {AntDesign} from '@expo/vector-icons';
+import {router} from 'expo-router';
+import BottomTabBar from '@/components/ui/BottomTabBar';
+import {useGoalStore} from '@/stores/goalStore';
 
 export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
   const [isScrollable, setIsScrollable] = useState(false);
+
+  const {goalData, setSelectedGoalId} = useGoalStore(state => state);
 
   const {
     goalBottomSheetRef,
     ddayBottomSheetRef,
     listItemBottomSheetRef,
     addTaskBottomSheetRef,
+    addGoalBottomSheetRef,
   } = useBottomSheet();
 
   const linearTransitionAnimation = useMemo(
@@ -53,6 +60,37 @@ export default function MainScreen() {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          position: 'absolute',
+          top: viewportHeight * 0.08,
+          right: viewportWidth * 0.08,
+          zIndex: 1000,
+          elevation: 1000,
+        }}>
+        <Pressable
+          onPress={() => router.push('/settings')}
+          style={{
+            padding: 8,
+            borderRadius: 20,
+          }}
+          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+          <AntDesign
+            name="questioncircleo"
+            size={24}
+            color="rgb(115, 115, 115)"
+          />
+        </Pressable>
+      </View>
+
+      <BottomTabBar
+        goalData={goalData}
+        setSelectedGoalId={setSelectedGoalId}
+        onAddGoal={() => {
+          addGoalBottomSheetRef.current?.expand();
+        }}
+      />
+
       <ScrollView
         contentContainerStyle={styles.scrollContentContainer}
         scrollEnabled={isScrollable}

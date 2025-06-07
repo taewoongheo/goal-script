@@ -8,6 +8,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {useGoalData} from '@/hooks/useGoalData';
 import {generateUUID} from '@/utils/uuid';
 import {AddGoalBottomSheet} from '@/components/mainScreen/goal/AddGoalBottomSheet';
+import {dateUtils} from '@/utils/dateUtils';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
 
 interface AddGoalBottomSheetContainerProps {
@@ -69,7 +70,7 @@ export function AddGoalBottomSheetContainer({
       title: tempEditableTitle,
       icon: selectedIcon,
       dDay: {
-        date: new Date().toISOString(),
+        date: dateUtils.formatToAppDate(dateUtils.getToday()),
         remainingDays: 0,
       },
       isCompleted: false,

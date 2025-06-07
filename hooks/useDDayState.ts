@@ -13,6 +13,8 @@ export function useDDayState({
   dDay = 0,
   onSaveDate,
 }: UseDDayStateProps) {
+  console.log('initialDate', initialDate);
+
   // 오늘 날짜 (시간은 00:00:00으로 설정)
   const today = useMemo(() => dateUtils.getToday(), []);
 

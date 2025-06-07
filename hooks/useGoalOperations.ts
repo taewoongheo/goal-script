@@ -11,7 +11,7 @@ import {dateUtils} from '@/utils/dateUtils';
 import {GoalData} from '@/types/goal';
 
 export function useGoalOperations(goalId: string) {
-  const {updateGoalData, deleteGoalData} = useGoalStore();
+  const {updateGoalData, deleteGoalData, addGoalData} = useGoalStore();
 
   const updateTitle = async (newTitle: string) => {
     if (!newTitle.trim()) return;
@@ -103,6 +103,8 @@ export function useGoalOperations(goalId: string) {
   };
 
   const addGoal = async (goal: GoalData) => {
+    addGoalData(goal);
+
     try {
       const addQuery = await prepareInsertGoal();
       await addQuery.executeAsync({

@@ -81,6 +81,7 @@ type GoalStore = {
   updateGoalData: (updater: (goalData: GoalData) => void) => void;
   setSelectedGoalId: (goalId: string | null) => void;
   deleteGoalData: (goalId: string) => void;
+  addGoalData: (goal: GoalData) => void;
 };
 
 export const useGoalStore = create<GoalStore>()(
@@ -94,6 +95,11 @@ export const useGoalStore = create<GoalStore>()(
     ) => {
       set({goalData, selectedGoalId});
     },
+
+    addGoalData: (goal: GoalData) =>
+      set(state => {
+        state.goalData.push(goal);
+      }),
 
     setSelectedGoalId: (goalId: string | null) => set({selectedGoalId: goalId}),
 

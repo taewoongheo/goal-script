@@ -10,6 +10,7 @@ import {
   TextBottomSheetButton,
 } from '@/components/ui/BottomSheetButton';
 import {useSelectedTask} from '@/app/_layout';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 interface ListItemBottomSheetProps {
   onEditItem?: (taskId: string, newText: string) => void;
@@ -31,11 +32,23 @@ export function ListItemBottomSheet({
   }, [selectedTask]);
 
   const handleEditTask = () => {
-    if (
-      selectedTask &&
-      editText.trim() !== '' &&
-      editText !== selectedTask.text
-    ) {
+    if (selectedTask && editText !== selectedTask.text) {
+      if (editText === '') {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: '목표를 입력해주세요.',
+          textBody: '한 글자 이상 입력해주세요',
+        });
+        return;
+      }
+      if (editText.length > 30) {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: '글자 수 제한',
+          textBody: '30자 이하로 입력해주세요',
+        });
+        return;
+      }
       onEditItem?.(selectedTask.id, editText);
     }
   };

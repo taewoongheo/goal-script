@@ -10,6 +10,7 @@ import {generateUUID} from '@/utils/uuid';
 import {AddGoalBottomSheet} from '@/components/mainScreen/goal/AddGoalBottomSheet';
 import {dateUtils} from '@/utils/dateUtils';
 import {useGoalStore} from '@/stores/goalStore';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {commonBottomSheetProps, commonStyles} from './bottomSheetCommon';
 
 interface AddGoalBottomSheetContainerProps {
@@ -20,7 +21,7 @@ export function AddGoalBottomSheetContainer({
   bottomSheetRef,
 }: AddGoalBottomSheetContainerProps) {
   const [tempEditableTitle, setTempEditableTitle] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState<string>('archway');
+  const [selectedIcon, setSelectedIcon] = useState<string>('');
   const titleInputRef = useRef<TextInput>(null);
 
   const {setSelectedGoalId} = useGoalStore();
@@ -65,6 +66,33 @@ export function AddGoalBottomSheetContainer({
   }, []);
 
   const handleAddGoal = () => {
+    if (tempEditableTitle === '') {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '목표를 입력해주세요.',
+        textBody: '한 글자 이상 입력해주세요',
+      });
+      return;
+    }
+
+    if (tempEditableTitle.length > 30) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '글자 수 제한',
+        textBody: '30자 이하로 입력해주세요',
+      });
+      return;
+    }
+
+    if (selectedIcon === '') {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '아이콘 하나를 선택해 주세요',
+        textBody: '아이콘은 반드시 선택해야해요',
+      });
+      return;
+    }
+
     const goalId = generateUUID();
     const today = dateUtils.formatToAppDate(dateUtils.getToday());
     actions.goal.add({

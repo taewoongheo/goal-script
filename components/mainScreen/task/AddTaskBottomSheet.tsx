@@ -6,6 +6,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
 import {PrimaryBottomSheetButton} from '@/components/ui/BottomSheetButton';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 interface AddTaskBottomSheetProps {
   onAddTask?: (taskText: string) => void;
@@ -16,6 +17,24 @@ export function AddTaskBottomSheet({onAddTask}: AddTaskBottomSheetProps) {
   const inputRef = useRef<TextInput>(null);
 
   const handleAddTask = () => {
+    if (taskText === '') {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '목표를 입력해주세요.',
+        textBody: '한 글자 이상 입력해주세요',
+      });
+      return;
+    }
+
+    if (taskText.length > 30) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '글자 수 제한',
+        textBody: '30자 이하로 입력해주세요',
+      });
+      return;
+    }
+
     if (taskText.trim() !== '') {
       onAddTask?.(taskText.trim());
       setTaskText('');

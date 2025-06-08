@@ -68,7 +68,7 @@ export function useDDayState({
       if (newDDay > 1000) {
         Toast.show({
           type: ALERT_TYPE.WARNING,
-          title: 'D-day 기간 제한',
+          title: 'D-Day 기간 제한',
           textBody: '달성일까지 기간이 너무 길어요',
         });
         return;

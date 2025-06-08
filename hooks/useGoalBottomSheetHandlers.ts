@@ -1,4 +1,5 @@
 import React, {useState, useRef} from 'react';
+import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
 import {TextInput} from 'react-native-gesture-handler';
 
 interface UseGoalBottomSheetHandlersProps {
@@ -49,6 +50,22 @@ export function useGoalBottomSheetHandlers({
 
   const handleConfirmEdit = () => {
     setEditableTitle(tempEditableTitle);
+    if (tempEditableTitle === '') {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '목표를 입력해주세요.',
+        textBody: '한 글자 이상 입력해주세요',
+      });
+      return;
+    }
+    if (tempEditableTitle.length > 30) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '글자 수 제한',
+        textBody: '30자 이하로 입력해주세요',
+      });
+      return;
+    }
     if (onTitleChange) {
       onTitleChange(tempEditableTitle);
     }

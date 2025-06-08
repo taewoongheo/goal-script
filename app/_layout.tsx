@@ -15,6 +15,7 @@ import {AddTaskBottomSheetContainer} from '@/components/bottomSheets/AddTaskBott
 import {AddGoalBottomSheetContainer} from '@/components/bottomSheets/AddGoalBottomSheetContainer';
 import {initializeGoals, useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -61,31 +62,36 @@ function RootLayoutContent() {
   );
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <SelectedTaskContext.Provider value={selectedTaskValue}>
-        <Stack>
-          <Stack.Screen name="index" options={{headerShown: false}} />
-          <Stack.Screen name="settings" options={{headerShown: false}} />
-          <Stack.Screen name="privacy-policy" options={{headerShown: false}} />
-          <Stack.Screen
-            name="terms-of-service"
-            options={{headerShown: false}}
-          />
-          <Stack.Screen name="license-info" options={{headerShown: false}} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+    <AlertNotificationRoot>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <SelectedTaskContext.Provider value={selectedTaskValue}>
+          <Stack>
+            <Stack.Screen name="index" options={{headerShown: false}} />
+            <Stack.Screen name="settings" options={{headerShown: false}} />
+            <Stack.Screen
+              name="privacy-policy"
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="terms-of-service"
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name="license-info" options={{headerShown: false}} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
 
-        <GoalBottomSheetContainer bottomSheetRef={goalBottomSheetRef} />
-        <DDayBottomSheetContainer bottomSheetRef={ddayBottomSheetRef} />
-        <ListItemBottomSheetContainer
-          bottomSheetRef={listItemBottomSheetRef}
-          selectedTask={selectedTask}
-          setSelectedTask={setSelectedTask}
-        />
-        <AddTaskBottomSheetContainer bottomSheetRef={addTaskBottomSheetRef} />
-        <AddGoalBottomSheetContainer bottomSheetRef={addGoalBottomSheetRef} />
-      </SelectedTaskContext.Provider>
-    </GestureHandlerRootView>
+          <GoalBottomSheetContainer bottomSheetRef={goalBottomSheetRef} />
+          <DDayBottomSheetContainer bottomSheetRef={ddayBottomSheetRef} />
+          <ListItemBottomSheetContainer
+            bottomSheetRef={listItemBottomSheetRef}
+            selectedTask={selectedTask}
+            setSelectedTask={setSelectedTask}
+          />
+          <AddTaskBottomSheetContainer bottomSheetRef={addTaskBottomSheetRef} />
+          <AddGoalBottomSheetContainer bottomSheetRef={addGoalBottomSheetRef} />
+        </SelectedTaskContext.Provider>
+      </GestureHandlerRootView>
+    </AlertNotificationRoot>
   );
 }
 

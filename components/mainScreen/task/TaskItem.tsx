@@ -25,6 +25,7 @@ export function TaskItem({
   setSelectedIdx,
   selectedIdx,
   listItemBottomSheetRef,
+  isCompleted,
 }: TaskItemProps) {
   const checkboxOpacity = useSharedValue(item.isCompleted ? 1 : 0);
   const textOpacity = useSharedValue(item.isCompleted ? 0.6 : 1);
@@ -82,24 +83,44 @@ export function TaskItem({
       onLayout={onLayout}
       style={styles.container}>
       <View style={[styles.contentContainer]}>
-        <Pressable
-          onPress={toggleComplete}
-          style={[styles.checkboxContainer, {opacity: isSelected ? 1 : 0}]}>
-          <View style={styles.checkbox}>
-            <MaterialIcons
-              name="check-box-outline-blank"
-              size={Theme.iconSize.small}
-              color={Theme.colors.highlight}
-            />
-            <Animated.View style={[styles.checkboxOverlay, checkboxStyle]}>
+        {!isCompleted ? (
+          <Pressable
+            onPress={toggleComplete}
+            style={[styles.checkboxContainer, {opacity: isSelected ? 1 : 0}]}>
+            <View style={styles.checkbox}>
               <MaterialIcons
-                name="check-box"
+                name="check-box-outline-blank"
                 size={Theme.iconSize.small}
                 color={Theme.colors.highlight}
               />
-            </Animated.View>
+              <Animated.View style={[styles.checkboxOverlay, checkboxStyle]}>
+                <MaterialIcons
+                  name="check-box"
+                  size={Theme.iconSize.small}
+                  color={Theme.colors.highlight}
+                />
+              </Animated.View>
+            </View>
+          </Pressable>
+        ) : (
+          <View
+            style={[styles.checkboxContainer, {opacity: isSelected ? 1 : 0}]}>
+            <View style={styles.checkbox}>
+              <MaterialIcons
+                name="check-box-outline-blank"
+                size={Theme.iconSize.small}
+                color={Theme.colors.highlight}
+              />
+              <Animated.View style={[styles.checkboxOverlay, checkboxStyle]}>
+                <MaterialIcons
+                  name="check-box"
+                  size={Theme.iconSize.small}
+                  color={Theme.colors.highlight}
+                />
+              </Animated.View>
+            </View>
           </View>
-        </Pressable>
+        )}
 
         <Pressable
           style={[

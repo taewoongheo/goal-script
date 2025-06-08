@@ -16,6 +16,7 @@ export function GoalLine({
   fadeInAnimation,
   fadeOutAnimation,
   bottomSheetRef,
+  isCompleted,
 }: GoalLineProps) {
   if (!isLastLine) {
     return (
@@ -58,7 +59,7 @@ export function GoalLine({
           )}
         </Animated.View>
         <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
-          까지
+          {isCompleted ? '성공' : '까지'}
         </Animated.Text>
       </View>
     </View>

@@ -14,7 +14,7 @@ import {GoalData, TaskItem} from '@/types/goal';
 export const SHOULD_SEED_SAMPLE_DATA = true;
 export const SAMPLE_DATA: GoalData[] = [
   // academicPaper,
-  // marathonPreparation,
+  marathonPreparation,
   // websiteProject,
   // languageLearning,
   // readingChallenge,

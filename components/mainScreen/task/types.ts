@@ -23,6 +23,7 @@ export interface TaskItemProps {
   setSelectedIdx: (idx: number) => void;
   selectedIdx: number;
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
+  isCompleted: boolean;
 }
 
 export interface TaskSectionProps {
@@ -40,4 +41,5 @@ export interface TaskSectionProps {
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
   addTaskBottomSheetRef?: React.RefObject<BottomSheet>;
   isScrollable: boolean;
+  isCompleted: boolean;
 }

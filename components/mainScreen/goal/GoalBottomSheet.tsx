@@ -15,6 +15,7 @@ interface GoalBottomSheetProps {
   achieved: TaskItem[];
   dDay: number;
   rDay: string;
+  isCompleted: boolean;
   onTitleChange?: (text: string) => void;
   onCompleteGoal?: () => void;
   onDeleteGoal?: () => void;
@@ -27,6 +28,7 @@ export function GoalBottomSheet({
   achieved,
   dDay,
   rDay,
+  isCompleted,
   onTitleChange,
   onCompleteGoal,
   onDeleteGoal,
@@ -67,6 +69,7 @@ export function GoalBottomSheet({
             achieved={achieved}
             dDay={dDay}
             rDay={rDay}
+            isCompleted={isCompleted}
             onSwitchToEdit={handlers.handleSwitchToEdit}
             onCompleteGoal={handlers.handleCompleteGoal}
             onDeleteGoal={handlers.handleDeleteGoal}

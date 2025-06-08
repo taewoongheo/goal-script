@@ -2,7 +2,6 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   BottomSheetProvider,

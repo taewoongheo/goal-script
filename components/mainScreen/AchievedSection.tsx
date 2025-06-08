@@ -13,6 +13,7 @@ interface AchievedSectionProps {
   styles: TaskStyles;
   linearTransitionAnimation: any;
   listItemBottomSheetRef?: React.RefObject<BottomSheet>;
+  isCompleted: boolean;
 }
 
 export function AchievedSection({
@@ -21,6 +22,7 @@ export function AchievedSection({
   styles,
   linearTransitionAnimation,
   listItemBottomSheetRef,
+  isCompleted,
 }: AchievedSectionProps) {
   const selectedGoalId = useGoalStore(state => state.selectedGoalId);
   const {actions} = useGoalData(selectedGoalId ?? '');
@@ -47,9 +49,15 @@ export function AchievedSection({
       onUpdateItem={actions.achieved.toggle}
       icon="list-check"
       title="achieved"
-      suffix={hasTodoItems ? '들을 완료했고,' : '들을 완료했어요.'}
+      suffix={
+        hasTodoItems === 0 || !isCompleted
+          ? '들을 완료했고,'
+          : '들을 완료했어요.'
+      }
       renderItem={renderTaskItem}
       listItemBottomSheetRef={listItemBottomSheetRef}
+      isScrollable={false}
+      isCompleted={isCompleted}
     />
   );
 }

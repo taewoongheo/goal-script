@@ -12,7 +12,15 @@ interface BaseButtonProps {
 
 export function PrimaryBottomSheetButton({label, onPress}: BaseButtonProps) {
   return (
-    <Pressable style={primaryButtonStyles.button} onPress={onPress}>
+    <Pressable
+      style={[
+        primaryButtonStyles.button,
+        label === '완료한 목표에요' && {
+          opacity: 0.7,
+        },
+      ]}
+      onPress={onPress}
+      disabled={label === '완료한 목표에요'}>
       <Text style={primaryButtonStyles.buttonText}>{label}</Text>
     </Pressable>
   );

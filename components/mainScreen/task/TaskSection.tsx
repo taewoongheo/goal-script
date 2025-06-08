@@ -36,6 +36,7 @@ export function TaskSection({
   listItemBottomSheetRef,
   addTaskBottomSheetRef,
   isScrollable,
+  isCompleted,
 }: TaskSectionProps) {
   const [height, setHeight] = useState(0);
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -157,6 +158,7 @@ export function TaskSection({
                     setSelectedIdx,
                     selectedIdx,
                     listItemBottomSheetRef,
+                    isCompleted,
                   })}
                 </React.Fragment>
               ))}

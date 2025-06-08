@@ -25,7 +25,13 @@ export default function MainScreen() {
   const {expandStates, handleToggle} = useToggleExpand();
   const [isScrollable, setIsScrollable] = useState(false);
 
-  const {goalData, setSelectedGoalId} = useGoalStore(state => state);
+  const {goalData, setSelectedGoalId, selectedGoalId} = useGoalStore(
+    state => state,
+  );
+
+  const isCompleted = goalData.find(
+    goal => goal.id === selectedGoalId,
+  )?.isCompleted;
 
   const {
     goalBottomSheetRef,
@@ -120,15 +126,17 @@ export default function MainScreen() {
               bottomSheetRef={goalBottomSheetRef}
             />
 
-            <DdaySection
-              isDdayExpanded={expandStates.dday[0]}
-              onToggleDday={handleToggle}
-              styles={componentStyles}
-              linearTransitionAnimation={linearTransitionAnimation}
-              fadeInAnimation={fadeInAnimation}
-              fadeOutAnimation={fadeOutAnimation}
-              bottomSheetRef={ddayBottomSheetRef}
-            />
+            {!isCompleted && (
+              <DdaySection
+                isDdayExpanded={expandStates.dday[0]}
+                onToggleDday={handleToggle}
+                styles={componentStyles}
+                linearTransitionAnimation={linearTransitionAnimation}
+                fadeInAnimation={fadeInAnimation}
+                fadeOutAnimation={fadeOutAnimation}
+                bottomSheetRef={ddayBottomSheetRef}
+              />
+            )}
 
             <AchievedSection
               isAchievedExpanded={expandStates.achieved[0]}
@@ -136,17 +144,20 @@ export default function MainScreen() {
               styles={componentStyles}
               linearTransitionAnimation={linearTransitionAnimation}
               listItemBottomSheetRef={listItemBottomSheetRef}
+              isCompleted={isCompleted ?? false}
             />
 
-            <TodoSection
-              isTodosExpanded={expandStates.todos[0]}
-              onToggle={handleToggle}
-              styles={componentStyles}
-              linearTransitionAnimation={linearTransitionAnimation}
-              listItemBottomSheetRef={listItemBottomSheetRef}
-              addTaskBottomSheetRef={addTaskBottomSheetRef}
-              isScrollable={isScrollable}
-            />
+            {!isCompleted && (
+              <TodoSection
+                isTodosExpanded={expandStates.todos[0]}
+                onToggle={handleToggle}
+                styles={componentStyles}
+                linearTransitionAnimation={linearTransitionAnimation}
+                listItemBottomSheetRef={listItemBottomSheetRef}
+                addTaskBottomSheetRef={addTaskBottomSheetRef}
+                isScrollable={isScrollable}
+              />
+            )}
           </Animated.View>
         </ScrollView>
       )}

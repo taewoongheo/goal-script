@@ -21,4 +21,5 @@ export interface GoalLineProps {
   fadeInAnimation: FadeIn;
   fadeOutAnimation: FadeOut;
   bottomSheetRef: React.RefObject<BottomSheet>;
+  isCompleted: boolean;
 }

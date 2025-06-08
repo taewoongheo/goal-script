@@ -15,6 +15,7 @@ interface GoalBottomSheetMainProps {
   achieved: TaskItem[];
   dDay: number;
   rDay: string;
+  isCompleted: boolean;
   onSwitchToEdit: () => void;
   onCompleteGoal: () => void;
   onDeleteGoal: () => void;
@@ -25,6 +26,7 @@ export function GoalBottomSheetMain({
   achieved,
   dDay,
   rDay,
+  isCompleted,
   onSwitchToEdit,
   onCompleteGoal,
   onDeleteGoal,
@@ -37,7 +39,7 @@ export function GoalBottomSheetMain({
         </View>
         <AntDesign
           name="right"
-          size={Theme.iconSize.medium}
+          size={Theme.iconSize.small}
           color={Theme.colors.highlight}
         />
       </Pressable>
@@ -75,7 +77,7 @@ export function GoalBottomSheetMain({
       <View style={styles.footerSection}>
         {/* 완료 버튼 */}
         <PrimaryBottomSheetButton
-          label="목표 완료하기"
+          label={isCompleted ? '완료한 목표에요' : '목표 완료하기'}
           onPress={onCompleteGoal}
         />
 

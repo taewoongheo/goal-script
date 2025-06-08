@@ -63,6 +63,7 @@ export function GoalBottomSheetContainer({
   const {title, icon, achieved} = goalData;
   const dDay = goalData.dDay.remainingDays;
   const rDay = goalData.dDay.date;
+  const {isCompleted} = goalData;
 
   return (
     <BottomSheet
@@ -84,6 +85,7 @@ export function GoalBottomSheetContainer({
           achieved={achieved}
           dDay={dDay}
           rDay={rDay}
+          isCompleted={isCompleted}
           onTitleChange={actions.goal.updateTitle}
           onCompleteGoal={actions.goal.complete}
           onDeleteGoal={actions.goal.delete}

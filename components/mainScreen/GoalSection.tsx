@@ -39,6 +39,10 @@ export function GoalSection({
     useGoalStore(
       state => state.goalData.find(g => g.id === selectedGoalId)?.icon,
     ) ?? '?';
+  const isCompleted =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.isCompleted,
+    ) ?? false;
 
   return (
     <View style={styles.lineContainer}>
@@ -66,6 +70,7 @@ export function GoalSection({
                   fadeInAnimation={fadeInAnimation}
                   fadeOutAnimation={fadeOutAnimation}
                   bottomSheetRef={bottomSheetRef}
+                  isCompleted={isCompleted}
                 />
               </View>
             );
@@ -82,6 +87,7 @@ export function GoalSection({
               fadeInAnimation={fadeInAnimation}
               fadeOutAnimation={fadeOutAnimation}
               bottomSheetRef={bottomSheetRef}
+              isCompleted={isCompleted}
             />
           );
         })}

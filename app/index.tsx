@@ -92,6 +92,7 @@ export default function MainScreen() {
       <BottomTabBar
         goalData={goalData}
         setSelectedGoalId={setSelectedGoalId}
+        selectedGoalId={selectedGoalId}
         onAddGoal={() => {
           addGoalBottomSheetRef.current?.expand();
         }}

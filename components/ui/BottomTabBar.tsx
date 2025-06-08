@@ -15,12 +15,14 @@ interface Goal {
 interface BottomTabBarProps {
   goalData: Goal[];
   setSelectedGoalId: (id: string) => void;
+  selectedGoalId: string;
   onAddGoal: () => void;
 }
 
 function BottomTabBar({
   goalData,
   setSelectedGoalId,
+  selectedGoalId,
   onAddGoal,
 }: BottomTabBarProps) {
   return (
@@ -108,7 +110,11 @@ function BottomTabBar({
                     <FontAwesome5
                       name={item.icon}
                       size={Theme.iconSize.medium}
-                      color="black"
+                      color={
+                        selectedGoalId === item.id
+                          ? 'black'
+                          : 'rgb(147, 147, 147)'
+                      }
                     />
                   </Pressable>
                 )}

@@ -47,7 +47,6 @@ function RootLayoutContent() {
     addGoalBottomSheetRef,
   } = useBottomSheet();
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
-  const {goalData} = useGoalStore(state => state);
 
   useEffect(() => {
     (async function () {

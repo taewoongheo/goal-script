@@ -1,6 +1,7 @@
 import {useState, useCallback, useMemo, useEffect} from 'react';
 import {DateData} from 'react-native-calendars';
 import {dateUtils} from '@/utils/dateUtils';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 interface UseDDayStateProps {
   initialDate?: string;
@@ -13,8 +14,6 @@ export function useDDayState({
   dDay = 0,
   onSaveDate,
 }: UseDDayStateProps) {
-  console.log('initialDate', initialDate);
-
   // 오늘 날짜 (시간은 00:00:00으로 설정)
   const today = useMemo(() => dateUtils.getToday(), []);
 
@@ -64,8 +63,18 @@ export function useDDayState({
 
   const handleDateSelect = useCallback(
     (date: DateData) => {
-      setSelectedDate(date.dateString);
       const newDDay = calculateDDay(date.dateString);
+
+      if (newDDay > 1000) {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'D-day 기간 제한',
+          textBody: '달성일까지 기간이 너무 길어요',
+        });
+        return;
+      }
+
+      setSelectedDate(date.dateString);
       setCalculatedDDay(newDDay);
       onSaveDate?.(
         dateUtils.formatToAppDate(dateUtils.parseDate(date.dateString)),

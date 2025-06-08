@@ -111,6 +111,7 @@ export function useGoalOperations(goalId: string) {
         $id: goal.id,
         $title: goal.title,
         $icon: goal.icon,
+        $created_date: goal.createdDate,
         $dDay_date: goal.dDay.date,
         $isCompleted: goal.isCompleted,
       });

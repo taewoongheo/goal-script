@@ -28,6 +28,7 @@ export async function ensureTables(db: SQLite.SQLiteDatabase) {
       id TEXT PRIMARY KEY NOT NULL,
       title TEXT NOT NULL,
       icon TEXT NOT NULL,
+      created_date TEXT NOT NULL,
       dDay_date TEXT NOT NULL,
       isCompleted INTEGER NOT NULL
     );
@@ -52,11 +53,12 @@ export async function insertSampleData(
   for (const sampleData of sampleDataArray) {
     const goalId = generateUUID();
     await db.runAsync(
-      `INSERT INTO Goal (id, title, icon, dDay_date, isCompleted)
-       VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO Goal (id, title, icon, created_date, dDay_date, isCompleted)
+       VALUES (?, ?, ?, ?, ?, ?)`,
       goalId,
       sampleData.title,
       sampleData.icon,
+      sampleData.createdDate,
       sampleData.dDay.date,
       0,
     );

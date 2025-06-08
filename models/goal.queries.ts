@@ -8,8 +8,8 @@ export async function prepareGetGoalById() {
 export async function prepareInsertGoal() {
   const db = await dbPromise;
   return db.prepareAsync(
-    `INSERT INTO Goal (id, title, icon, dDay_date, isCompleted)
-     VALUES ($id, $title, $icon, $dDay_date, $isCompleted)`,
+    `INSERT INTO Goal (id, title, icon, created_date, dDay_date, isCompleted)
+     VALUES ($id, $title, $icon, $created_date, $dDay_date, $isCompleted)`,
   );
 }
 

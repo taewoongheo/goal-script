@@ -9,6 +9,7 @@ export async function initGoalTables(): Promise<void> {
       id TEXT PRIMARY KEY NOT NULL,
       title TEXT NOT NULL,
       icon TEXT NOT NULL,
+      created_date TEXT NOT NULL,
       dDay_date TEXT NOT NULL,
       isCompleted INTEGER NOT NULL
     );

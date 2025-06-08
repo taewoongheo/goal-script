@@ -41,6 +41,7 @@ async function fetchGoalDataById(goalId: string): Promise<GoalData | null> {
       id: goal.id,
       title: goal.title,
       icon: goal.icon,
+      createdDate: goal.created_date,
       dDay: {
         date: goal.dDay_date,
         remainingDays,

@@ -10,6 +10,7 @@ export type GoalData = {
   id: string;
   title: string;
   icon: string;
+  createdDate: string;
   dDay: {
     date: string;
     remainingDays: number;
@@ -23,6 +24,7 @@ export const websiteProject: GoalData = {
   id: generateUUID(),
   title: '웹사이트 리뉴얼',
   icon: 'code',
+  createdDate: '25.01.01',
   dDay: {
     date: '25.05.30',
     remainingDays: 37,
@@ -49,6 +51,7 @@ export const marathonPreparation: GoalData = {
   id: generateUUID(),
   title: '봄 마라톤',
   icon: 'flag-checkered',
+  createdDate: '24.12.01',
   dDay: {
     date: '25.10.15',
     remainingDays: 175,
@@ -91,6 +94,7 @@ export const academicPaper: GoalData = {
   id: generateUUID(),
   title: '인공지능 윤리에 관한 학술 논문sdds 게재sdsdsssss',
   icon: 'book',
+  createdDate: '24.11.15',
   dDay: {
     date: '25.12.20',
     remainingDays: 97,
@@ -155,6 +159,7 @@ export const languageLearning: GoalData = {
   id: generateUUID(),
   title: '영어 회화 마스터',
   icon: 'language',
+  createdDate: '24.10.01',
   dDay: {
     date: '25.09.01',
     remainingDays: 131,
@@ -185,6 +190,7 @@ export const readingChallenge: GoalData = {
   id: generateUUID(),
   title: '2025 독서 챌린지',
   icon: 'book',
+  createdDate: '24.12.31',
   dDay: {
     date: '24.12.31',
     remainingDays: 210,
@@ -213,11 +219,12 @@ export const readingChallenge: GoalData = {
 
 export const photoExhibition: GoalData = {
   id: generateUUID(),
-  title: '사진전 개최',
+  title: '개인 사진전 개최',
   icon: 'camera',
+  createdDate: '24.09.01',
   dDay: {
-    date: '25.07.15',
-    remainingDays: 404,
+    date: '25.11.30',
+    remainingDays: 245,
   },
   achieved: [
     {id: generateUUID(), text: '출품작 컨셉 기획', isCompleted: true},
@@ -236,10 +243,11 @@ export const photoExhibition: GoalData = {
 export const certificateExam: GoalData = {
   id: generateUUID(),
   title: '정보처리기사 자격증 취득',
-  icon: 'award',
+  icon: 'certificate',
+  createdDate: '24.08.15',
   dDay: {
-    date: '25.10.10',
-    remainingDays: 491,
+    date: '25.06.15',
+    remainingDays: 126,
   },
   achieved: [
     {id: generateUUID(), text: '필기 교재 구입', isCompleted: true},

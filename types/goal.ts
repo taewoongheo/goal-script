@@ -8,6 +8,7 @@ export type GoalData = {
   id: string;
   title: string;
   icon: string;
+  createdDate: string;
   dDay: {
     date: string;
     remainingDays: number;

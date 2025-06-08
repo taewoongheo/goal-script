@@ -126,17 +126,16 @@ export default function MainScreen() {
               bottomSheetRef={goalBottomSheetRef}
             />
 
-            {!isCompleted && (
-              <DdaySection
-                isDdayExpanded={expandStates.dday[0]}
-                onToggleDday={handleToggle}
-                styles={componentStyles}
-                linearTransitionAnimation={linearTransitionAnimation}
-                fadeInAnimation={fadeInAnimation}
-                fadeOutAnimation={fadeOutAnimation}
-                bottomSheetRef={ddayBottomSheetRef}
-              />
-            )}
+            <DdaySection
+              isDdayExpanded={expandStates.dday[0]}
+              onToggleDday={handleToggle}
+              styles={componentStyles}
+              linearTransitionAnimation={linearTransitionAnimation}
+              fadeInAnimation={fadeInAnimation}
+              fadeOutAnimation={fadeOutAnimation}
+              bottomSheetRef={ddayBottomSheetRef}
+              isCompleted={isCompleted ?? false}
+            />
 
             <AchievedSection
               isAchievedExpanded={expandStates.achieved[0]}

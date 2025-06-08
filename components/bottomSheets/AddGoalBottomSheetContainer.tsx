@@ -66,14 +66,16 @@ export function AddGoalBottomSheetContainer({
 
   const handleAddGoal = () => {
     const goalId = generateUUID();
+    const today = dateUtils.formatToAppDate(dateUtils.getToday());
     actions.goal.add({
       id: goalId,
       achieved: [],
       todos: [],
       title: tempEditableTitle,
       icon: selectedIcon,
+      createdDate: today,
       dDay: {
-        date: dateUtils.formatToAppDate(dateUtils.getToday()),
+        date: today,
         remainingDays: 0,
       },
       isCompleted: false,

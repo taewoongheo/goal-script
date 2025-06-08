@@ -17,6 +17,7 @@ interface DdaySectionProps {
   fadeInAnimation: any;
   fadeOutAnimation: any;
   bottomSheetRef: React.RefObject<BottomSheet>;
+  isCompleted: boolean;
 }
 
 export function DdaySection({
@@ -27,6 +28,7 @@ export function DdaySection({
   fadeInAnimation,
   fadeOutAnimation,
   bottomSheetRef,
+  isCompleted,
 }: DdaySectionProps) {
   const selectedGoalId = useGoalStore(state => state.selectedGoalId);
   const dDay =
@@ -76,7 +78,7 @@ export function DdaySection({
         </Animated.View>
         {dDay > 0 && (
           <Animated.Text layout={linearTransitionAnimation} style={styles.text}>
-            남았어요
+            {isCompleted ? '동안' : '남았어요'}
           </Animated.Text>
         )}
       </View>

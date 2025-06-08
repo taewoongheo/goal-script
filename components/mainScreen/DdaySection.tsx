@@ -40,6 +40,10 @@ export function DdaySection({
     useGoalStore(
       state => state.goalData.find(g => g.id === selectedGoalId)?.dDay.date,
     ) ?? '??';
+  const createdDate =
+    useGoalStore(
+      state => state.goalData.find(g => g.id === selectedGoalId)?.createdDate,
+    ) ?? '??';
 
   const dDayText = dDay > 0 ? `D-${dDay}` : 'D-Day';
 
@@ -48,14 +52,25 @@ export function DdaySection({
       <View style={localStyles.row}>
         <Pressable
           style={localStyles.calendarButton}
-          onPress={() => onToggleDday('dday')}>
+          onPress={() => {
+            if (isCompleted) return;
+            onToggleDday('dday');
+          }}>
           <FontAwesome
             name="calendar"
             size={Theme.iconSize.medium}
             color={Theme.colors.highlight}
             style={localStyles.iconContainer}
           />
-          <Text style={[styles.text, styles.highlight]}>{dDayText} </Text>
+          <Text style={[styles.text, styles.highlight]}>
+            {!isCompleted
+              ? dDayText
+              : `${dateUtils.formatToAppDate(
+                  dateUtils.parseDate(createdDate),
+                )}~${dateUtils.formatToAppDate(
+                  dateUtils.parseDate(rDay),
+                )}`}{' '}
+          </Text>
         </Pressable>
         <Animated.View
           style={localStyles.overflowContainer}

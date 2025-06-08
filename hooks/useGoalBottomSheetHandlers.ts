@@ -1,5 +1,6 @@
+import {useGoalStore} from '@/stores/goalStore';
 import React, {useState, useRef} from 'react';
-import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {TextInput} from 'react-native-gesture-handler';
 
 interface UseGoalBottomSheetHandlersProps {
@@ -21,6 +22,8 @@ export function useGoalBottomSheetHandlers({
   const [tempEditableTitle, setTempEditableTitle] = useState(title);
   const [isEditMode, setIsEditMode] = useState(false);
   const titleInputRef = useRef<TextInput>(null);
+
+  const {goalData, setSelectedGoalId} = useGoalStore();
 
   const handleSwitchToEdit = () => {
     setIsEditMode(true);
@@ -45,6 +48,13 @@ export function useGoalBottomSheetHandlers({
     if (onDeleteGoal) {
       onDeleteGoal();
     }
+
+    console.log(goalData[0].id);
+
+    if (goalData.length > 1) {
+      setSelectedGoalId(goalData[0].id);
+    }
+
     bottomSheetRef?.current.close();
   };
 

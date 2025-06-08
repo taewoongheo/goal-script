@@ -29,19 +29,26 @@ export function AddGoalBottomSheetContainer({
 
   const icons = useMemo(
     () => [
-      ['archway', 'atom', 'award', 'basketball-ball', 'battery-full', 'book'],
-      ['brain', 'briefcase', 'broom', 'calendar-alt', 'camera-retro', 'car'],
-      ['chart-line', 'child', 'city', 'cloud-sun', 'coffee', 'couch'],
+      [
+        'coins',
+        'dice',
+        'plane-departure',
+        'basketball-ball',
+        'battery-full',
+        'book',
+      ],
+      ['brain', 'briefcase', 'flask', 'microphone-alt', 'camera-retro', 'car'],
+      ['chart-line', 'child', 'city', 'first-order-alt', 'archive', 'tools'],
       [
         'dumbbell',
-        'glass-cheers',
-        'globe',
+        'hubspot',
+        'globe-americas',
         'graduation-cap',
         'heartbeat',
-        'home',
+        'splotch',
       ],
       ['leaf', 'medal', 'mountain', 'paint-brush', 'paw', 'running'],
-      ['trophy', 'weight', 'weight-hanging', 'tree', 'utensils', 'money-bill'],
+      ['gift', 'hourglass-half', 'headphones', 'tree', 'hotjar', 'money-bill'],
     ],
     [],
   );

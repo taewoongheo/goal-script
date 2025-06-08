@@ -92,10 +92,11 @@ export default function MainScreen() {
       <BottomTabBar
         goalData={goalData}
         setSelectedGoalId={setSelectedGoalId}
-        selectedGoalId={selectedGoalId}
+        selectedGoalId={selectedGoalId ?? ''}
         onAddGoal={() => {
           addGoalBottomSheetRef.current?.expand();
         }}
+        onToggleExpand={handleToggle}
       />
 
       {goalData.length === 0 ? (

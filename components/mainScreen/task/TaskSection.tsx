@@ -89,13 +89,15 @@ export function TaskSection({
   if (items.length === 0) {
     if (emptyMessage) {
       return (
-        <Pressable onPress={() => addTaskBottomSheetRef?.current?.expand()}>
-          <Animated.Text
-            layout={linearTransitionAnimation}
-            style={[styles.text, styles.highlight]}>
-            {emptyMessage}
-          </Animated.Text>
-        </Pressable>
+        <Animated.View layout={linearTransitionAnimation}>
+          <Pressable onPress={() => addTaskBottomSheetRef?.current?.expand()}>
+            <Animated.Text
+              layout={linearTransitionAnimation}
+              style={[styles.text, styles.highlight]}>
+              {emptyMessage}
+            </Animated.Text>
+          </Pressable>
+        </Animated.View>
       );
     }
     return null;

@@ -49,8 +49,6 @@ export function useGoalBottomSheetHandlers({
       onDeleteGoal();
     }
 
-    console.log(goalData[0].id);
-
     if (goalData.length > 1) {
       setSelectedGoalId(goalData[0].id);
     }

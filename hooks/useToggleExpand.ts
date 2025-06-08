@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-export type ToggleKey = 'goal' | 'dday' | 'achieved' | 'todos';
+export type ToggleKey = 'goal' | 'dday' | 'achieved' | 'todos' | '';
 
 export function useToggleExpand() {
   const [goalExpand, setGoalExpand] = useState<boolean>(false);

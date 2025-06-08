@@ -6,6 +6,7 @@ import {scale} from 'react-native-size-matters';
 import {AntDesign, FontAwesome5, MaterialIcons} from '@expo/vector-icons';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
 import {Theme} from '@/constants/Theme';
+import {useToggleExpand} from '@/hooks/useToggleExpand';
 
 interface Goal {
   id: string;
@@ -17,6 +18,7 @@ interface BottomTabBarProps {
   setSelectedGoalId: (id: string) => void;
   selectedGoalId: string;
   onAddGoal: () => void;
+  onToggleExpand: (key: ToggleKey) => void;
 }
 
 function BottomTabBar({
@@ -24,7 +26,10 @@ function BottomTabBar({
   setSelectedGoalId,
   selectedGoalId,
   onAddGoal,
+  onToggleExpand,
 }: BottomTabBarProps) {
+  const {handleToggle} = useToggleExpand();
+
   return (
     <View
       style={{
@@ -106,7 +111,11 @@ function BottomTabBar({
                 }}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                  <Pressable onPress={() => setSelectedGoalId(item.id)}>
+                  <Pressable
+                    onPress={() => {
+                      onToggleExpand('');
+                      setSelectedGoalId(item.id);
+                    }}>
                     <FontAwesome5
                       name={item.icon}
                       size={Theme.iconSize.medium}

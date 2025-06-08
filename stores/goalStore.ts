@@ -6,6 +6,7 @@ import {prepareSelectTaskItemsByGoal} from '@/models/taskitem.queries';
 import {dateUtils} from '@/utils/dateUtils';
 import {differenceInCalendarDays} from 'date-fns';
 import {intToBool} from '@/models/goal';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 async function loadAllGoalIdsFromDB(): Promise<string[]> {
   const selectGoalsStmt = await prepareSelectAllGoals();
@@ -56,20 +57,29 @@ async function fetchGoalDataById(goalId: string): Promise<GoalData | null> {
 }
 
 export async function initializeGoals() {
-  const {initializeGoalDatas} = useGoalStore.getState();
+  try {
+    const {initializeGoalDatas} = useGoalStore.getState();
 
-  const goalIds = await loadAllGoalIdsFromDB();
-  const goalDataArr = await Promise.all(
-    goalIds.map(id => fetchGoalDataById(id)),
-  );
-  const validGoalData = goalDataArr.filter(
-    (goal): goal is GoalData => goal !== null,
-  );
+    const goalIds = await loadAllGoalIdsFromDB();
+    const goalDataArr = await Promise.all(
+      goalIds.map(id => fetchGoalDataById(id)),
+    );
+    const validGoalData = goalDataArr.filter(
+      (goal): goal is GoalData => goal !== null,
+    );
 
-  initializeGoalDatas(
-    validGoalData,
-    validGoalData.length > 0 ? validGoalData[0].id : null,
-  );
+    initializeGoalDatas(
+      validGoalData,
+      validGoalData.length > 0 ? validGoalData[0].id : null,
+    );
+  } catch (e) {
+    console.error('Initialize goals error:', e);
+    Toast.show({
+      type: ALERT_TYPE.DANGER,
+      title: '데이터 로딩 실패',
+      textBody: '앱을 다시 시작해주세요',
+    });
+  }
 }
 
 type GoalStore = {

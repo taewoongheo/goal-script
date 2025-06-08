@@ -65,6 +65,8 @@ export function AddGoalBottomSheetContainer({
     }
   }, []);
 
+  const {goalData} = useGoalStore();
+
   const handleAddGoal = () => {
     if (tempEditableTitle === '') {
       Toast.show({
@@ -89,6 +91,15 @@ export function AddGoalBottomSheetContainer({
         type: ALERT_TYPE.WARNING,
         title: '아이콘 하나를 선택해 주세요',
         textBody: '아이콘은 반드시 선택해야해요',
+      });
+      return;
+    }
+
+    if (goalData.length >= 10) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '목표 개수 제한',
+        textBody: '최대 10개까지 목표를 만들 수 있어요',
       });
       return;
     }

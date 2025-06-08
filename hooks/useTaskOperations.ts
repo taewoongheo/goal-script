@@ -9,6 +9,7 @@ import {
   prepareUpdateTaskItem,
 } from '@/models/taskitem.queries';
 import {TaskItem} from '@/types/goal';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 type PendingMoveTask = {
   id: string;
@@ -88,6 +89,11 @@ export function useTaskOperations(goalId: string) {
         });
       } catch (e) {
         console.error('DB updateTaskCompletion error:', e);
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: '태스크 상태 변경 실패',
+          textBody: '다시 시도해주세요',
+        });
       }
     }, ANIMATION_DURATION.TASK_STATUS.TASK_MOVE_DELAY);
 
@@ -133,6 +139,11 @@ export function useTaskOperations(goalId: string) {
       });
     } catch (e) {
       console.error('DB insertTaskToDB error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '태스크 저장 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 
@@ -150,6 +161,11 @@ export function useTaskOperations(goalId: string) {
       await deleteQuery.executeAsync({$id: taskId});
     } catch (e) {
       console.error('DB deleteTaskFromDB error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '태스크 삭제 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 
@@ -158,7 +174,23 @@ export function useTaskOperations(goalId: string) {
     newText: string,
     source: TaskSource,
   ) => {
-    if (!newText.trim()) return;
+    if (!newText.trim()) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '태스크를 입력해주세요',
+        textBody: '한 글자 이상 입력해주세요',
+      });
+      return;
+    }
+
+    if (newText.length > 50) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: '글자 수 제한',
+        textBody: '50자 이하로 입력해주세요',
+      });
+      return;
+    }
 
     // UI update
     updateGoalData(draft => {
@@ -179,6 +211,11 @@ export function useTaskOperations(goalId: string) {
       await updateQuery.executeAsync({$id: taskId, $text: newText});
     } catch (e) {
       console.error('DB updateTaskTextInDB error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '태스크 수정 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 

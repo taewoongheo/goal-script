@@ -9,6 +9,7 @@ import {
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
 import {GoalData} from '@/types/goal';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 export function useGoalOperations(goalId: string) {
   const {updateGoalData, deleteGoalData, addGoalData} = useGoalStore();
@@ -36,6 +37,11 @@ export function useGoalOperations(goalId: string) {
       });
     } catch (e) {
       console.error('DB updateGoal error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '목표 수정 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 
@@ -62,6 +68,11 @@ export function useGoalOperations(goalId: string) {
       });
     } catch (e) {
       console.error('DB updateGoalDate error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '날짜 수정 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 
@@ -83,6 +94,11 @@ export function useGoalOperations(goalId: string) {
       await completeQuery.executeAsync({$id: goalId});
     } catch (e) {
       console.error('DB completeGoal error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '목표 완료 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 
@@ -99,6 +115,11 @@ export function useGoalOperations(goalId: string) {
       await deleteQuery.executeAsync({$id: goalId});
     } catch (e) {
       console.error('DB deleteGoal error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '목표 삭제 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 
@@ -117,6 +138,11 @@ export function useGoalOperations(goalId: string) {
       });
     } catch (e) {
       console.error('DB addGoal error:', e);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: '목표 저장 실패',
+        textBody: '다시 시도해주세요',
+      });
     }
   };
 

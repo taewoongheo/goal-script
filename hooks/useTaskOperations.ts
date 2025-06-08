@@ -91,7 +91,7 @@ export function useTaskOperations(goalId: string) {
         console.error('DB updateTaskCompletion error:', e);
         Toast.show({
           type: ALERT_TYPE.DANGER,
-          title: '태스크 상태 변경 실패',
+          title: '할 일 상태 변경 실패',
           textBody: '다시 시도해주세요',
         });
       }
@@ -118,8 +118,8 @@ export function useTaskOperations(goalId: string) {
       if (totalTasks >= 50) {
         Toast.show({
           type: ALERT_TYPE.WARNING,
-          title: '태스크 개수 제한',
-          textBody: '목표당 최대 50개까지 태스크를 만들 수 있어요',
+          title: '할 일 개수 제한',
+          textBody: '목표당 최대 50개까지 할 일를 만들 수 있어요',
         });
         return;
       }
@@ -155,7 +155,7 @@ export function useTaskOperations(goalId: string) {
       console.error('DB insertTaskToDB error:', e);
       Toast.show({
         type: ALERT_TYPE.DANGER,
-        title: '태스크 저장 실패',
+        title: '할 일 저장 실패',
         textBody: '다시 시도해주세요',
       });
     }
@@ -173,11 +173,17 @@ export function useTaskOperations(goalId: string) {
     try {
       const deleteQuery = await prepareDeleteTaskItem();
       await deleteQuery.executeAsync({$id: taskId});
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: '삭제 완료',
+        textBody: '할 일이 삭제되었어요',
+      });
     } catch (e) {
       console.error('DB deleteTaskFromDB error:', e);
       Toast.show({
         type: ALERT_TYPE.DANGER,
-        title: '태스크 삭제 실패',
+        title: '할 일 삭제 실패',
         textBody: '다시 시도해주세요',
       });
     }
@@ -191,8 +197,8 @@ export function useTaskOperations(goalId: string) {
     if (!newText.trim()) {
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        title: '태스크를 입력해주세요',
-        textBody: '한 글자 이상 입력해주세요',
+        title: '할 일을 입력해주세요',
+        textBody: ' 한 글자 이상 입력해주세요',
       });
       return;
     }
@@ -223,11 +229,17 @@ export function useTaskOperations(goalId: string) {
     try {
       const updateQuery = await prepareUpdateTaskItem();
       await updateQuery.executeAsync({$id: taskId, $text: newText});
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: '수정 완료',
+        textBody: '할 일이 수정되었어요',
+      });
     } catch (e) {
       console.error('DB updateTaskTextInDB error:', e);
       Toast.show({
         type: ALERT_TYPE.DANGER,
-        title: '태스크 수정 실패',
+        title: '할 일 수정 실패',
         textBody: '다시 시도해주세요',
       });
     }

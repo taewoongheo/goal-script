@@ -123,6 +123,12 @@ export function AddGoalBottomSheetContainer({
     setTempEditableTitle('');
     setSelectedIcon('archway');
     setSelectedGoalId(goalId);
+
+    Toast.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: '추가 완료',
+      textBody: '목표가 추가되었어요',
+    });
   };
 
   return (

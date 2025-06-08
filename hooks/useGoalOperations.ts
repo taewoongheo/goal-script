@@ -9,7 +9,7 @@ import {
 } from '@/models/goal.queries';
 import {dateUtils} from '@/utils/dateUtils';
 import {GoalData} from '@/types/goal';
-import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
 
 export function useGoalOperations(goalId: string) {
   const {updateGoalData, deleteGoalData, addGoalData} = useGoalStore();
@@ -34,6 +34,12 @@ export function useGoalOperations(goalId: string) {
       await updateQuery.executeAsync({
         $id: goalId,
         $title: newTitle,
+      });
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: '수정 완료',
+        textBody: '목표 제목이 변경되었어요',
       });
     } catch (e) {
       console.error('DB updateGoal error:', e);
@@ -66,6 +72,12 @@ export function useGoalOperations(goalId: string) {
         $id: goalId,
         $dDay_date: newDate,
       });
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: '수정 완료',
+        textBody: '목표 날짜가 변경되었어요',
+      });
     } catch (e) {
       console.error('DB updateGoalDate error:', e);
       Toast.show({
@@ -92,6 +104,12 @@ export function useGoalOperations(goalId: string) {
     try {
       const completeQuery = await prepareCompleteGoal();
       await completeQuery.executeAsync({$id: goalId});
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: '목표 완료!',
+        textBody: '축하합니다! 목표를 달성했어요',
+      });
     } catch (e) {
       console.error('DB completeGoal error:', e);
       Toast.show({
@@ -113,6 +131,12 @@ export function useGoalOperations(goalId: string) {
     try {
       const deleteQuery = await prepareDeleteGoal();
       await deleteQuery.executeAsync({$id: goalId});
+
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: '삭제 완료',
+        textBody: '목표를 성공적으로 삭제했어요',
+      });
     } catch (e) {
       console.error('DB deleteGoal error:', e);
       Toast.show({

@@ -111,6 +111,20 @@ export function useTaskOperations(goalId: string) {
   };
 
   const addTask = async (text: string, source: TaskSource) => {
+    const {goalData, selectedGoalId} = useGoalStore.getState();
+    const currentGoal = goalData.find(g => g.id === selectedGoalId);
+    if (currentGoal) {
+      const totalTasks = currentGoal.achieved.length + currentGoal.todos.length;
+      if (totalTasks >= 50) {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: '태스크 개수 제한',
+          textBody: '목표당 최대 50개까지 태스크를 만들 수 있어요',
+        });
+        return;
+      }
+    }
+
     const isCompleted = source === 'achieved';
     const newTask: TaskItem = {
       id: generateUUID(),

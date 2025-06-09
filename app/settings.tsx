@@ -8,13 +8,19 @@ import {
   Pressable,
 } from 'react-native';
 import {router} from 'expo-router';
-import {AntDesign, Ionicons} from '@expo/vector-icons';
+import {AntDesign} from '@expo/vector-icons';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
 import {scale} from 'react-native-size-matters';
 
 export default function SettingsScreen() {
   const settingsItems = [
+    {
+      icon: 'info-circle',
+      title: '앱 사용방법 알아보기',
+      onPress: () => router.push('/onboarding'),
+      showArrow: true,
+    },
     {
       icon: 'document-text-outline',
       title: '개인정보 처리방침',
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Theme.spacing.large,
-    paddingVertical: Theme.spacing.medium + scale(4),
+    paddingVertical: Theme.spacing.medium,
     backgroundColor: Colors.light.white,
   },
   settingIconContainer: {

@@ -16,7 +16,7 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
-import {AntDesign} from '@expo/vector-icons';
+import {AntDesign, FontAwesome5} from '@expo/vector-icons';
 import {router} from 'expo-router';
 import BottomTabBar from '@/components/ui/BottomTabBar';
 import {useGoalStore} from '@/stores/goalStore';
@@ -81,10 +81,10 @@ export default function MainScreen() {
             borderRadius: 20,
           }}
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-          <AntDesign
-            name="questioncircleo"
+          <FontAwesome5
+            name="info-circle"
             size={24}
-            color="rgb(115, 115, 115)"
+            color="rgb(147, 147, 147)"
           />
         </Pressable>
       </View>

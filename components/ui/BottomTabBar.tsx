@@ -3,10 +3,10 @@ import {View, Platform, FlatList} from 'react-native';
 import {Pressable} from 'react-native-gesture-handler';
 import {BlurView} from 'expo-blur';
 import {scale} from 'react-native-size-matters';
-import {AntDesign, FontAwesome5, MaterialIcons} from '@expo/vector-icons';
+import {AntDesign, FontAwesome5} from '@expo/vector-icons';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
 import {Theme} from '@/constants/Theme';
-import {useToggleExpand} from '@/hooks/useToggleExpand';
+import {ToggleKey, useToggleExpand} from '@/hooks/useToggleExpand';
 
 interface Goal {
   id: string;

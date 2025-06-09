@@ -76,6 +76,7 @@ function RootLayoutContent() {
               options={{headerShown: false}}
             />
             <Stack.Screen name="license-info" options={{headerShown: false}} />
+            <Stack.Screen name="onboarding" options={{headerShown: false}} />
             <Stack.Screen name="+not-found" />
           </Stack>
 

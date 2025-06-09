@@ -219,13 +219,13 @@ const styles = StyleSheet.create({
   },
   completeButton: {
     backgroundColor: Theme.colors.highlight,
-    paddingVertical: Theme.spacing.medium,
+    paddingVertical: Theme.spacing.small + scale(8),
     paddingHorizontal: Theme.spacing.xl,
     borderRadius: Theme.borderRadius.medium,
     alignItems: 'center',
   },
   completeButtonText: {
-    fontSize: Theme.fontSize.medium,
+    fontSize: Theme.fontSize.small,
     fontFamily: Theme.fontFamily.semiBold,
     color: Colors.light.white,
   },

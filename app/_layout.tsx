@@ -1,7 +1,7 @@
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {
   BottomSheetProvider,
@@ -16,6 +16,7 @@ import {AddGoalBottomSheetContainer} from '@/components/bottomSheets/AddGoalBott
 import {initializeGoals, useGoalStore} from '@/stores/goalStore';
 import {setupDatabase} from '@/scripts/setup';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
+import Onboarding from './onboarding';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,6 +47,7 @@ function RootLayoutContent() {
     addTaskBottomSheetRef,
     addGoalBottomSheetRef,
   } = useBottomSheet();
+
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
 
   useEffect(() => {

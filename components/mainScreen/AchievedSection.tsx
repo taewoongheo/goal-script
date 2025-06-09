@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {ToggleKey} from '@/hooks/useToggleExpand';
 import {useGoalStore} from '@/stores/goalStore';
@@ -39,6 +39,16 @@ export function AchievedSection({
     <TaskItemComponent {...props} />
   );
 
+  const suffix = useMemo(() => {
+    if (isCompleted) {
+      return '들을 완료했어요.';
+    }
+    if (hasTodoItems === 0) {
+      return '들을 완료했고,';
+    }
+    return '들을 완료했어요.';
+  }, [hasTodoItems, isCompleted]);
+
   return (
     <TaskSection
       items={achievedItems}
@@ -49,11 +59,7 @@ export function AchievedSection({
       onUpdateItem={actions.achieved.toggle}
       icon="list-check"
       title="achieved"
-      suffix={
-        hasTodoItems === 0 || !isCompleted
-          ? '들을 완료했고,'
-          : '들을 완료했어요.'
-      }
+      suffix={suffix}
       renderItem={renderTaskItem}
       listItemBottomSheetRef={listItemBottomSheetRef}
       isScrollable={false}

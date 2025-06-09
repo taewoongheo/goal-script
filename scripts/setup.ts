@@ -96,11 +96,9 @@ export async function setupDatabase() {
     await ensureTables(db);
     if (SHOULD_SEED_SAMPLE_DATA) {
       await insertSampleData(db, SAMPLE_DATA);
-      console.log('Sample data inserted successfully.');
     } else {
       // await db.runAsync('DELETE FROM TaskItem');
       // await db.runAsync('DELETE FROM Goal');
-      console.log('Tables ensured, no sample data inserted.');
     }
   } catch (e) {
     console.error('DB Setup Error:', e);

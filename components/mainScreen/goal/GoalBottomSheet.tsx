@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Pressable, StyleSheet, Keyboard} from 'react-native';
 import {moderateScale, scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
@@ -21,6 +21,7 @@ interface GoalBottomSheetProps {
   onDeleteGoal?: () => void;
   bottomSheetRef?: React.RefObject<any>;
   setEditModeHeight: (height: number) => void;
+  selectedGoalId: string;
 }
 
 export function GoalBottomSheet({
@@ -34,9 +35,11 @@ export function GoalBottomSheet({
   onDeleteGoal,
   bottomSheetRef,
   setEditModeHeight,
+  selectedGoalId,
 }: GoalBottomSheetProps) {
   const {
     editableTitle,
+    setEditableTitle,
     tempEditableTitle,
     setTempEditableTitle,
     isEditMode,
@@ -49,6 +52,11 @@ export function GoalBottomSheet({
     onDeleteGoal,
     bottomSheetRef,
   });
+
+  useEffect(() => {
+    setTempEditableTitle(title);
+    setEditableTitle(title);
+  }, [selectedGoalId]);
 
   return (
     <Pressable

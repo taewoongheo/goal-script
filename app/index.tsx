@@ -5,7 +5,7 @@ import Animated, {
   FadeOut,
 } from 'react-native-reanimated';
 import {useMemo, useState} from 'react';
-import {scale, ScaledSheet} from 'react-native-size-matters';
+import {ScaledSheet} from 'react-native-size-matters';
 import {Pressable, ScrollView} from 'react-native-gesture-handler';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
@@ -16,7 +16,7 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
-import {AntDesign, FontAwesome5} from '@expo/vector-icons';
+import {FontAwesome5} from '@expo/vector-icons';
 import {router} from 'expo-router';
 import BottomTabBar from '@/components/ui/BottomTabBar';
 import {useGoalStore} from '@/stores/goalStore';
@@ -65,7 +65,8 @@ export default function MainScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, {backgroundColor: Theme.colors.background}]}>
       <View
         style={{
           position: 'absolute',

@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Keyboard, Platform} from 'react-native';
 import BottomSheet, {
   BottomSheetView,
@@ -91,6 +91,7 @@ export function GoalBottomSheetContainer({
           onDeleteGoal={actions.goal.delete}
           bottomSheetRef={bottomSheetRef}
           setEditModeHeight={setEditModeHeight}
+          selectedGoalId={selectedGoalId ?? ''}
         />
       </BottomSheetView>
     </BottomSheet>

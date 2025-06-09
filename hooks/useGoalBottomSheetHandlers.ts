@@ -82,6 +82,7 @@ export function useGoalBottomSheetHandlers({
 
   return {
     editableTitle,
+    setEditableTitle,
     tempEditableTitle,
     setTempEditableTitle,
     isEditMode,

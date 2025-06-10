@@ -23,7 +23,7 @@ export function useGoalBottomSheetHandlers({
   const [isEditMode, setIsEditMode] = useState(false);
   const titleInputRef = useRef<TextInput>(null);
 
-  const {goalData, setSelectedGoalId} = useGoalStore();
+  const {goalData, setSelectedGoalId, selectedGoalId} = useGoalStore();
 
   const handleSwitchToEdit = () => {
     setIsEditMode(true);
@@ -50,7 +50,12 @@ export function useGoalBottomSheetHandlers({
     }
 
     if (goalData.length > 1) {
-      setSelectedGoalId(goalData[0].id);
+      for (let i = 0; i < goalData.length; i += 1) {
+        if (goalData[i].id !== selectedGoalId) {
+          setSelectedGoalId(goalData[i].id);
+          break;
+        }
+      }
     }
 
     bottomSheetRef?.current.close();

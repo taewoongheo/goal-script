@@ -11,12 +11,12 @@ import {
 import {generateUUID} from '../utils/uuid';
 import {GoalData, TaskItem} from '@/types/goal';
 
-export const SHOULD_SEED_SAMPLE_DATA = false;
+export const SHOULD_SEED_SAMPLE_DATA = true;
 export const SAMPLE_DATA: GoalData[] = [
   // academicPaper,
-  // marathonPreparation,
-  // websiteProject,
-  // languageLearning,
+  marathonPreparation,
+  websiteProject,
+  languageLearning,
   // readingChallenge,
   // photoExhibition,
   // certificateExam,

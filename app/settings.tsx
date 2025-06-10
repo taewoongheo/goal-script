@@ -17,7 +17,7 @@ export default function SettingsScreen() {
   const settingsItems = [
     {
       icon: 'info-circle',
-      title: '앱 사용방법 알아보기',
+      title: '앱 이용방법',
       onPress: () => router.push('/onboarding'),
       showArrow: true,
     },

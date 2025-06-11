@@ -36,7 +36,7 @@ export default function PrivacyPolicyScreen() {
         showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <Text style={styles.introText}>
-            Goal Script(이하 "회사")는 개인정보보호법에 따라 이용자의 개인정보를
+            Textual(이하 "회사")는 개인정보보호법에 따라 이용자의 개인정보를
             보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기
             위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.
           </Text>

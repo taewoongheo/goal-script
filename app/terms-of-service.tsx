@@ -38,23 +38,22 @@ export default function TermsOfServiceScreen() {
         showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <Text style={styles.introText}>
-            Goal Script(이하 회사)가 제공하는 모바일 애플리케이션 서비스의
-            이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을
-            규정합니다.
+            Textual(이하 회사)가 제공하는 모바일 애플리케이션 서비스의 이용과
+            관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정합니다.
           </Text>
 
           <Text style={styles.sectionTitle}>제1조 (목적)</Text>
           <Text style={styles.contentText}>
-            이 약관은 Goal Script(이하 회사)가 제공하는 모바일 애플리케이션 Goal
-            Script(이하 서비스)의 이용과 관련하여 회사와 이용자 간의 권리, 의무
+            이 약관은 Textual(이하 회사)가 제공하는 모바일 애플리케이션
+            Textual(이하 서비스)의 이용과 관련하여 회사와 이용자 간의 권리, 의무
             및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
           </Text>
 
           <Text style={styles.sectionTitle}>제2조 (정의)</Text>
           <Text style={styles.contentText}>
             이 약관에서 사용하는 용어의 정의는 다음과 같습니다:
-            {'\n\n'}1. 서비스: 회사가 제공하는 Goal Script 모바일 애플리케이션
-            및 관련 서비스
+            {'\n\n'}1. 서비스: 회사가 제공하는 Textual 모바일 애플리케이션 및
+            관련 서비스
             {'\n'}2. 이용자: 이 약관에 따라 서비스를 이용하는 개인
             {'\n'}3. 콘텐츠: 이용자가 서비스 내에서 생성, 등록, 저장하는 목표,
             할 일, 텍스트, 이미지 등의 정보

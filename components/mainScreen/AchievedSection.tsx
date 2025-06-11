@@ -43,7 +43,7 @@ export function AchievedSection({
     if (isCompleted) {
       return '들을 완료했어요.';
     }
-    if (hasTodoItems === 0) {
+    if (hasTodoItems !== 0) {
       return '들을 완료했고,';
     }
     return '들을 완료했어요.';

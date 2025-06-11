@@ -36,7 +36,7 @@ export default function LicenseInfoScreen() {
         showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <Text style={styles.introText}>
-            Goal Script 앱은 다음과 같은 오픈소스 라이브러리들을 사용하여
+            Textual 앱은 다음과 같은 오픈소스 라이브러리들을 사용하여
             개발되었습니다. 각 라이브러리의 라이선스 조건을 준수하여 사용하고
             있습니다.
           </Text>

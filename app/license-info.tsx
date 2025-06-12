@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {router} from 'expo-router';
 import {AntDesign} from '@expo/vector-icons';
+import {scale} from 'react-native-size-matters';
 import {Theme} from '@/constants/Theme';
 import {Colors} from '@/constants/Colors';
-import {scale} from 'react-native-size-matters';
 
 export default function LicenseInfoScreen() {
   return (
@@ -165,8 +165,7 @@ export default function LicenseInfoScreen() {
           </Text>
 
           <Text style={styles.contentText}>
-            {'\n\n'}문의사항이 있으시면 chamjoeun0111@gmail.com으로 연락해
-            주세요.
+            {'\n\n'}문의사항이 있으시면 tw.heo24@gmail.com으로 연락해 주세요.
           </Text>
           <Text style={styles.lastUpdated}>최종 수정일: 2025년 6월 10일</Text>
         </View>

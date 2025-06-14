@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "goalScript",
-    "slug": "goalScript",
+    "name": "textual",
+    "slug": "textual",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon-ios.png",

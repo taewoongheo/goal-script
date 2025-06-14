@@ -7,12 +7,14 @@ import {
   readingChallenge,
   photoExhibition,
   certificateExam,
+  readingGoal,
 } from '../constants/SampleData';
 import {generateUUID} from '../utils/uuid';
 import {GoalData, TaskItem} from '@/types/goal';
 
-export const SHOULD_SEED_SAMPLE_DATA = false;
+export const SHOULD_SEED_SAMPLE_DATA = true;
 export const SAMPLE_DATA: GoalData[] = [
+  readingGoal,
   // academicPaper,
   // marathonPreparation,
   // websiteProject,

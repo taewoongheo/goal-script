@@ -20,6 +20,29 @@ export type GoalData = {
   isCompleted: boolean;
 };
 
+export const readingGoal: GoalData = {
+  id: generateUUID(),
+  title: '책 10권 읽기',
+  icon: 'book-open',
+  createdDate: '25.01.01',
+  dDay: {
+    date: '25.12.31',
+    remainingDays: 290,
+  },
+  achieved: [
+    {id: generateUUID(), text: '독서 계획 세우기', isCompleted: true},
+    {id: generateUUID(), text: '도서관 회원 가입', isCompleted: true},
+    {id: generateUUID(), text: '5권 완독', isCompleted: true},
+  ],
+  todos: [
+    {id: generateUUID(), text: '매주 100 페이지씩 읽기', isCompleted: false},
+    {id: generateUUID(), text: '독서 기록장 작성', isCompleted: false},
+    {id: generateUUID(), text: '다양한 장르 도전', isCompleted: false},
+    {id: generateUUID(), text: '독서 모임 참여', isCompleted: false},
+  ],
+  isCompleted: false,
+};
+
 export const websiteProject: GoalData = {
   id: generateUUID(),
   title: '웹사이트 리뉴얼',

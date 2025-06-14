@@ -27,6 +27,7 @@
         <data android:scheme="myapp"/>
         <data android:scheme="com.chamjoeun.goalScript"/>
         <data android:scheme="exp+goalscript"/>
+        <data android:scheme="exp+textual"/>
       </intent-filter>
     </activity>
   </application>

@@ -7,6 +7,8 @@ import Animated, {
 import {useMemo, useState} from 'react';
 import {ScaledSheet} from 'react-native-size-matters';
 import {Pressable, ScrollView} from 'react-native-gesture-handler';
+import {FontAwesome5} from '@expo/vector-icons';
+import {router} from 'expo-router';
 import {useToggleExpand} from '@/hooks/useToggleExpand';
 import {GoalSection} from '@/components/mainScreen/GoalSection';
 import {DdaySection} from '@/components/mainScreen/DdaySection';
@@ -16,8 +18,6 @@ import {ANIMATION_DURATION} from '@/constants/Animation';
 import {useBottomSheet} from '@/contexts/BottomSheetContext';
 import {Theme} from '@/constants/Theme';
 import {viewportHeight, viewportWidth} from '@/utils/viewport';
-import {FontAwesome5} from '@expo/vector-icons';
-import {router} from 'expo-router';
 import BottomTabBar from '@/components/ui/BottomTabBar';
 import {useGoalStore} from '@/stores/goalStore';
 
@@ -117,7 +117,9 @@ export default function MainScreen() {
             style={styles.textContainer}
             layout={linearTransitionAnimation}
             onLayout={e => {
-              setIsScrollable(e.nativeEvent.layout.height > viewportHeight);
+              setIsScrollable(
+                e.nativeEvent.layout.height > viewportHeight * 0.8,
+              );
             }}>
             <GoalSection
               isGoalExpanded={expandStates.goal[0]}

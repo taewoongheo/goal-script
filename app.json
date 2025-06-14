@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "textual",
-    "slug": "textual",
+    "slug": "goalScript",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon-ios.png",
@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.chamjoeun.goalScript"
     },
     "android": {

@@ -4,7 +4,7 @@
     "slug": "goalScript",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/app-icon-ios.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,10 +13,7 @@
       "bundleIdentifier": "com.chamjoeun.goalScript"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
+      "icon": "./assets/images/app-icon-android.png",
       "package": "com.chamjoeun.goalScript"
     },
     "web": {

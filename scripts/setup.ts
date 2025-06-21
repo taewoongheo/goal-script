@@ -12,9 +12,9 @@ import {
 import {generateUUID} from '../utils/uuid';
 import {GoalData, TaskItem} from '@/types/goal';
 
-export const SHOULD_SEED_SAMPLE_DATA = true;
+export const SHOULD_SEED_SAMPLE_DATA = false;
 export const SAMPLE_DATA: GoalData[] = [
-  readingGoal,
+  // readingGoal,
   // academicPaper,
   // marathonPreparation,
   // websiteProject,
